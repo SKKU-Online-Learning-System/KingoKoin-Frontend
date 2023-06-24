@@ -24,33 +24,31 @@ const Sidebar = ({ children }) => {
   ];
 
   return (
-    <div className="flex h-screen bg-[#2b6653]">
-      <div className="w-[200px]">
-        <div className="top_section">
-          <span
-            className="pt-[32px] text-[28px] pb-8 text-4xl text-white pl-[67px] font-gugi"
-            style={{ whiteSpace: "nowrap" }}
-          >
-            킹고코인
-          </span>
+    <div className="flex h-screen bg-primary">
+      <div className="w-[200px] flex flex-col p-8 pr-0 gap-8 text-center">
+        <span
+          className="text-2xl text-onPrimary font-gugi"
+          style={{ whiteSpace: "nowrap" }}
+        >
+          킹고코인
+        </span>
+        <div className="flex flex-col gap-4">
+          {menuItem.map((item, index) => (
+            <NavLink
+              to={item.path}
+              key={index}
+              className="link flex gap-1 p-4 w-full items-center hover:"
+              activeClassName="active"
+            >
+              <div className="icon">{item.icon}</div>
+              <div className="text-lg link_text font-noto-sans-kr font-light">
+                {item.name}
+              </div>
+            </NavLink>
+          ))}
         </div>
-        {menuItem.map((item, index) => (
-          <NavLink
-            to={item.path}
-            key={index}
-            className="link mb-[16px] flex items-center h-[53px]"
-            activeClassName="active"
-          >
-            <div className="icon ml-[19px]">{item.icon}</div>
-            <div className="text-2xl link_text font-noto-sans-kr font-regular pl-[7px] text-[20px] ">
-              {item.name}
-            </div>
-          </NavLink>
-        ))}
       </div>
-      <main className="bg-[#f2f2f2]  rounded-tl-xl flex-grow p-3">
-        {children}
-      </main>
+      <main className="bg-surface rounded-tl-lg flex-grow">{children}</main>
     </div>
   );
 };

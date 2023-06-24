@@ -1,26 +1,23 @@
 import React from "react";
 import logo from "../assets/main_logo_eng.png";
+import { AiOutlineLogout } from "react-icons/ai";
 
 function Top1(props) {
   return (
-    <div className="flex justify-between items-center bg-white h-[139.49px]">
-      <div className="flex items-center">
-        <img
-          src={logo}
-          alt="SKKU logo"
-          className="h-10 pl-[64px] pr-[16px] pb-1"
-        />
-        <div className="w-0.5  bg-[#DDDDDD] h-10 "></div>
-        <span
-          className="pl-[16px] text-[28px] text-[#1b1b1b] font-gugi"
-          style={{ whiteSpace: "nowrap" }}
-        >
+    <div className="flex justify-between items-center bg-background px-16 py-8">
+      <div className="flex items-center gap-4">
+        <img src={logo} alt="SKKU logo" className="h-12" />
+        <span className=" text-lightGray text-3xl font-noto-sans-kr">|</span>
+        <span className="text-3xl font-gugi" style={{ whiteSpace: "nowrap" }}>
           킹고코인
         </span>
       </div>
-      <div className="pr-[62.02px] text-[20px] text-right link_text font-noto-sans-kr font-regular">
-        소프트웨어학과&nbsp;&nbsp; |&nbsp;&nbsp; 율전이&nbsp;&nbsp;
-        |&nbsp;&nbsp; O
+      <div className="flex p-1 gap-4 text-xl text-right font-noto-sans-kr font-light items-center text-onSurface">
+        <span>소프트웨어학과</span>
+        <span>|</span>
+        <span>율전이</span>
+        <span>|</span>
+        <AiOutlineLogout className="w-6 h-6" />
       </div>
     </div>
   );
