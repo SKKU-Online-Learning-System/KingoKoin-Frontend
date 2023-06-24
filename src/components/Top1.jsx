@@ -7,12 +7,12 @@ function Top1(props) {
     <div className="flex justify-between items-center bg-background px-16 py-8">
       <div className="flex items-center gap-4">
         <img src={logo} alt="SKKU logo" className="h-12" />
-        <span className=" text-lightGray text-3xl font-noto-sans-kr">|</span>
-        <span className="text-3xl font-gugi" style={{ whiteSpace: "nowrap" }}>
+        <span className=" text-lightGray text-logo">|</span>
+        <span className="text-logo" style={{ whiteSpace: "nowrap" }}>
           킹고코인
         </span>
       </div>
-      <div className="flex p-1 gap-4 text-xl text-right font-noto-sans-kr font-light items-center text-onSurface">
+      <div className="flex p-1 gap-4 text-label text-right font-light items-center text-onSurface">
         <span>소프트웨어학과</span>
         <span>|</span>
         <span>율전이</span>

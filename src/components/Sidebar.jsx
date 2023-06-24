@@ -27,7 +27,7 @@ const Sidebar = ({ children }) => {
     <div className="flex h-screen bg-primary">
       <div className="w-[200px] flex flex-col p-8 pr-0 gap-8 text-center">
         <span
-          className="text-2xl text-onPrimary font-gugi"
+          className="text-logo text-onPrimary"
           style={{ whiteSpace: "nowrap" }}
         >
           킹고코인
@@ -41,7 +41,7 @@ const Sidebar = ({ children }) => {
               activeClassName="active"
             >
               <div className="icon">{item.icon}</div>
-              <div className="text-lg link_text font-noto-sans-kr font-light">
+              <div className="text-label link_text font-noto-sans-kr font-light">
                 {item.name}
               </div>
             </NavLink>
