@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -13,4 +14,28 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.text-logo {
+  @apply font-gugi text-3xl font-regular;
+}
+
+.text-display {
+  @apply font-noto-sans-kr text-4xl font-bold;
+}
+
+.text-title-m {
+  @apply font-noto-sans-kr text-3xl font-medium;
+}
+
+.text-title-l {
+  @apply font-noto-sans-kr text-3xl font-light;
+}
+
+.text-label {
+  @apply font-noto-sans-kr text-xl font-bold;
+}
+
+p {
+  @apply font-noto-sans-kr text-base font-thin;
 }
