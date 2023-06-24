@@ -152,6 +152,10 @@ table {
   @apply font-noto-sans-kr text-xl font-light;
 }
 
+.text-body {
+  @apply font-noto-sans-kr text-base font-thin;
+}
+
 p {
   @apply font-noto-sans-kr text-base font-thin;
 }
