@@ -132,6 +132,8 @@ table {
   border-spacing: 0;
 }
 
+/* type system */
+
 .text-logo {
   @apply font-gugi text-3xl font-regular;
 }
@@ -158,4 +160,14 @@ table {
 
 p {
   @apply font-noto-sans-kr text-base font-thin;
+}
+
+/* scrollbar */
+
+::-webkit-scrollbar {
+  @apply bg-background w-2;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-lg bg-lightGray;
 }

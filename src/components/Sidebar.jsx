@@ -24,7 +24,7 @@ const Sidebar = ({ children }) => {
   ];
 
   return (
-    <div className="flex h-screen bg-primary">
+    <div className="flex bg-primary">
       <div className="w-[200px] flex flex-col p-8 pr-0 gap-8 text-center">
         <span
           className="text-logo text-onPrimary"
@@ -38,7 +38,6 @@ const Sidebar = ({ children }) => {
               to={item.path}
               key={index}
               className="link flex gap-1 p-4 w-full items-center hover:"
-              activeClassName="active"
             >
               <div className="icon">{item.icon}</div>
               <div className="text-label link_text font-noto-sans-kr font-light">
