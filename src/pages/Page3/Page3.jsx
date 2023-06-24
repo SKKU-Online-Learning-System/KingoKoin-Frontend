@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
 import { dummyFNQ, dummyKoin, dummyKoinDetails } from "../../api.tsx";
+import Counter from "./Counter.jsx";
 import SKKU_LOGO from "../../assets/skku_emblem_kor.png";
 import SODS_LOGO from "../../assets/sosd_logo.svg";
 
@@ -50,21 +51,15 @@ function Page3(props) {
     <div className="flex flex-col gap-16 justify-center py-16 w-[1040px] mx-auto">
       <section className="flex gap-32 self-center">
         <div className="flex flex-col gap-4 items-center">
-          <span className="text-6xl font-bold font-noto-sans-kr text-primary">
-            {dummyKoin.curr}
-          </span>
+          <Counter start={0} end={dummyKoin.curr} duration={1000}></Counter>
           <span className="text-title-m">보유한 코인</span>
         </div>
         <div className="flex flex-col gap-4 items-center">
-          <span className="text-6xl font-bold font-noto-sans-kr text-primary">
-            {dummyKoin.all}
-          </span>
+          <Counter start={0} end={dummyKoin.all} duration={1000}></Counter>
           <span className="text-title-m">획득한 코인</span>
         </div>
         <div className="flex flex-col gap-4 items-center">
-          <span className="text-6xl font-bold font-noto-sans-kr text-primary">
-            {dummyKoin.used}
-          </span>
+          <Counter start={0} end={dummyKoin.used} duration={1000}></Counter>
           <span className="text-title-m">사용한 코인</span>
         </div>
       </section>
