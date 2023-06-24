@@ -24,33 +24,33 @@ const Sidebar = ({ children }) => {
   ];
 
   return (
-    <div className="container">
-      <div style={{ width: "250px" }} className="sidebar">
+    <div className="flex h-screen bg-[#2b6653]">
+      <div className="w-[200px]">
         <div className="top_section">
-          <h1
-            style={{
-              textAlign: "right",
-              marginLeft: "55px",
-              marginBottom: "20px",
-            }}
-            className="logo"
+          <span
+            className="pt-[32px] text-[28px] pb-8 text-4xl text-white pl-[67px] font-gugi"
+            style={{ whiteSpace: "nowrap" }}
           >
-            <span style={{ whiteSpace: "nowrap" }}>킹고코인</span>
-          </h1>
+            킹고코인
+          </span>
         </div>
         {menuItem.map((item, index) => (
           <NavLink
             to={item.path}
             key={index}
-            className="link"
+            className="link mb-[16px] flex items-center h-[53px]"
             activeClassName="active"
           >
-            <div className="icon">{item.icon}</div>
-            <div className="link_text">{item.name}</div>
+            <div className="icon ml-[19px]">{item.icon}</div>
+            <div className="text-2xl link_text font-noto-sans-kr font-regular pl-[7px] text-[20px] ">
+              {item.name}
+            </div>
           </NavLink>
         ))}
       </div>
-      <main>{children}</main>
+      <main className="bg-[#f2f2f2]  rounded-tl-xl flex-grow p-3">
+        {children}
+      </main>
     </div>
   );
 };

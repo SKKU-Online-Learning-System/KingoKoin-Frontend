@@ -1,73 +1,17 @@
-* {
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  text-decoration: none;
-  background-color: #f2f2f2;
-}
-
-main {
-  width: 100%;
-  border-radius: 10px 0 0 0;
-  overflow: hidden;
-  border-top: 1px solid #f2f2f2ed;
-  border-left: 0px solid #f2f2f2ed;
-  border-bottom: 0px solid #f2f2f2ed;
-  border-right: 0px solid #f2f2f2;
-}
-
-.bars {
-  display: flex;
-  font-size: 25px;
-  margin-left: 50px;
-}
-
 /*
 Sidebar.jsx 관련 css 코드
-.module.css로 구현하면 class 이름이 랜덤하게 생성되기 때문에
-원하는 방식으로 코딩하기에 여러가지 한계점이 있어서
-App.js에 구현
 */
-
-.container {
-  display: flex;
-}
-
-.sidebar {
-  background: #2b6653;
-  color: #fff;
-  height: 100vh;
-  width: 250px;
-  transition: all 0.5s;
-}
 
 .top_section {
   display: flex;
   align-items: center;
-  padding: 20px 15px;
-}
-
-.logo {
-  font-size: 23px;
-  padding-left: 55px;
-  padding-bottom: 35px;
-  padding-top: 35px;
 }
 
 .link {
   display: flex;
   color: #fff;
-  padding: 12px 15px;
-  gap: 15px;
+
   transition: all 0.5s;
-  padding-left: 10px;
-  margin-bottom: 20px;
-  position: relative;
   background: #2b6653;
   border-radius: 10px 0 0 10px;
   margin-left: 15%;
@@ -86,16 +30,4 @@ App.js에 구현
   background: #f2f2f2;
   color: #000;
   width: 85%;
-}
-
-.icon,
-.link_text {
-  font-size: 20px;
-  text-align: right;
-}
-
-.secondcontainer {
-  background-color: #f2f2f2ed;
-  width: 100%;
-  height: 100%;
 }
