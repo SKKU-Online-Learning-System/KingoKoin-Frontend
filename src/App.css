@@ -1,33 +1,11 @@
 /*
 Sidebar.jsx 관련 css 코드
 */
-
-.top_section {
-  display: flex;
-  align-items: center;
-}
-
 .link {
-  display: flex;
-  color: #fff;
-
-  transition: all 0.5s;
-  background: #2b6653;
-  border-radius: 10px 0 0 10px;
-  margin-left: 15%;
-  width: 85%;
-  box-sizing: border-box;
+  @apply flex text-onPrimary bg-primary transition-all rounded-l-lg;
 }
 
 .link:hover,
 .link.active {
-  background: #f2f2f2;
-  color: #000;
-  width: 85%;
-}
-
-.activeLink {
-  background: #f2f2f2;
-  color: #000;
-  width: 85%;
+  @apply bg-surface text-onSurface;
 }
