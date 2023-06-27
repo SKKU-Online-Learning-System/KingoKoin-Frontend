@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 function Top2() {
-  return <div className="bg-[#2b6653] h-[66.51px]"></div>;
+  return <div className="bg-primary h-16"></div>;
 }
 
 export default Top2;
