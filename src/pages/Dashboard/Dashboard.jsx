@@ -8,6 +8,7 @@ import {
   fetchKoinDetails,
 } from "../../api.tsx";
 import Counter from "./Counter.jsx";
+import Loader from "../../components/Loader.jsx";
 
 function Page3(props) {
   const [fnqs, setFnqs] = useState(
@@ -30,7 +31,7 @@ function Page3(props) {
   } = useQuery("KoinDetails", fetchKoinDetails);
 
   const isLoading = koinIsLoading || detailsIsLoading;
-  if (isLoading) return "nowLoading...";
+  if (isLoading) return <Loader />;
 
   const handleToggle = (id) => {
     const target = fnqs.findIndex((it) => it.question_id === id);

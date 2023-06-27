@@ -6,8 +6,6 @@ import Page2 from "./pages/Dashboard/Dashboard";
 import Page3 from "./pages/Page3/Page3";
 import NotFound from "./pages/NotFound/NotFound";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
-
 import "./App.css";
 
 import Sidebar from "./components/Sidebar";
