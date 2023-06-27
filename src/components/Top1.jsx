@@ -2,7 +2,7 @@ import React from "react";
 import logo from "../assets/main_logo_eng.png";
 import { AiOutlineLogout } from "react-icons/ai";
 
-function Top1(props) {
+function Top1() {
   return (
     <div className="flex justify-between items-center bg-background px-16 py-8">
       <div className="flex items-center gap-4">
@@ -12,7 +12,7 @@ function Top1(props) {
           킹고코인
         </span>
       </div>
-      <div className="flex p-1 gap-4 text-label text-right font-light items-center text-onSurface">
+      <div className="flex p-1 gap-4 text-label-l text-right font-light items-center text-onSurface">
         <span>소프트웨어학과</span>
         <span>|</span>
         <span>율전이</span>

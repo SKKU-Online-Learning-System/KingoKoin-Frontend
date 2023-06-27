@@ -1,6 +1,6 @@
-import { FaTh, FaBars } from "react-icons/fa";
+import { FaTh } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -40,7 +40,7 @@ const Sidebar = ({ children }) => {
               className="link flex gap-1 p-4 w-full items-center hover:"
             >
               <div className="icon">{item.icon}</div>
-              <div className="text-label link_text font-noto-sans-kr font-light">
+              <div className="text-label-l link_text font-noto-sans-kr font-light">
                 {item.name}
               </div>
             </NavLink>
