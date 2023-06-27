@@ -1,10 +1,8 @@
 import { FaTh } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import React, { useState } from "react";
+import React from "react";
 
 const Sidebar = ({ children }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const toggle = () => setIsOpen(!isOpen);
   const menuItem = [
     {
       path: "/page1",
