@@ -8,7 +8,7 @@ const Sidebar = ({ children }) => {
   const menuItem = [
     {
       path: "/page1",
-      name: "smallbutton",
+      name: "코인부여",
       icon: <FaTh />,
     },
     {

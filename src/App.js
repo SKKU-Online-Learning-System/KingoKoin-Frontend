@@ -6,6 +6,8 @@ import Page2 from "./pages/Dashboard/Dashboard";
 import Page3 from "./pages/Page3/Page3";
 import NotFound from "./pages/NotFound/NotFound";
 
+import {dummy} from "./dummy";
+
 import "./App.css";
 
 import Sidebar from "./components/Sidebar";
@@ -35,6 +37,9 @@ function App() {
             </>
           }
         />
+
+        
+
         <Route
           path="/page1"
           element={
