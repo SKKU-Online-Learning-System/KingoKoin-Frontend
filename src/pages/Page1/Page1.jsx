@@ -153,7 +153,7 @@ const StudentCoinPage = () => {
     <div>
       <div className="text-2xl font-bold mb-2 pt-10 p-5">코인 주고 받은 기록</div>
       <table className="w-full justify-center">
-          <thead className='bg-gray-50'>
+          <thead className='bg-SKKU_GREEN text-gray-200'>
             <tr className='text-center'>
               <th>학번</th>
               <th>내용</th>
@@ -161,7 +161,7 @@ const StudentCoinPage = () => {
               <th>시간</th>
             </tr>
           </thead>
-          <tbody className='text-center'>
+          <tbody className='text-center bg-gray-50'>
             {coinHistory.map((history, index) => (
               <tr key={index}>
                 <td>{history.studentId}</td>
