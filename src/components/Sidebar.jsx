@@ -7,13 +7,13 @@ const Sidebar = ({ children }) => {
   const toggle = () => setIsOpen(!isOpen);
   const menuItem = [
     {
-      path: "/page1",
-      name: "코인부여",
+      path: "/dashboard",
+      name: "대시보드",
       icon: <FaTh />,
     },
     {
-      path: "/dashboard",
-      name: "대시보드",
+      path: "/givingcoin",
+      name: "코인부여",
       icon: <FaTh />,
     },
     {

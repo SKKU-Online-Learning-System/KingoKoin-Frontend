@@ -84,14 +84,14 @@ const StudentCoinPage = () => {
               id="studentId"
               value={studentId}
               onChange={handleStudentIdChange}
-              className="flex-grow border border-gray-300 px-3 py-2 rounded-lg mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="flex-grow border border-gray-300 px-3 py-2 rounded-lg mr-2 focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
               placeholder="학번"
               onMouseEnter={(event) => event.target.placeholder = ''}
               onMouseLeave={(event) => event.target.placeholder = '학번'}
             />
             <button
               onClick={handleStudentLookup}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg min-w-[120px] min-h-[40px]"
+              className="bg-SKKU_GREEN text-gray-50 px-4 py-2 rounded-lg min-w-[120px] min-h-[40px]"
             >
               학생 조회
             </button>
@@ -115,7 +115,7 @@ const StudentCoinPage = () => {
             id="coinValue"
             value={coinValue}
             onChange={handleCoinValueChange}
-            className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
             placeholder="코인값"
             onMouseEnter={(event) => event.target.placeholder = ''}
             onMouseLeave={(event) => event.target.placeholder = '코인값'}
@@ -128,7 +128,7 @@ const StudentCoinPage = () => {
             id="content"
             value={content}
             onChange={handleContentChange}
-            className="border border-gray-300 px-3 py-2 rounded-lg flex-grow mr-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="border border-gray-300 px-3 py-2 rounded-lg flex-grow mr-2 focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
             placeholder="내용"
             onMouseEnter={(event) => event.target.placeholder = ''}
             onMouseLeave={(event) => event.target.placeholder = '내용'}
@@ -136,7 +136,7 @@ const StudentCoinPage = () => {
 
           <button
             onClick={handleGrantCoins}
-            className="bg-green-500 text-white px-4 py-2 rounded-lg min-w-[120px] min-h-[40px]"
+            className="bg-SKKU_GREEN text-gray-50 px-4 py-2 rounded-lg min-w-[120px] min-h-[40px]"
           >
             코인 부여
           </button>

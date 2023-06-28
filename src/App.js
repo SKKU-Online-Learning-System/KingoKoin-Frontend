@@ -41,7 +41,7 @@ function App() {
         
 
         <Route
-          path="/page1"
+          path="/givingcoin"
           element={
             <>
               <Top1 />
