@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { information } from '../../dummy';
 
 const StudentCoinPage = () => {
@@ -10,9 +10,7 @@ const StudentCoinPage = () => {
   const [studentCoin, setStudentCoin] = useState(0);
   const [coinHistory, setCoinHistory] = useState([]);
 
-  //코인 수가 유지되도록 useEffect를 사용해보았는데 어차피 서버 연결하기 전까지는 소용 없을듯
-
-  useEffect(() => { 
+  useEffect(() => {
     const coinHistoryData = localStorage.getItem('coinHistory');
     if (coinHistoryData) {
       setCoinHistory(JSON.parse(coinHistoryData));
@@ -73,12 +71,11 @@ const StudentCoinPage = () => {
   };
 
   return (
-    <div className='pb-10'>
+    <div className="pt-10">
       <div className="text-2xl font-bold mb-2 pt-10 p-5">학생 코인 부여</div>
-
-      <div className="max-w-md mx-auto bg-white shadow-lg p-10 rounded-lg">
-        <div className="mb-4">
-          <div className="flex">
+      <div className="flex px-10">
+        <div className=" bg-white shadow-lg p-10 rounded-lg basis-1/4">
+          <div className="mb-4">
             <input
               type="text"
               id="studentId"
@@ -86,8 +83,8 @@ const StudentCoinPage = () => {
               onChange={handleStudentIdChange}
               className="flex-grow border border-gray-300 px-3 py-2 rounded-lg mr-2 focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
               placeholder="학번"
-              onMouseEnter={(event) => event.target.placeholder = ''}
-              onMouseLeave={(event) => event.target.placeholder = '학번'}
+              onMouseEnter={(event) => (event.target.placeholder = '')}
+              onMouseLeave={(event) => (event.target.placeholder = '학번')}
             />
             <button
               onClick={handleStudentLookup}
@@ -96,83 +93,83 @@ const StudentCoinPage = () => {
               학생 조회
             </button>
           </div>
+
+          <div className="mb-4">
+            <input
+              type="text"
+              id="studentName"
+              value={studentName}
+              readOnly
+              className="border border-gray-300 px-3 py-2 rounded-lg bg-gray-100 focus:outline-none"
+              placeholder="이름"
+            />
+          </div>
+
+          <div className="mb-4">
+            <input
+              type="text"
+              id="coinValue"
+              value={coinValue}
+              onChange={handleCoinValueChange}
+              className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
+              placeholder="코인값"
+              onMouseEnter={(event) => (event.target.placeholder = '')}
+              onMouseLeave={(event) => (event.target.placeholder = '코인값')}
+            />
+          </div>
+
+          <div className="mb-4 flex items-center">
+            <input
+              type="text"
+              id="content"
+              value={content}
+              onChange={handleContentChange}
+              className="border border-gray-300 px-3 py-2 rounded-lg flex-grow mr-2 focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
+              placeholder="내용"
+              onMouseEnter={(event) => (event.target.placeholder = '')}
+              onMouseLeave={(event) => (event.target.placeholder = '내용')}
+            />
+
+            <button
+              onClick={handleGrantCoins}
+              className="bg-SKKU_GREEN text-gray-50 px-4 py-2 rounded-lg min-w-[120px] min-h-[40px]"
+            >
+              코인 부여
+            </button>
+          </div>
+
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {studentCoin !== undefined && (
+            <p className="mt-4">
+              {studentName} 학생의 현재 코인: {studentCoin}
+            </p>
+          )}
         </div>
-      
-        <div className="mb-4">
-          <input
-            type="text"
-            id="studentName"
-            value={studentName}
-            readOnly
-            className="border border-gray-300 px-3 py-2 rounded-lg bg-gray-100 focus:outline-none"
-            placeholder="이름"
-          />
-        </div>
 
-        <div className="mb-4">
-          <input
-            type="text"
-            id="coinValue"
-            value={coinValue}
-            onChange={handleCoinValueChange}
-            className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
-            placeholder="코인값"
-            onMouseEnter={(event) => event.target.placeholder = ''}
-            onMouseLeave={(event) => event.target.placeholder = '코인값'}
-          />
-        </div>
-
-        <div className="mb-4 flex items-center">
-          <input
-            type="text"
-            id="content"
-            value={content}
-            onChange={handleContentChange}
-            className="border border-gray-300 px-3 py-2 rounded-lg flex-grow mr-2 focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
-            placeholder="내용"
-            onMouseEnter={(event) => event.target.placeholder = ''}
-            onMouseLeave={(event) => event.target.placeholder = '내용'}
-          />
-
-          <button
-            onClick={handleGrantCoins}
-            className="bg-SKKU_GREEN text-gray-50 px-4 py-2 rounded-lg min-w-[120px] min-h-[40px]"
-          >
-            코인 부여
-          </button>
-        </div>
-
-
-      {error && <p className="text-red-500 mt-2">{error}</p>}
-      {studentCoin !== undefined && (
-        <p className="mt-4">
-          {studentName} 학생의 현재 코인: {studentCoin}
-        </p>
-      )}
-    </div>
-    <div>
-      <div className="text-2xl font-bold mb-2 pt-10 p-5">코인 주고 받은 기록</div>
-      <table className="w-full justify-center">
-          <thead className='bg-SKKU_GREEN text-gray-200'>
-            <tr className='text-center'>
-              <th>학번</th>
-              <th>내용</th>
-              <th>코인 수</th>
-              <th>시간</th>
-            </tr>
-          </thead>
-          <tbody className='text-center bg-gray-50'>
-            {coinHistory.map((history, index) => (
-              <tr key={index}>
-                <td>{history.studentId}</td>
-                <td>{history.content}</td>
-                <td>{history.coinValue}</td>
-                <td>{history.date}</td>
+        <div className="pl-10">
+          <div className="text-2xl font-bold pb-5">코인 주고 받은 기록</div>
+          <table className="pl-10 basis-3/4">
+            <thead className="bg-SKKU_GREEN text-gray-200">
+              <tr className="text-center">
+                <th className='px-10'>학번</th>
+                <th className='px-20'>내용</th>
+                <th className='px-10'>코인 수</th>
+                <th className='px-16'>시간</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-    </div>
+            </thead>
+            <tbody className="text-center bg-gray-50">
+              {coinHistory.map((history, index) => (
+                <tr key={index}>
+                  <td>{history.studentId}</td>
+                  <td>{history.content}</td>
+                  <td>{history.coinValue}</td>
+                  <td>{history.date}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
