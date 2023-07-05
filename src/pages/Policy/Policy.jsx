@@ -1,10 +1,11 @@
 import React from "react";
+import { Typography } from "@mui/material";
 
 function Policy(props) {
   return (
     <div style={{ borderTopLeftRadius: "10px" }}>
-      <h1>Policy</h1>
-      <p>정책 관리 페이지 내용</p>
+      <Typography variant="display">Policy</Typography>
+      <Typography variant="logo">킹고코인</Typography>
     </div>
   );
 }

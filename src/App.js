@@ -1,96 +1,163 @@
+import {
+  StyledEngineProvider,
+  ThemeProvider,
+  createTheme,
+} from "@mui/material";
 import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./pages/Login/Login";
+
+import "./App.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import Koin from "./pages/Koin/Koin";
+import Login from "./pages/Login/Login";
+import NotFound from "./pages/NotFound/NotFound";
 import Policy from "./pages/Policy/Policy";
 import Users from "./pages/Users/Users";
-import Koin from "./pages/Koin/Koin";
-import NotFound from "./pages/NotFound/NotFound";
-import { QueryClient, QueryClientProvider } from "react-query";
-import "./App.css";
 
 import Sidebar from "./components/Sidebar";
-
 import Top1 from "./components/Top1";
 import Top2 from "./components/Top2";
 
 const queryClient = new QueryClient();
 
 function App() {
+  const lightTheme = createTheme({
+    palette: {
+      mode: "light",
+      primary: {
+        main: "#214A3A",
+        contrastText: "#F2F2F2",
+      },
+      secondary: {
+        main: "#FF6B0F",
+      },
+      error: {
+        main: "#C54154",
+      },
+    },
+    fontFamily: ["Gugi", "Noto Sans KR"].join(","),
+    typography: {
+      display: {
+        fontFamily: "Noto Sans KR",
+        fontSize: "30px",
+        fontWeight: "700",
+      },
+      logo: {
+        fontFamily: "Gugi",
+        fontSize: "24px",
+        fontWeight: "400",
+      },
+      "title-m": {
+        fontFamily: "Noto Sans KR",
+        fontSize: "24px",
+        fontWeight: "500",
+      },
+      "title-l": {
+        fontFamily: "Noto Sans KR",
+        fontSize: "24px",
+        fontWeight: "300",
+      },
+
+      "label-m": {
+        fontFamily: "Noto Sans KR",
+        fontSize: "16px",
+        fontWeight: "500",
+      },
+      "label-l": {
+        fontFamily: "Noto Sans KR",
+        fontSize: "16px",
+        fontWeight: "300",
+      },
+      body: {
+        fontFamily: "Noto Sans KR",
+        fontSize: "12px",
+        fontWeight: "100",
+      },
+      caption: {
+        fontFamily: "Noto Sans KR",
+        fontSize: "8px",
+        fontWeight: "100",
+      },
+    },
+  });
+
   return (
-    <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Login />
-              </>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <>
-                <Login />
-              </>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <>
-                <Top1 />
-                <Top2 />
-                <Sidebar>
-                  <Dashboard />
-                </Sidebar>
-              </>
-            }
-          />
-          <Route
-            path="/users"
-            element={
-              <>
-                <Top1 />
-                <Top2 />
-                <Sidebar>
-                  <Users />
-                </Sidebar>
-              </>
-            }
-          />
-          <Route
-            path="/koin"
-            element={
-              <>
-                <Top1 />
-                <Top2 />
-                <Sidebar>
-                  <Koin />
-                </Sidebar>
-              </>
-            }
-          />
-          <Route
-            path="/policy"
-            element={
-              <>
-                <Top1 />
-                <Top2 />
-                <Sidebar>
-                  <div style={{ borderTopLeftRadius: "10px" }}>
-                    <Policy />
-                  </div>
-                </Sidebar>
-              </>
-            }
-          />
-          <Route path="*" element={<NotFound />} /> {/* catch-all route */}
-        </Routes>
-      </BrowserRouter>
-    </QueryClientProvider>
+    <ThemeProvider theme={lightTheme}>
+      <StyledEngineProvider injectFirst>
+        <QueryClientProvider client={queryClient}>
+          <BrowserRouter>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <Login />
+                  </>
+                }
+              />
+              <Route
+                path="/login"
+                element={
+                  <>
+                    <Login />
+                  </>
+                }
+              />
+              <Route
+                path="/dashboard"
+                element={
+                  <>
+                    <Top1 />
+                    <Top2 />
+                    <Sidebar>
+                      <Dashboard />
+                    </Sidebar>
+                  </>
+                }
+              />
+              <Route
+                path="/users"
+                element={
+                  <>
+                    <Top1 />
+                    <Top2 />
+                    <Sidebar>
+                      <Users />
+                    </Sidebar>
+                  </>
+                }
+              />
+              <Route
+                path="/koin"
+                element={
+                  <>
+                    <Top1 />
+                    <Top2 />
+                    <Sidebar>
+                      <Koin />
+                    </Sidebar>
+                  </>
+                }
+              />
+              <Route
+                path="/policy"
+                element={
+                  <>
+                    <Top1 />
+                    <Top2 />
+                    <Sidebar>
+                      <Policy />
+                    </Sidebar>
+                  </>
+                }
+              />
+              <Route path="*" element={<NotFound />} /> {/* catch-all route */}
+            </Routes>
+          </BrowserRouter>
+        </QueryClientProvider>
+      </StyledEngineProvider>
+    </ThemeProvider>
   );
 }
 
