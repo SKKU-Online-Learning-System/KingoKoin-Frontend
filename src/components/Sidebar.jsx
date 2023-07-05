@@ -7,24 +7,24 @@ const Sidebar = ({ children }) => {
   const toggle = () => setIsOpen(!isOpen);
   const menuItem = [
     {
-      path: "/dashboard",
-      name: "대시보드",
-      icon: <FaTh />,
-    },
-    {
-      path: "/givingcoin",
+      path: "/page1",
       name: "코인부여",
       icon: <FaTh />,
     },
     {
+      path: "/page2",
+      name: "학생별 코인 현황 조회",
+      icon: <FaTh />,
+    },
+    {
       path: "/page3",
-      name: "smallbutton",
+      name: "전체 코인 현황 조회",
       icon: <FaTh />,
     },
   ];
 
   return (
-    <div className="flex h-full bg-SKKU_GREEN overflow-visible">
+    <div className="flex h-fit bg-SKKU_GREEN overflow-visible">
       <div className="w-[200px]">
         <div className="top_section">
           <span
