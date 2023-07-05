@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login/Login";
-import Page1 from "./pages/Page1/Page1";
-import Page2 from "./pages/Dashboard/Dashboard";
-import Page3 from "./pages/Page3/Page3";
+import Dashboard from "./pages/Dashboard/Dashboard";
+import Policy from "./pages/Policy/Policy";
+import Users from "./pages/Users/Users";
+import Koin from "./pages/Koin/Koin";
 import NotFound from "./pages/NotFound/NotFound";
 import { QueryClient, QueryClientProvider } from "react-query";
 import "./App.css";
@@ -37,39 +38,51 @@ function App() {
             }
           />
           <Route
-            path="/page1"
-            element={
-              <>
-                <Top1 />
-                <Top2 />
-                <Sidebar>
-                  <div style={{ borderTopLeftRadius: "10px" }}>
-                    <Page1 />
-                  </div>
-                </Sidebar>
-              </>
-            }
-          />
-          <Route
             path="/dashboard"
             element={
               <>
                 <Top1 />
                 <Top2 />
                 <Sidebar>
-                  <Page2 />
+                  <Dashboard />
                 </Sidebar>
               </>
             }
           />
           <Route
-            path="/page3"
+            path="/users"
             element={
               <>
                 <Top1 />
                 <Top2 />
                 <Sidebar>
-                  <Page3 />
+                  <Users />
+                </Sidebar>
+              </>
+            }
+          />
+          <Route
+            path="/koin"
+            element={
+              <>
+                <Top1 />
+                <Top2 />
+                <Sidebar>
+                  <Koin />
+                </Sidebar>
+              </>
+            }
+          />
+          <Route
+            path="/policy"
+            element={
+              <>
+                <Top1 />
+                <Top2 />
+                <Sidebar>
+                  <div style={{ borderTopLeftRadius: "10px" }}>
+                    <Policy />
+                  </div>
                 </Sidebar>
               </>
             }
