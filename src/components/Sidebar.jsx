@@ -1,23 +1,29 @@
 import { FaTh } from "react-icons/fa";
+import { MdPerson, MdPolicy, MdOutlineMonetizationOn } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import React from "react";
 
 const Sidebar = ({ children }) => {
   const menuItem = [
     {
-      path: "/page1",
-      name: "smallbutton",
-      icon: <FaTh />,
-    },
-    {
       path: "/dashboard",
       name: "대시보드",
       icon: <FaTh />,
     },
     {
-      path: "/page3",
-      name: "smallbutton",
-      icon: <FaTh />,
+      path: "/users",
+      name: "사용자 관리",
+      icon: <MdPerson />,
+    },
+    {
+      path: "/koin",
+      name: "코인 분석",
+      icon: <MdOutlineMonetizationOn />,
+    },
+    {
+      path: "/policy",
+      name: "정책 관리",
+      icon: <MdPolicy />,
     },
   ];
 
