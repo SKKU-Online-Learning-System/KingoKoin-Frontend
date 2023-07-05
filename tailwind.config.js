@@ -1,5 +1,6 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  important: "#root", // app wrapper
   theme: {
     extend: {
       colors: {
