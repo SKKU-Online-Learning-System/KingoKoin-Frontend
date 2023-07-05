@@ -1,16 +1,11 @@
 import React, { useState } from "react";
 import { useQuery } from "react-query";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
-import {
-  dummyFNQs,
-  dummyLinks,
-  fetchKoin,
-  fetchKoinDetails,
-} from "../../api.tsx";
-import Counter from "./Counter.jsx";
-import Loader from "../../components/Loader.jsx";
+import { dummyFNQs, dummyLinks, fetchKoin, fetchKoinDetails } from "../../api";
+import Counter from "./Counter";
+import Loader from "../../components/Loader";
 
-function Page3(props) {
+function Dashboard(props) {
   const [fnqs, setFnqs] = useState(
     dummyFNQs.map((it) => {
       return { ...it, isToggle: false };
@@ -52,15 +47,15 @@ function Page3(props) {
     <div className="flex flex-col gap-16 justify-center py-16 w-[1040px] mx-auto">
       <section className="flex self-center justify-around w-full">
         <div className="flex flex-col gap-4 items-center">
-          <Counter start={0} end={koin.curr} duration={1000}></Counter>
+          <Counter start={0} end={koin.point_curr} duration={1000}></Counter>
           <span className="text-title-m">보유한 코인</span>
         </div>
         <div className="flex flex-col gap-4 items-center">
-          <Counter start={0} end={koin.all} duration={1000}></Counter>
+          <Counter start={0} end={koin.point_all} duration={1000}></Counter>
           <span className="text-title-m">획득한 코인</span>
         </div>
         <div className="flex flex-col gap-4 items-center">
-          <Counter start={0} end={koin.used} duration={1000}></Counter>
+          <Counter start={0} end={koin.point_used} duration={1000}></Counter>
           <span className="text-title-m">사용한 코인</span>
         </div>
       </section>
@@ -174,4 +169,4 @@ function Page3(props) {
     </div>
   );
 }
-export default Page3;
+export default Dashboard;
