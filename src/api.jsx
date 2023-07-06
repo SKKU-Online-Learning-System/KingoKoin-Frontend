@@ -27,12 +27,12 @@ export const fetchKoin = async (user_id) => {
 /**
  * Fetch KoinDetails
  * @param {number} user_id 유저 식별자
- * @returns {Promise<{detail_id: number, pf_name: string, title: string, plus: boolean, modifiedAt: string}>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
+ * @returns {Promise<{dt_id: number, pf_name: string, title: string, plus: boolean, modifiedAt: string}>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
  */
 export const fetchKoinDetails = async (user_id) => {
   const dummyKoinDetails = [
     {
-      detail_id: 0,
+      dt_id: 0,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: true,
@@ -40,7 +40,7 @@ export const fetchKoinDetails = async (user_id) => {
       modifiedAt: "2023-05-10T04:05:08.000Z",
     },
     {
-      detail_id: 1,
+      dt_id: 1,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: false,
@@ -48,7 +48,7 @@ export const fetchKoinDetails = async (user_id) => {
       modifiedAt: "2023-05-10T04:05:08.000Z",
     },
     {
-      detail_id: 2,
+      dt_id: 2,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: true,
@@ -56,7 +56,7 @@ export const fetchKoinDetails = async (user_id) => {
       modifiedAt: "2023-05-10T04:05:08.000Z",
     },
     {
-      detail_id: 3,
+      dt_id: 3,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: false,
@@ -64,7 +64,7 @@ export const fetchKoinDetails = async (user_id) => {
       modifiedAt: "2023-05-10T04:05:08.000Z",
     },
     {
-      detail_id: 4,
+      dt_id: 4,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: true,
@@ -72,7 +72,7 @@ export const fetchKoinDetails = async (user_id) => {
       modifiedAt: "2023-05-10T04:05:08.000Z",
     },
     {
-      detail_id: 5,
+      dt_id: 5,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: false,
@@ -80,7 +80,7 @@ export const fetchKoinDetails = async (user_id) => {
       modifiedAt: "2023-05-10T04:05:08.000Z",
     },
     {
-      detail_id: 6,
+      dt_id: 6,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: true,
@@ -88,7 +88,7 @@ export const fetchKoinDetails = async (user_id) => {
       modifiedAt: "2023-05-10T04:05:08.000Z",
     },
     {
-      detail_id: 7,
+      dt_id: 7,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: false,
@@ -96,7 +96,7 @@ export const fetchKoinDetails = async (user_id) => {
       modifiedAt: "2023-05-10T04:05:08.000Z",
     },
     {
-      detail_id: 8,
+      dt_id: 8,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: true,
@@ -104,7 +104,7 @@ export const fetchKoinDetails = async (user_id) => {
       modifiedAt: "2023-05-10T04:05:08.000Z",
     },
     {
-      detail_id: 9,
+      dt_id: 9,
       pf_name: "온라인명륜당",
       title: "온라인명륜당 회원가입",
       plus: false,
