@@ -71,12 +71,12 @@ function App() {
       },
       body: {
         fontFamily: "Noto Sans KR",
-        fontSize: "12px",
+        fontSize: "14px",
         fontWeight: "100",
       },
       caption: {
         fontFamily: "Noto Sans KR",
-        fontSize: "8px",
+        fontSize: "10px",
         fontWeight: "100",
       },
     },
