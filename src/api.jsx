@@ -9,9 +9,9 @@ import SOSD_LOGO from "./assets/sosd_logo.svg";
  */
 export const fetchKoin = async (user_id) => {
   const dummyKoin = {
-    point_curr: 180,
-    point_used: 60,
-    point_all: 240,
+    point_total: 180,
+    point_plus: 60,
+    point_minus: 240,
   };
 
   const result = new Promise(function (resolve, reject) {
@@ -27,7 +27,7 @@ export const fetchKoin = async (user_id) => {
 /**
  * Fetch KoinDetails
  * @param {number} user_id 유저 식별자
- * @returns {Promise<{detail_id: number, pf_name: string, title: string, plus: boolean, modifiedAt: string}>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
+ * @returns {Promise<{detail_id: number, pf_name: string, title: string, plus: boolean, modified_date: string}>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
  */
 export const fetchKoinDetails = async (user_id) => {
   const dummyKoinDetails = [
@@ -37,7 +37,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: true,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       detail_id: 1,
@@ -45,7 +45,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: false,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       detail_id: 2,
@@ -53,7 +53,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: true,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       detail_id: 3,
@@ -61,7 +61,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: false,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       detail_id: 4,
@@ -69,7 +69,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: true,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       detail_id: 5,
@@ -77,7 +77,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: false,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       detail_id: 6,
@@ -85,7 +85,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: true,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       detail_id: 7,
@@ -93,7 +93,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: false,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       detail_id: 8,
@@ -101,7 +101,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: true,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       detail_id: 9,
@@ -109,7 +109,7 @@ export const fetchKoinDetails = async (user_id) => {
       title: "온라인명륜당 회원가입",
       plus: false,
       point: 50,
-      modifiedAt: "2023-05-10T04:05:08.000Z",
+      modified_date: "2023-05-10T04:05:08.000Z",
     },
   ];
 
@@ -172,15 +172,16 @@ export const dummyFNQs = [
 
 /**
  * Fetch Proposed Policy List
- * @return {Promise<{request_id: number, pl_id: number, name: string, plus: boolean, point: number, request_point: number, reason: string, create_user_name: string, created_date: string, isDelete: boolean}[]}
+ * @return {Promise<{request_id: number, pl_id: number, pf_name: string, name: string, plus: boolean, point: number, request_point: number, reason: string, create_user_name: string, created_date: string, isDelete: boolean}[]}
  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
 export const fetchProposedPolicies = async () => {
-  const dummyProposedPolicy = [
+  const dummyProposedPolicies = [
     {
       request_id: 1,
       pl_id: 10101,
       name: "온라인 명륜당 가입",
+      pf_name: "온라인 명륜당",
       plus: true,
       point: 10,
       request_point: 20,
@@ -194,6 +195,7 @@ export const fetchProposedPolicies = async () => {
       request_id: 2,
       pl_id: 10102,
       name: "온라인 명륜당 콘텐츠 수강",
+      pf_name: "온라인 명륜당",
       plus: true,
       point: 10,
       request_point: 20,
@@ -207,6 +209,7 @@ export const fetchProposedPolicies = async () => {
       request_id: 3,
       pl_id: 20101,
       name: "SOSD 가입",
+      pf_name: "온라인 명륜당",
       plus: true,
       point: 10,
       request_point: 20,
@@ -220,6 +223,7 @@ export const fetchProposedPolicies = async () => {
       request_id: 4,
       pl_id: 20102,
       name: "SOSD 상위 10%",
+      pf_name: "온라인 명륜당",
       plus: true,
       point: 10,
       request_point: 20,
@@ -233,6 +237,7 @@ export const fetchProposedPolicies = async () => {
       request_id: 5,
       pl_id: 20103,
       name: "SOSD 특별 이벤트",
+      pf_name: "온라인 명륜당",
       plus: true,
       point: 10,
       request_point: 20,
@@ -246,6 +251,7 @@ export const fetchProposedPolicies = async () => {
       request_id: 6,
       pl_id: 20104,
       name: "SOSD 상위 10%",
+      pf_name: "온라인 명륜당",
       plus: true,
       point: 10,
       request_point: 20,
@@ -271,6 +277,7 @@ export const fetchProposedPolicies = async () => {
       request_id: 8,
       pl_id: 20106,
       name: "SOSD 상위 10%",
+      pf_name: "온라인 명륜당",
       plus: true,
       point: 10,
       request_point: 20,
@@ -284,6 +291,7 @@ export const fetchProposedPolicies = async () => {
       request_id: 1,
       pl_id: 20107,
       name: "SOSD 특별 이벤트",
+      pf_name: "온라인 명륜당",
       plus: true,
       point: 10,
       request_point: 20,
@@ -297,9 +305,11 @@ export const fetchProposedPolicies = async () => {
 
   const result = new Promise(function (resolve, reject) {
     setTimeout(() => {
-      resolve(dummyProposedPolicy);
+      resolve(dummyProposedPolicies);
     }, 500);
   });
+
+  return result;
 };
 
 /**
@@ -310,7 +320,7 @@ export const fetchProposedPolicies = async () => {
 export const fetchPolicies = async () => {
   const dummyPolicy = [
     {
-      pl_id: "10101",
+      pl_id: 10101,
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
       plus: true,
@@ -319,7 +329,7 @@ export const fetchPolicies = async () => {
       isDelete: false,
     },
     {
-      pl_id: "10101",
+      pl_id: 10102,
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
       plus: true,
@@ -328,7 +338,7 @@ export const fetchPolicies = async () => {
       isDelete: false,
     },
     {
-      pl_id: "10101",
+      pl_id: 10103,
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
       plus: true,
@@ -337,7 +347,7 @@ export const fetchPolicies = async () => {
       isDelete: false,
     },
     {
-      pl_id: "10101",
+      pl_id: 20101,
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
       plus: true,
@@ -346,7 +356,7 @@ export const fetchPolicies = async () => {
       isDelete: false,
     },
     {
-      pl_id: "10101",
+      pl_id: 20102,
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
       plus: true,
@@ -355,7 +365,7 @@ export const fetchPolicies = async () => {
       isDelete: false,
     },
     {
-      pl_id: "10101",
+      pl_id: 20103,
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
       plus: true,
@@ -364,7 +374,7 @@ export const fetchPolicies = async () => {
       isDelete: false,
     },
     {
-      pl_id: "10101",
+      pl_id: 10104,
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
       plus: true,
@@ -373,7 +383,7 @@ export const fetchPolicies = async () => {
       isDelete: false,
     },
     {
-      pl_id: "10101",
+      pl_id: 10105,
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
       plus: true,
@@ -388,4 +398,81 @@ export const fetchPolicies = async () => {
       resolve(dummyPolicy);
     }, 500);
   });
+
+  return result;
+};
+
+/**
+ * Create Proposed Policy
+ * @param {string} name
+ * @param {number} pl_id DB에추가필요
+ * @param {number} point
+ * @param {number} create_user_id
+ * @param {string} reason
+ * @returns {Promise<{result: boolean}>} 성공여부를 반환하는 프로미스 객체
+ *  * 보안과 관련된 파라미터가 필요할 수 있다.
+ */
+export const createProposedPolicy = (name, point, create_user_id, reason) => {};
+
+/**
+ * Fetch Policy List
+ * @returns {Promise<{user_id: number, st_id: number, st_name: string, dept: string, point_total: number, point_plus: number, user_authority: string}[]>} 사용자 배열을 반환하는 프로미스 객체
+ *  * 보안과 관련된 파라미터가 필요할 수 있다.
+ */
+export const fetchUsers = async () => {
+  const dummyUsers = [
+    {
+      user_id: 1,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
+    {
+      user_id: 2,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
+    {
+      user_id: 3,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
+    {
+      user_id: 4,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
+    {
+      user_id: 5,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
+  ];
+
+  const result = new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      resolve(dummyUsers);
+    }, 500);
+  });
+
+  return result;
 };

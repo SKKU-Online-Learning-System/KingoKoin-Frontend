@@ -96,7 +96,7 @@ function Dashboard(props) {
                 {details.map((it) => (
                   <tr key={it.detail_id} className="text-body">
                     <td className="text-left p-4">
-                      {new Date(it.createdAt).toLocaleDateString("ko-KR", {
+                      {new Date(it.modified_date).toLocaleDateString("ko-KR", {
                         timeZone: "UTC",
                       })}
                     </td>
@@ -120,7 +120,7 @@ function Dashboard(props) {
         <div className="text-title-m">자주 묻는 질문</div>
         {fnqs.map((it) => (
           <div
-            key={it.id}
+            key={it.question_id}
             className="flex flex-col gap-4 bg-background px-8 py-4 rounded-lg"
           >
             <div className="flex w-full justify-between items-center">
