@@ -153,22 +153,33 @@ export const dummyLinks = [
 ];
 
 /**
- * FNQ List Data
- * @type {{question_id: number, question: string, answer: string}[]}
+ * Fetch FNQ List
+ * @returns {Promise<{question_id: number, question: string, answer: string}[]>} 자주 묻는 질문 배열을 반환하는 프로미스 객체
  */
-export const dummyFNQs = [
-  {
-    question_id: 0,
-    question: "킹고코인에 사용기한이 있나요?",
-    answer: "킹고코인은 매년 초기화됩니다.",
-  },
-  {
-    question_id: 1,
-    question: "휴학생도 킹고코인을 사용할 수 있나요?",
-    answer:
-      "킹고코인 포인트는 AWS, GPU 개인사용 크레딧, IT 기기대여, 세미나실 사용 등에 사용될 수 있으며, 코리아챌린지와 글로벌챌린지를 비롯한 각종 학과내 행사에 있어서 선발 기준에 적용될 수 있습니다.",
-  },
-];
+export const fetchFaqs = () => {
+  const dummyFaqs = [
+    {
+      fnq_id: 0,
+      question: "킹고코인에 사용기한이 있나요?",
+      answer: "킹고코인은 매년 초기화됩니다.",
+    },
+    {
+      fnq_id: 1,
+      question: "휴학생도 킹고코인을 사용할 수 있나요?",
+      answer:
+        "킹고코인 포인트는 AWS, GPU 개인사용 크레딧, IT 기기대여, 세미나실 사용 등에 사용될 수 있으며, 코리아챌린지와 글로벌챌린지를 비롯한 각종 학과내 행사에 있어서 선발 기준에 적용될 수 있습니다.",
+    },
+  ];
+
+  const result = new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      resolve(dummyFaqs);
+    }, 500);
+  });
+
+  // axios.get<IKoinDetail[]>(".../api/koin/${user_id}?=”${}”")
+  return result;
+};
 
 /**
  * Fetch Proposed Policy List
