@@ -5,13 +5,13 @@ import SOSD_LOGO from "./assets/sosd_logo.svg";
 /**
  * Fetch Koin
  * @param {number} user_id - 유저 식별자
- * @return {Promise<{ point_curr: number, point_used: number, point_all: number }>} 코인 객체를 반환하는 프로미스 객체
+ * @return {Promise<{ point_total: number, point_plus: number, point_minus: number }>} 코인 객체를 반환하는 프로미스 객체
  */
 export const fetchKoin = async (user_id) => {
   const dummyKoin = {
     point_total: 180,
-    point_plus: 60,
-    point_minus: 240,
+    point_plus: 240,
+    point_minus: 60,
   };
 
   const result = new Promise(function (resolve, reject) {
@@ -27,88 +27,100 @@ export const fetchKoin = async (user_id) => {
 /**
  * Fetch KoinDetails
  * @param {number} user_id 유저 식별자
- * @returns {Promise<{dt_id: number, pf_name: string, title: string, plus: boolean, modified_date: string}>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
+ * @param {number} page n번째 페이지
+ * @param {number} size 페이지 크기
+ * @returns {Promise<{dt_id: number, pf_name: string, pl_name: string, plus: boolean, point:number, point_total: number, modified_date: string}>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
  */
 export const fetchKoinDetails = async (user_id) => {
   const dummyKoinDetails = [
     {
       dt_id: 0,
-      pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
-      plus: true,
-      point: 50,
-      modified_date: "2023-05-10T04:05:08.000Z",
+      pf_name: "소프트웨어학과 행정실",
+      pl_name: "장비 대여",
+      plus: false,
+      point: 10,
+      point_total: 180,
+      modified_date: "2023-07-12T04:05:08.000Z",
     },
     {
       dt_id: 1,
       pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
-      plus: false,
-      point: 50,
-      modified_date: "2023-05-10T04:05:08.000Z",
+      pl_name: "온라인명륜당 강좌 수강",
+      plus: true,
+      point: 10,
+      point_total: 190,
+      modified_date: "2023-07-11T04:05:08.000Z",
     },
     {
       dt_id: 2,
       pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
+      pl_name: "온라인명륜당 가입",
       plus: true,
-      point: 50,
-      modified_date: "2023-05-10T04:05:08.000Z",
+      point: 20,
+      point_total: 170,
+      modified_date: "2023-07-11T04:05:08.000Z",
     },
     {
       dt_id: 3,
-      pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
+      pf_name: "SOSD",
+      pl_name: "분기별 상위 10%",
       plus: false,
       point: 50,
-      modified_date: "2023-05-10T04:05:08.000Z",
+      point_total: 120,
+      modified_date: "2023-07-01T04:05:08.000Z",
     },
     {
       dt_id: 4,
-      pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
+      pf_name: "소프트웨어학과 행정실",
+      pl_name: "킹고인과의 만남 강연 참석",
       plus: true,
-      point: 50,
+      point: 10,
+      point_total: 100,
       modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       dt_id: 5,
-      pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
-      plus: false,
-      point: 50,
-      modified_date: "2023-05-10T04:05:08.000Z",
+      pf_name: "SOSD",
+      pl_name: "특별 이벤트",
+      plus: true,
+      point: 10,
+      point_total: 90,
+      modified_date: "2023-05-09T04:05:08.000Z",
     },
     {
       dt_id: 6,
-      pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
+      pf_name: "SOSD",
+      pl_name: "SOSD 회원가입",
       plus: true,
-      point: 50,
-      modified_date: "2023-05-10T04:05:08.000Z",
+      point: 20,
+      point_total: 70,
+      modified_date: "2023-05-05T04:05:08.000Z",
     },
     {
       dt_id: 7,
       pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
+      pl_name: "온라인명륜당 회원가입",
       plus: false,
       point: 50,
+      point_total: 100,
       modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       dt_id: 8,
       pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
+      pl_name: "온라인명륜당 회원가입",
       plus: true,
       point: 50,
+      point_total: 100,
       modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
       dt_id: 9,
       pf_name: "온라인명륜당",
-      title: "온라인명륜당 회원가입",
+      pl_name: "온라인명륜당 회원가입",
       plus: false,
       point: 50,
+      point_total: 100,
       modified_date: "2023-05-10T04:05:08.000Z",
     },
   ];
@@ -119,7 +131,7 @@ export const fetchKoinDetails = async (user_id) => {
     }, 500);
   });
 
-  // axios.get<IKoinDetail[]>(".../api/koin/${user_id}?=”${}”")
+  // axios.get<IKoinDetail[]>(`.../api/koin/${user_id}/detail?page="${page}"&size="${size}"`)
   return result;
 };
 
@@ -154,17 +166,17 @@ export const dummyLinks = [
 
 /**
  * Fetch FNQ List
- * @returns {Promise<{question_id: number, question: string, answer: string}[]>} 자주 묻는 질문 배열을 반환하는 프로미스 객체
+ * @returns {Promise<{faq_id: number, question: string, answer: string}[]>} 자주 묻는 질문 배열을 반환하는 프로미스 객체
  */
 export const fetchFaqs = () => {
   const dummyFaqs = [
     {
-      fnq_id: 0,
+      faq_id: 0,
       question: "킹고코인에 사용기한이 있나요?",
       answer: "킹고코인은 매년 초기화됩니다.",
     },
     {
-      fnq_id: 1,
+      faq_id: 1,
       question: "휴학생도 킹고코인을 사용할 수 있나요?",
       answer:
         "킹고코인 포인트는 AWS, GPU 개인사용 크레딧, IT 기기대여, 세미나실 사용 등에 사용될 수 있으며, 코리아챌린지와 글로벌챌린지를 비롯한 각종 학과내 행사에 있어서 선발 기준에 적용될 수 있습니다.",
@@ -173,7 +185,11 @@ export const fetchFaqs = () => {
 
   const result = new Promise(function (resolve, reject) {
     setTimeout(() => {
-      resolve(dummyFaqs);
+      resolve(
+        dummyFaqs.map((it) => {
+          return { ...it, isToggle: false };
+        })
+      );
     }, 500);
   });
 
@@ -181,9 +197,10 @@ export const fetchFaqs = () => {
   return result;
 };
 
-/**
+/**0
  * Fetch Proposed Policy List
- * @return {Promise<{request_id: number, pl_id: number, pf_name: string, name: string, plus: boolean, point: number, request_point: number, reason: string, create_user_name: string, created_date: string, isDelete: boolean}[]}
+ * @return {Promise<{request_id: number, pl_id: number, pf_name: string, name: string, plus: boolean, point: number, request_point: number, reason: string, create_user_name: string, created_date: string, available: boolean,
+ * request_available: boolean}[]}
  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
 export const fetchProposedPolicies = async () => {
@@ -199,13 +216,14 @@ export const fetchProposedPolicies = async () => {
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "율전이",
-      date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      date: "2023-07-12T04:05:08.000Z",
+      available: true,
+      request_available: true,
     },
     {
       request_id: 2,
-      pl_id: 10102,
-      name: "온라인 명륜당 콘텐츠 수강",
+      pl_id: 10199,
+      name: "특별 이벤트",
       pf_name: "온라인 명륜당",
       plus: true,
       point: 10,
@@ -214,13 +232,29 @@ export const fetchProposedPolicies = async () => {
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "율전이",
       date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
+      request_available: true,
+    },
+    {
+      request_id: 0,
+      pl_id: 10103,
+      name: "강좌 수료",
+      pf_name: "온라인 명륜당",
+      plus: true,
+      point: 20,
+      request_point: 10,
+      reason:
+        "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
+      create_user_name: "율전이",
+      date: "2023-07-12T04:05:08.000Z",
+      available: true,
+      request_available: true,
     },
     {
       request_id: 3,
       pl_id: 20101,
       name: "SOSD 가입",
-      pf_name: "온라인 명륜당",
+      pf_name: "SOSD",
       plus: true,
       point: 10,
       request_point: 20,
@@ -228,13 +262,14 @@ export const fetchProposedPolicies = async () => {
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
+      request_available: true,
     },
     {
       request_id: 4,
       pl_id: 20102,
       name: "SOSD 상위 10%",
-      pf_name: "온라인 명륜당",
+      pf_name: "SOSD",
       plus: true,
       point: 10,
       request_point: 20,
@@ -242,13 +277,14 @@ export const fetchProposedPolicies = async () => {
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
+      request_available: true,
     },
     {
       request_id: 5,
       pl_id: 20103,
       name: "SOSD 특별 이벤트",
-      pf_name: "온라인 명륜당",
+      pf_name: "SOSD",
       plus: true,
       point: 10,
       request_point: 20,
@@ -256,7 +292,8 @@ export const fetchProposedPolicies = async () => {
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
+      request_available: false,
     },
     {
       request_id: 6,
@@ -270,7 +307,8 @@ export const fetchProposedPolicies = async () => {
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
+      request_available: true,
     },
     {
       request_id: 7,
@@ -282,7 +320,8 @@ export const fetchProposedPolicies = async () => {
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
-      isDelete: false,
+      available: true,
+      request_available: true,
     },
     {
       request_id: 8,
@@ -296,7 +335,8 @@ export const fetchProposedPolicies = async () => {
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
+      request_available: true,
     },
     {
       request_id: 1,
@@ -310,7 +350,8 @@ export const fetchProposedPolicies = async () => {
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
+      request_available: true,
     },
   ];
 
@@ -325,7 +366,8 @@ export const fetchProposedPolicies = async () => {
 
 /**
  * Fetch Policy List
- * @returns {Promise<{pl_id: number, name: string, pf_name: string, plus: boolean, point: number, created_date: string, isDelete: boolean}[]>} 정책 배열을 반환하는 프로미스 객체
+ * @returns {Promise<{pl_id: number, name: string, pf_name: string, plus: boolean, point: number, created_date: string, available: boolean,
+ * request_available: false}[]>} 정책 배열을 반환하는 프로미스 객체
  *  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
 export const fetchPolicies = async () => {
@@ -335,54 +377,54 @@ export const fetchPolicies = async () => {
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
       plus: true,
-      point: 10,
+      point: 5,
       created_date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
     },
     {
       pl_id: 10102,
-      name: "온라인 명륜당 가입",
+      name: "강좌 시청",
       pf_name: "온라인 명륜당",
       plus: true,
-      point: 10,
+      point: 1,
       created_date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
     },
     {
       pl_id: 10103,
-      name: "온라인 명륜당 가입",
+      name: "강좌 수료 완료",
       pf_name: "온라인 명륜당",
       plus: true,
-      point: 10,
+      point: 20,
       created_date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
     },
     {
       pl_id: 20101,
-      name: "온라인 명륜당 가입",
+      name: "특별 이벤트",
       pf_name: "온라인 명륜당",
-      plus: true,
+      plus: false,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: false,
     },
     {
       pl_id: 20102,
-      name: "온라인 명륜당 가입",
-      pf_name: "온라인 명륜당",
+      name: "화상강연 참석",
+      pf_name: "소프트웨어학과 행정실",
       plus: true,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
     },
     {
-      pl_id: 20103,
-      name: "온라인 명륜당 가입",
-      pf_name: "온라인 명륜당",
+      pl_id: 10202,
+      name: "SOSD 가입",
+      pf_name: "SOSD",
       plus: true,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
     },
     {
       pl_id: 10104,
@@ -391,7 +433,7 @@ export const fetchPolicies = async () => {
       plus: true,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: true,
     },
     {
       pl_id: 10105,
@@ -400,7 +442,7 @@ export const fetchPolicies = async () => {
       plus: true,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
-      isDelete: false,
+      available: false,
     },
   ];
 

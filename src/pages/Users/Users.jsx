@@ -71,6 +71,7 @@ function Users(props) {
   const [detailIsHidden, setDetailIsHidden] = useState(true);
 
   if (usersIsLoading) return <Loader />;
+  if (usersError) return <div>An error has occurred: {usersError.message}</div>;
 
   const rows = users.map((it) => ({
     ...it,
