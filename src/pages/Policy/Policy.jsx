@@ -139,8 +139,8 @@ const PolicyContainer = () => {
   const [detailIsHidden, setDetailIsHidden] = useState(true);
 
   if (policiesIsLoading) return <Loader />;
-
-  console.log(policies);
+  if (policiesError)
+    return <div>An error has occurred: {policiesError.message}</div>;
 
   const rows = policies.map((it) => ({
     ...it,

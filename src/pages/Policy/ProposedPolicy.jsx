@@ -90,8 +90,8 @@ const ProposedPolicy = (props) => {
   const [detailIsHidden, setDetailIsHidden] = useState(true);
 
   if (proposedPoliciesIsLoading) return <Loader />;
-
-  console.log(proposedPolicies);
+  if (proposedPoliciesError)
+    return <div>An error has occurred: {proposedPoliciesError.message}</div>;
 
   const rows = proposedPolicies.map((it) => ({
     ...it,
