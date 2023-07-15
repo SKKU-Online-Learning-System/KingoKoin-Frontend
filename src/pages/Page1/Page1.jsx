@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { information } from '../../dummy';
 import * as xlsx from 'xlsx';
 import Modal from 'react-modal';
+import Select from 'react-select';
 
 const StudentCoinPage = () => {
   const [studentId, setStudentId] = useState('');
@@ -14,6 +15,14 @@ const StudentCoinPage = () => {
   const [uploadedData, setUploadedData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [pendingGrantHistory, setPendingGrantHistory] = useState([]);
+  const [customContent, setCustomContent] = useState('');
+
+  const contentOptions = [
+    { label: '화상 강연', value: '화상 강연', coinValue: '5' },
+    { label: 'IT 강연', value: 'IT 강연', coinValue: '10' },
+    { label: '특강', value: '특강', coinValue: '15' },
+    { label: '직접입력', value: '직접입력', coinValue: '' },
+  ];
 
   useEffect(() => {
     const coinHistoryData = localStorage.getItem('coinHistory');
@@ -31,12 +40,38 @@ const StudentCoinPage = () => {
   };
 
   const handleCoinValueChange = (event) => {
-    setCoinValue(event.target.value);
+    const value = event.target.value;
+    setCoinValue(value);
+  
+    if (content === '직접입력') {
+      setCustomContent(value);
+    }
   };
+  
+    
+  
 
-  const handleContentChange = (event) => {
-    setContent(event.target.value);
+  const handleContentChange = (selectedOption) => {
+    if (selectedOption) {
+      const { value, coinValue } = selectedOption;
+      if (value === '직접입력') {
+        setContent(value);
+        setCoinValue('');
+      } 
+      
+      else {
+        setContent(value);
+        setCoinValue(coinValue || '');
+      }
+    } 
+    
+    else {
+      setContent('');
+      setCoinValue('');
+    }
   };
+  
+  
 
   const handleStudentLookup = () => {
     if (!studentId || isNaN(studentId)) {
@@ -46,15 +81,15 @@ const StudentCoinPage = () => {
       return;
     }
 
-    const student = Object.values(information).find((data) => data.st_id === parseInt(studentId));
+    const student = Object.values(information).find(
+      (data) => data.st_id === parseInt(studentId)
+    );
 
     if (student) {
       setStudentName(student.st_name);
       setStudentCoin(student.point);
       setError('');
-    } 
-    
-    else {
+    } else {
       setStudentName('');
       setStudentCoin(0);
       setError('잘못된 학번입니다.');
@@ -66,7 +101,9 @@ const StudentCoinPage = () => {
   };
 
   const confirmGrantCoins = () => {
-    const student = Object.values(information).find((data) => data.st_id === parseInt(studentId));
+    const student = Object.values(information).find(
+      (data) => data.st_id === parseInt(studentId)
+    );
   
     if (!coinValue || isNaN(parseInt(coinValue))) {
       setShowModal(false);
@@ -83,7 +120,7 @@ const StudentCoinPage = () => {
   
       const newCoinHistory = {
         date: new Date().toLocaleString(),
-        content: content,
+        content: content === '직접입력' ? customContent : content,
         studentId: studentId,
         coinValue: parseInt(coinValue),
       };
@@ -96,9 +133,10 @@ const StudentCoinPage = () => {
     }
   
     setShowModal(false);
-  };
+  };  
   
- 
+  
+
   const cancelGrantCoins = () => {
     setShowModal(false);
     setPendingGrantHistory([]);
@@ -107,31 +145,31 @@ const StudentCoinPage = () => {
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
-  
+
     reader.onload = (e) => {
       const data = new Uint8Array(e.target.result);
       const workbook = xlsx.read(data, { type: 'array' });
       const sheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[sheetName];
-  
+
       const jsonData = xlsx.utils.sheet_to_json(worksheet);
-  
+
       const uploadedData = [];
-  
+
       jsonData.forEach((row) => {
         const studentId = row['학번'];
         const content = row['내용'];
         const coinValue = row['코인 수'];
         const time = row['시간'];
-  
+
         const student = Object.values(information).find(
           (data) => data.st_id === parseInt(studentId)
         );
-  
+
         if (student) {
           const newCoin = student.point + parseInt(coinValue);
           student.point = newCoin;
-  
+
           const newCoinHistory = {
             date: new Date().toLocaleString(),
             content: content,
@@ -139,7 +177,7 @@ const StudentCoinPage = () => {
             coinValue: parseInt(coinValue),
             time: parseInt(time),
           };
-  
+
           uploadedData.push(newCoinHistory);
           console.log(`부여된 코인: ${coinValue}, 학생의 현재 코인: ${newCoin}`);
           setCoinHistory([newCoinHistory, ...coinHistory]);
@@ -148,15 +186,14 @@ const StudentCoinPage = () => {
       setCoinHistory([...uploadedData.reverse()], ...coinHistory);
       setUploadedData(uploadedData);
     };
-  
+
     reader.readAsArrayBuffer(file);
   };
-  
 
   return (
     <div className="pt-10">
       <div className="flex px-10">
-        <div className="basis-1/4">
+        <div className="">
           <div className="text-2xl font-bold mb-2 pb-5">학생 코인 부여</div>
           <div className="bg-white rounded-lg shadow-lg p-10">
             <div className="mb-4">
@@ -165,11 +202,12 @@ const StudentCoinPage = () => {
                 id="studentId"
                 value={studentId}
                 onChange={handleStudentIdChange}
-                className="flex-grow border border-gray-300 px-3 py-2 rounded-lg mr-2 focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
+                className="flex-grow border border-gray-300 px-2 py-2 rounded-lg mr-2 focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
                 placeholder="학번"
                 onMouseEnter={(event) => (event.target.placeholder = '')}
                 onMouseLeave={(event) => (event.target.placeholder = '학번')}
               />
+
               <button
                 onClick={handleStudentLookup}
                 className="bg-SKKU_GREEN text-gray-50 px-4 py-2 rounded-lg min-w-[120px] min-h-[40px]"
@@ -183,11 +221,38 @@ const StudentCoinPage = () => {
                 type="text"
                 id="studentName"
                 value={studentName}
-                readOnly
-                className="border border-gray-300 px-3 py-2 rounded-lg bg-gray-100 focus:outline-none"
+               readOnly
+                className="border border-gray-300 px-2 py-2 rounded-lg bg-gray-100 focus:outline-none"
                 placeholder="이름"
               />
             </div>
+
+            <div className="mb-4">
+  <div className="flex items-center">
+    <div className="flex-grow mr-2">
+      <Select
+        value={contentOptions.find((option) => option.value === content)}
+        options={contentOptions}
+        onChange={handleContentChange}
+      />
+    </div>
+
+    {content === '직접입력' && (
+      <div className="flex-grow">
+        <input
+          type="text"
+          id="customContent"
+          className="border border-gray-300 px-3 py-2 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
+          placeholder="내용 입력"
+          onMouseEnter={(event) => (event.target.placeholder = '')}
+          onMouseLeave={(event) => (event.target.placeholder = '내용 입력')}
+          
+        />
+      </div>
+    )}
+  </div>
+</div>
+
 
             <div className="mb-4">
               <input
@@ -195,25 +260,11 @@ const StudentCoinPage = () => {
                 id="coinValue"
                 value={coinValue}
                 onChange={handleCoinValueChange}
-                className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
+                className="border border-gray-300 px-2 mr-2 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
                 placeholder="코인값"
                 onMouseEnter={(event) => (event.target.placeholder = '')}
                 onMouseLeave={(event) => (event.target.placeholder = '코인값')}
               />
-            </div>
-
-            <div className="mb-4 flex items-center">
-              <input
-                type="text"
-                id="content"
-                value={content}
-                onChange={handleContentChange}
-                className="border border-gray-300 px-3 py-2 rounded-lg flex-grow mr-2 focus:outline-none focus:ring-2 focus:ring-SKKU_GREEN"
-                placeholder="내용"
-                onMouseEnter={(event) => (event.target.placeholder = '')}
-                onMouseLeave={(event) => (event.target.placeholder = '내용')}
-              />
-
               <button
                 onClick={handleGrantCoins}
                 className="bg-SKKU_GREEN text-gray-50 px-4 py-2 rounded-lg min-w-[120px] min-h-[40px]"
@@ -222,14 +273,7 @@ const StudentCoinPage = () => {
               </button>
             </div>
 
-            <div className="mt-4">
-              <input
-                type="file"
-                id="fileUpload"
-                onChange={handleFileUpload}
-                className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none"
-              />
-            </div>
+            
 
             {error && <p className="text-red-500 mt-2">{error}</p>}
             {studentCoin !== undefined && (
@@ -241,7 +285,15 @@ const StudentCoinPage = () => {
         </div>
 
         <div className="pl-12">
-          <div className="text-2xl font-bold pb-8">업로드한 엑셀 파일</div>
+          <div className="text-2xl font-bold pb-10">업로드한 엑셀 파일</div>
+          <div className="mt-4">
+              <input
+                type="file"
+                id="fileUpload"
+                onChange={handleFileUpload}
+                className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none"
+              />
+            </div>
           {uploadedData.length > 0 && (
             <table className="pl-20 table-auto">
               <thead className="bg-SKKU_GREEN text-gray-200">
