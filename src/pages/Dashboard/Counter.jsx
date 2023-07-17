@@ -14,7 +14,7 @@ const Counter = ({ start, end, duration }) => {
   useEffect(counterInc, [count, end, timeInterval]);
 
   return (
-    <div className="text-6xl font-bold font-noto-sans-kr text-primary">
+    <div className="text-6xl font-regular font-noto-sans-kr text-primary">
       {count}
     </div>
   );
