@@ -4,6 +4,17 @@ import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { dummyLinks, fetchFaqs, fetchKoin, fetchKoinDetails } from "../../api";
 import Counter from "./Counter";
 import Loader from "../../components/Loader";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Accordion,
+  AccordionSummary,
+  Typography,
+  AccordionDetails,
+} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import CustomPagination from "../../components/CustomPagination";
 
 function Dashboard(props) {
   const {
@@ -26,152 +37,191 @@ function Dashboard(props) {
     data: details,
   } = useQuery("KoinDetails", fetchKoinDetails);
 
-  const queryClient = useQueryClient();
-
   const isLoading = faqsIsLoading || koinIsLoading || detailsIsLoading;
   const error = faqsError || koinError || detailsError;
 
   if (isLoading) return <Loader />;
   if (error) return <div>An error has occurred: {error.message}</div>;
 
-  const handleToggle = (id) => {
-    const target = faqs.findIndex((it) => it.faq_id === id);
-    queryClient.setQueryData(
-      "Faqs",
-      faqs.map((item, index) => {
-        if (index !== target) {
-          return item;
-        }
-        return {
-          ...item,
-          isToggle: !item.isToggle,
-        };
-      })
-    );
-  };
+  const PAGE_SIZE = 4;
+
+  const rows = details.map((it) => ({
+    ...it,
+    id: it.dt_id,
+    modified_date: new Date(it.modified_date).toLocaleDateString("ko-KR", {
+      timeZone: "UTC",
+    }),
+  }));
+
+  const columns = [
+    { field: "modified_date", headerName: "날짜", flex: 1 },
+    { field: "pf_name", headerName: "제공처", flex: 1.5 },
+    { field: "pl_name", headerName: "내용", flex: 1.5 },
+    {
+      field: "point_plus",
+      headerName: "획득한 코인",
+      flex: 1,
+      valueGetter: (params) => (params.row.plus ? params.row.point : ""),
+    },
+    {
+      field: "point_minus",
+      headerName: "사용한 코인",
+      flex: 1,
+      valueGetter: (params) => (params.row.plus ? "" : params.row.point),
+    },
+    { field: "point_total", headerName: "보유한 코인", flex: 1 },
+  ];
 
   return (
-    <div className="flex flex-col gap-16 justify-center py-16 w-[1040px] mx-auto">
-      <section className="flex self-center justify-around w-full">
-        <div className="flex flex-col gap-4 items-center">
-          <Counter start={0} end={koin.point_total} duration={1000}></Counter>
-          <span className="text-title-m">보유한 코인</span>
-        </div>
-        <div className="flex flex-col gap-4 items-center">
-          <Counter start={0} end={koin.point_plus} duration={1000}></Counter>
-          <span className="text-title-m">획득한 코인</span>
-        </div>
-        <div className="flex flex-col gap-4 items-center">
-          <Counter start={0} end={koin.point_minus} duration={1000}></Counter>
-          <span className="text-title-m">사용한 코인</span>
-        </div>
-      </section>
-      <section className="flex flex-col gap-4">
-        <div className="text-display">코인 내역</div>
-        <div className="overflow-hidden rounded-lg">
-          <table className="bg-primary text-onPrimary w-full sticky top-0">
-            <colgroup>
-              <col className="w-32" />
-              <col className="w-40" />
-              <col className="w-64" />
-              <col className="w-32" />
-              <col className="w-32" />
-              <col className="w-32" />
-            </colgroup>
-            <thead>
-              <tr className="text-label-m">
-                <th className="text-left p-4">날짜</th>
-                <th className="text-left p-4">플랫폼</th>
-                <th className="text-left p-4">내용</th>
-                <th className="text-right p-4">획득한 코인</th>
-                <th className="text-right p-4">사용한 코인</th>
-                <th className="text-right p-4">보유한 코인</th>
-              </tr>
-            </thead>
-          </table>
-          <div className="h-[208px] overflow-y-scroll">
-            <table className="bg-background w-full">
-              <colgroup>
-                <col className="w-32" />
-                <col className="w-40" />
-                <col className="w-64" />
-                <col className="w-32" />
-                <col className="w-32" />
-                <col className="w-32" />
-              </colgroup>
-              <tbody>
-                {details.map((it) => (
-                  <tr key={it.dt_id} className="text-body">
-                    <td className="text-left p-4">
-                      {new Date(it.modified_date).toLocaleDateString("ko-KR", {
-                        timeZone: "UTC",
-                      })}
-                    </td>
-                    <td className="text-left p-4">{it.pf_name}</td>
-                    <td className="text-left p-4">{it.pl_name}</td>
-                    <td className="text-right p-4">
-                      {it.plus ? it.point : ""}
-                    </td>
-                    <td className="text-right p-4">
-                      {it.plus ? "" : it.point}
-                    </td>
-                    <td className="text-right p-4">{it.point_total}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+    <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
+      <section className="flex gap-6 w-full">
+        <div className="flex flex-col gap-6 w-full">
+          <div className="flex gap-6">
+            <Card className="w-[172px]">
+              <CardHeader
+                title="보유한 코인"
+                titleTypographyProps={{ variant: "label-l" }}
+              />
+              <CardContent>
+                <div className="flex items-end">
+                  <Counter start={0} end={koin.point_total} duration={1000} />
+                  <div
+                    className={
+                      rows[0].plus ? "flex text-primary" : "flex text-red-600"
+                    }
+                  >
+                    {rows[0].point}
+                    {rows[0].plus ? "▲" : "▼"}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="w-[172px]">
+              <CardHeader
+                title="획득한 코인"
+                titleTypographyProps={{ variant: "label-l" }}
+              />
+              <CardContent>
+                <div className="flex items-end">
+                  <Counter start={0} end={koin.point_plus} duration={1000} />
+                  <div
+                    className={
+                      rows[0].plus ? "flex text-primary" : "flex text-red-600"
+                    }
+                  >
+                    {rows[0].point}
+                    {rows[0].plus ? "▲" : "▼"}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            <Card className="w-[172px]">
+              <CardHeader
+                title="사용한 코인"
+                titleTypographyProps={{ variant: "label-l" }}
+              />
+              <CardContent>
+                <div className="flex items-end">
+                  <Counter start={0} end={koin.point_minus} duration={1000} />
+                  <div
+                    className={
+                      rows[0].plus ? "flex text-red-600" : "flex text-primary"
+                    }
+                  >
+                    {rows[0].point}
+                    {rows[0].plus ? "▼" : "▲"}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           </div>
+          <Card className="w-[564px] h-full">
+            <CardHeader
+              title="누적코인보유량"
+              titleTypographyProps={{ variant: "display" }}
+            />
+            <CardContent>GRAPH</CardContent>
+          </Card>
         </div>
-      </section>
-      <section className="flex flex-col gap-4">
-        <div className="text-title-m">자주 묻는 질문</div>
-        {faqs.map((it) => (
-          <div
-            key={it.faq_id}
-            className="flex flex-col gap-4 bg-background px-8 py-4 rounded-lg"
-          >
-            <div className="flex w-full justify-between items-center">
-              <div className="text-label-l">{it.question}</div>
-              {it.isToggle ? (
-                <BiChevronUp
-                  className="w-6 h-6 cursor-pointer"
-                  onClick={() => handleToggle(it.faq_id)}
-                />
-              ) : (
-                <BiChevronDown
-                  className="w-6 h-6 cursor-pointer"
-                  onClick={() => handleToggle(it.faq_id)}
-                />
-              )}
+        <Card className="bg-transparent shadow-none w-full">
+          <CardHeader
+            title="코인 획득처"
+            titleTypographyProps={{ variant: "display" }}
+          />
+          <CardContent>
+            <div className="flex flex-wrap gap-3 w-full">
+              {links.map((it) => (
+                <a
+                  key={it.pf_name}
+                  href={it.pf_link}
+                  className="flex justify-center items-center gap-1 w-[258px] h-[156px] bg-background rounded-lg border-solid border-2 border-primary"
+                >
+                  {it.pf_logo ? (
+                    <>
+                      <img
+                        className="w-8 h-8"
+                        src={it.pf_logo}
+                        alt={it.pf_name + " 링크"}
+                      />
+                      <div className="text-label-l">{it.pf_name}</div>
+                    </>
+                  ) : (
+                    <div className="font-gugi text-xl">{it.pf_name}</div>
+                  )}
+                </a>
+              ))}
             </div>
-            {it.isToggle && <p>{it.answer}</p>}
-          </div>
-        ))}
+          </CardContent>
+        </Card>
       </section>
       <section className="flex flex-col gap-4">
-        <div className="text-title-m">코인을 더 모으고 싶다면?</div>
-        <div className="flex gap-4">
-          {links.map((it) => (
-            <a
-              key={it.pf_name}
-              href={it.pf_link}
-              className="flex bg-background w-[248px] h-20 justify-center items-center rounded-lg shadow-md "
-            >
-              {it.pf_logo ? (
-                <>
-                  <img
-                    className="w-8 h-8"
-                    src={it.pf_logo}
-                    alt={it.pf_name + " 링크"}
-                  />
-                  <div className="text-label-l">{it.pf_name}</div>
-                </>
-              ) : (
-                <div className="font-gugi text-xl">{it.pf_name}</div>
-              )}
-            </a>
-          ))}
-        </div>
+        <Card className="flex-1">
+          <CardHeader
+            title="코인 내역"
+            titleTypographyProps={{ variant: "display" }}
+            subheader={`${details.length}건`}
+            subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
+          />
+          <CardContent>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              initialState={{
+                pagination: {
+                  paginationModel: {
+                    pageSize: PAGE_SIZE,
+                  },
+                },
+              }}
+              pageSizeOptions={[PAGE_SIZE]}
+              slots={{
+                pagination: CustomPagination,
+              }}
+            />
+          </CardContent>
+        </Card>
+      </section>
+      <section className="flex flex-col gap-4">
+        <Card className="bg-transparent shadow-none w-full">
+          <CardHeader
+            title="자주 묻는 질문"
+            titleTypographyProps={{ variant: "display" }}
+          />
+          <CardContent>
+            {faqs.map((it) => (
+              <Accordion key={it.faq_id}>
+                <AccordionSummary
+                  expandIcon={<BiChevronDown className="w-6 h-6" />}
+                >
+                  <Typography variant="title-l">{it.question}</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Typography variant="body">{it.answer}</Typography>
+                </AccordionDetails>
+              </Accordion>
+            ))}
+          </CardContent>
+        </Card>
       </section>
     </div>
   );

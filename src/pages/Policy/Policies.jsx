@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Card,
   CardActions,
@@ -467,7 +466,7 @@ const Policies = () => {
     setDetail({ type, row: params.row });
   };
 
-  const handleDetailType = (type, row) => {
+  const handleDetailType = (type) => {
     switch (type) {
       case POLICY_UPDATE:
         return <PolicyUpdateCard row={detail.row} />;
@@ -475,6 +474,8 @@ const Policies = () => {
         return <PolicyCreateCard row={detail.row} />;
       case PROPOSED_READ:
         return <ProposedPolicyReadCard row={detail.row} />;
+      default:
+        return <PolicyCreateCard row={detail.row} />;
     }
   };
 
@@ -482,7 +483,7 @@ const Policies = () => {
     <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
       <section className="flex gap-6">
         {detailShow ? (
-          handleDetailType(detail.type, detail.row)
+          handleDetailType(detail.type)
         ) : (
           <PolicyPlaceholderCard handleRowClick={handleRowClick} />
         )}
