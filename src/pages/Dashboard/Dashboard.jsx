@@ -16,33 +16,19 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import CustomPagination from "../../components/CustomPagination";
 
-function Dashboard(props) {
-  const {
-    isLoading: faqsIsLoading,
-    error: faqsError,
-    data: faqs,
-  } = useQuery("Faqs", fetchFaqs);
+export const UserPointGraph = ({ details }) => {
+  return (
+    <Card className="flex-1 h-min-full">
+      <CardHeader
+        title="누적코인보유량"
+        titleTypographyProps={{ variant: "display" }}
+      />
+      <CardContent>GRAPH</CardContent>
+    </Card>
+  );
+};
 
-  const links = dummyLinks;
-
-  const {
-    isLoading: koinIsLoading,
-    error: koinError,
-    data: koin,
-  } = useQuery("Koin", fetchKoin);
-
-  const {
-    isLoading: detailsIsLoading,
-    error: detailsError,
-    data: details,
-  } = useQuery("KoinDetails", fetchKoinDetails);
-
-  const isLoading = faqsIsLoading || koinIsLoading || detailsIsLoading;
-  const error = faqsError || koinError || detailsError;
-
-  if (isLoading) return <Loader />;
-  if (error) return <div>An error has occurred: {error.message}</div>;
-
+export const UserPointHistory = ({ details }) => {
   const PAGE_SIZE = 4;
 
   const rows = details.map((it) => ({
@@ -73,6 +59,62 @@ function Dashboard(props) {
   ];
 
   return (
+    <Card className="flex-1">
+      <CardHeader
+        title="코인 내역"
+        titleTypographyProps={{ variant: "display" }}
+        subheader={`${details.length}건`}
+        subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
+      />
+      <CardContent>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: PAGE_SIZE,
+              },
+            },
+          }}
+          pageSizeOptions={[PAGE_SIZE]}
+          slots={{
+            pagination: CustomPagination,
+          }}
+        />
+      </CardContent>
+    </Card>
+  );
+};
+
+function Dashboard(props) {
+  const {
+    isLoading: faqsIsLoading,
+    error: faqsError,
+    data: faqs,
+  } = useQuery("Faqs", fetchFaqs);
+
+  const links = dummyLinks;
+
+  const {
+    isLoading: koinIsLoading,
+    error: koinError,
+    data: koin,
+  } = useQuery("Koin", fetchKoin);
+
+  const {
+    isLoading: detailsIsLoading,
+    error: detailsError,
+    data: details,
+  } = useQuery("KoinDetails", fetchKoinDetails);
+
+  const isLoading = faqsIsLoading || koinIsLoading || detailsIsLoading;
+  const error = faqsError || koinError || detailsError;
+
+  if (isLoading) return <Loader />;
+  if (error) return <div>An error has occurred: {error.message}</div>;
+
+  return (
     <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
       <section className="flex gap-6 w-full">
         <div className="flex flex-col gap-6 w-full">
@@ -87,11 +129,13 @@ function Dashboard(props) {
                   <Counter start={0} end={koin.point_total} duration={1000} />
                   <div
                     className={
-                      rows[0].plus ? "flex text-primary" : "flex text-red-600"
+                      details[0].plus
+                        ? "flex text-primary"
+                        : "flex text-red-600"
                     }
                   >
-                    {rows[0].point}
-                    {rows[0].plus ? "▲" : "▼"}
+                    {details[0].point}
+                    {details[0].plus ? "▲" : "▼"}
                   </div>
                 </div>
               </CardContent>
@@ -106,11 +150,13 @@ function Dashboard(props) {
                   <Counter start={0} end={koin.point_plus} duration={1000} />
                   <div
                     className={
-                      rows[0].plus ? "flex text-primary" : "flex text-red-600"
+                      details[0].plus
+                        ? "flex text-primary"
+                        : "flex text-red-600"
                     }
                   >
-                    {rows[0].point}
-                    {rows[0].plus ? "▲" : "▼"}
+                    {details[0].point}
+                    {details[0].plus ? "▲" : "▼"}
                   </div>
                 </div>
               </CardContent>
@@ -125,23 +171,19 @@ function Dashboard(props) {
                   <Counter start={0} end={koin.point_minus} duration={1000} />
                   <div
                     className={
-                      rows[0].plus ? "flex text-red-600" : "flex text-primary"
+                      details[0].plus
+                        ? "flex text-red-600"
+                        : "flex text-primary"
                     }
                   >
-                    {rows[0].point}
-                    {rows[0].plus ? "▼" : "▲"}
+                    {details[0].point}
+                    {details[0].plus ? "▼" : "▲"}
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
-          <Card className="w-[564px] h-full">
-            <CardHeader
-              title="누적코인보유량"
-              titleTypographyProps={{ variant: "display" }}
-            />
-            <CardContent>GRAPH</CardContent>
-          </Card>
+          <UserPointGraph details={details} />
         </div>
         <Card className="bg-transparent shadow-none w-full">
           <CardHeader
@@ -175,31 +217,7 @@ function Dashboard(props) {
         </Card>
       </section>
       <section className="flex flex-col gap-4">
-        <Card className="flex-1">
-          <CardHeader
-            title="코인 내역"
-            titleTypographyProps={{ variant: "display" }}
-            subheader={`${details.length}건`}
-            subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
-          />
-          <CardContent>
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: PAGE_SIZE,
-                  },
-                },
-              }}
-              pageSizeOptions={[PAGE_SIZE]}
-              slots={{
-                pagination: CustomPagination,
-              }}
-            />
-          </CardContent>
-        </Card>
+        <UserPointHistory details={details} />
       </section>
       <section className="flex flex-col gap-4">
         <Card className="bg-transparent shadow-none w-full">

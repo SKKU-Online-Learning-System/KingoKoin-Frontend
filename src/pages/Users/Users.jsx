@@ -16,43 +16,24 @@ import React, { useState } from "react";
 import CustomPagination from "../../components/CustomPagination";
 
 import { useQuery } from "react-query";
-import { fetchUsers } from "../../api";
+import { fetchKoinDetails, fetchUsers } from "../../api";
 import Loader from "../../components/Loader";
-const UserDetail = () => {
-  return <div className="">UserDetail</div>;
-};
+import { UserPointGraph, UserPointHistory } from "../Dashboard/Dashboard";
 
 function QuickSearchToolbar() {
   return (
-    <Box
-      sx={{
-        p: 0.5,
-        pb: 0,
-      }}
-    >
-      <GridToolbarQuickFilter
-        quickFilterParser={(searchInput) =>
-          searchInput
-            .split(",")
-            .map((value) => value.trim())
-            .filter((value) => value !== "")
-        }
-      />
-    </Box>
+    <GridToolbarQuickFilter
+      className="w-[270px] pt-4 pl-4"
+      quickFilterParser={(searchInput) =>
+        searchInput
+          .split(",")
+          .map((value) => value.trim())
+          .filter((value) => value !== "")
+      }
+      placeholder="검색어를 입력하세요."
+    />
   );
 }
-
-const UserName = (params) => {
-  return (
-    <div className="flex items-center gap-2">
-      <Avatar className="w-8 h-8" />
-      <div className="flex flex-col">
-        <Typography variant="label-l">{params.row.st_name}</Typography>
-        <Typography variant="body">{params.row.st_id}</Typography>
-      </div>
-    </div>
-  );
-};
 
 const UserAuthority = (params) => {
   return (
@@ -60,15 +41,14 @@ const UserAuthority = (params) => {
   );
 };
 
-function Users(props) {
-  // Otherwise filter will be applied on fields such as the hidden column id
+const UsersCard = ({ handleRowClick }) => {
+  const PAGE_SIZE = 4;
+
   const {
     isLoading: usersIsLoading,
     error: usersError,
     data: users,
   } = useQuery("users", fetchUsers);
-  const [selectedRow, setSelectedRow] = useState({});
-  const [detailIsHidden, setDetailIsHidden] = useState(true);
 
   if (usersIsLoading) return <Loader />;
   if (usersError) return <div>An error has occurred: {usersError.message}</div>;
@@ -79,18 +59,9 @@ function Users(props) {
   }));
 
   const columns = [
-    {
-      field: "name",
-      headerName: "이름",
-      flex: 2,
-      renderCell: UserName,
-    },
-    {
-      field: "dept",
-      headerName: "학과",
-      flex: 2,
-    },
-    { field: "point_plus", headerName: "획득코인", flex: 1 },
+    { field: "st_name", headerName: "이름", flex: 1 },
+    { field: "st_id", headerName: "학번", flex: 1 },
+    { field: "dept", headerName: "학과", flex: 2 },
     { field: "point_total", headerName: "보유코인", flex: 1 },
     {
       field: "user_authority",
@@ -100,49 +71,82 @@ function Users(props) {
     },
   ];
 
+  return (
+    <Card className="w-[662px]">
+      <CardHeader
+        title="승인 대기 중인 정책"
+        titleTypographyProps={{ variant: "display" }}
+      />
+      <CardContent>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: {
+                pageSize: PAGE_SIZE,
+              },
+            },
+            filter: {
+              filterModel: {
+                items: [],
+                quickFilterLogicOperator: GridLogicOperator.Or,
+              },
+            },
+          }}
+          pageSizeOptions={[PAGE_SIZE]}
+          onRowClick={handleRowClick}
+          slots={{
+            pagination: CustomPagination,
+            toolbar: QuickSearchToolbar,
+          }}
+        />
+      </CardContent>
+    </Card>
+  );
+};
+
+const UserPlaceholderCard = ({ handleRowClick }) => {
+  return (
+    <div className="flex-1 flex flex-col gap-4 items-center justify-center min-h-full border-dashed border-primary border-2 text-primary">
+      <Typography variant="title-l">목록에서 사용자를 선택하세요.</Typography>
+    </div>
+  );
+};
+
+function Users() {
+  const [selectedRow, setSelectedRow] = useState({});
+  const [detailShow, setDetailShow] = useState(false);
+
+  // selectedRow를 이용하여 데이터 불러오기
+  const {
+    isLoading: detailsIsLoading,
+    error: detailsError,
+    data: details,
+  } = useQuery("KoinDetails", fetchKoinDetails);
+
+  if (detailsIsLoading) return <Loader />;
+  if (detailsError) return <div>{detailsError.message}</div>;
+
   const handleRowClick = (params) => {
     setSelectedRow(params.row);
-    setDetailIsHidden(false);
+    setDetailShow(true);
   };
 
   return (
-    <div className="flex flex-col gap-16 justify-center py-16 w-[1152px] mx-auto">
+    <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
       <section>
         <div className="flex gap-6">
-          <Card className="w-[759px]">
-            <CardHeader
-              title="승인 대기 중인 정책"
-              titleTypographyProps={{ variant: "display" }}
-            />
-            <CardContent>
-              <DataGrid
-                rows={rows}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: 4,
-                    },
-                  },
-                  filter: {
-                    filterModel: {
-                      items: [],
-                      quickFilterLogicOperator: GridLogicOperator.Or,
-                    },
-                  },
-                }}
-                pageSizeOptions={[4]}
-                disableRowSelectionOnClick
-                onRowClick={handleRowClick}
-                slots={{
-                  pagination: CustomPagination,
-                  toolbar: QuickSearchToolbar,
-                }}
-              />
-            </CardContent>
-          </Card>
-          {detailIsHidden ? "" : <UserDetail row={selectedRow} />}
+          <UsersCard handleRowClick={handleRowClick} />
+          {detailShow ? (
+            <UserPointGraph details={details} />
+          ) : (
+            <UserPlaceholderCard />
+          )}
         </div>
+      </section>
+      <section>
+        {detailShow ? <UserPointHistory details={details} /> : ""}
       </section>
     </div>
   );

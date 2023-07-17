@@ -354,10 +354,10 @@ const PoliciesCard = ({ handleRowClick }) => {
               },
             },
           }}
+          pageSizeOptions={[PAGE_SIZE]}
           onRowClick={(params) => {
             handleRowClick(POLICY_UPDATE, params);
           }}
-          pageSizeOptions={[PAGE_SIZE]}
           slots={{
             pagination: CustomPagination,
           }}
