@@ -5,7 +5,11 @@ import SOSD_LOGO from "./assets/sosd_logo.svg";
 /**
  * Fetch Koin
  * @param {number} user_id - 유저 식별자
- * @return {Promise<{ point_total: number, point_plus: number, point_minus: number }>} 코인 객체를 반환하는 프로미스 객체
+ * @return {Promise<{
+ * point_total: number,
+ * point_plus: number,
+ * point_minus: number
+ * }>} 코인 객체를 반환하는 프로미스 객체
  */
 export const fetchKoin = async (user_id) => {
   const dummyKoin = {
@@ -29,7 +33,15 @@ export const fetchKoin = async (user_id) => {
  * @param {number} user_id 유저 식별자
  * @param {number} page n번째 페이지
  * @param {number} size 페이지 크기
- * @returns {Promise<{dt_id: number, pf_name: string, pl_name: string, plus: boolean, point:number, point_total: number, modified_date: string}>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
+ * @returns {Promise<{
+ * dt_id: number,
+ * pf_name: string,
+ * pl_name: string,
+ * plus: boolean,
+ * point:number,
+ * point_total: number,
+ * modified_date: string
+ * }>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
  */
 export const fetchKoinDetails = async (user_id) => {
   const dummyKoinDetails = [
@@ -137,7 +149,11 @@ export const fetchKoinDetails = async (user_id) => {
 
 /**
  * Link List Data
- * @type {{pf_name: string, pf_logo: string, pf_link: string}[]}
+ * @type {{
+ * pf_name: string,
+ * pf_logo: string,
+ * pf_link: string
+ * }[]}
  */
 export const dummyLinks = [
   {
@@ -166,7 +182,11 @@ export const dummyLinks = [
 
 /**
  * Fetch FNQ List
- * @returns {Promise<{faq_id: number, question: string, answer: string}[]>} 자주 묻는 질문 배열을 반환하는 프로미스 객체
+ * @returns {Promise<{
+ * faq_id: number,
+ * question: string,
+ * answer: string
+ * }[]>} 자주 묻는 질문 배열을 반환하는 프로미스 객체
  */
 export const fetchFaqs = () => {
   const dummyFaqs = [
@@ -197,10 +217,24 @@ export const fetchFaqs = () => {
   return result;
 };
 
-/**0
+/**
  * Fetch Proposed Policy List
- * @return {Promise<{request_id: number, pl_id: number, pf_name: string, name: string, plus: boolean, point: number, request_point: number, reason: string, create_user_name: string, created_date: string, available: boolean,
- * request_available: boolean}[]}
+ * @return {Promise<{
+ * request_id: number,
+ * pl_id: number,
+ * name: string,
+ * pf_name: string,
+ * request_type: string,
+ * plus: boolean,
+ * request_plus: number,
+ * point: number,
+ * request_point: number,
+ * available: boolean,
+ * request_available: boolean,
+ * reason: string,
+ * create_user_name: string,
+ * date: string,
+ * }[]}
  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
 export const fetchProposedPolicies = async () => {
@@ -210,148 +244,169 @@ export const fetchProposedPolicies = async () => {
       pl_id: 10101,
       name: "온라인 명륜당 가입",
       pf_name: "온라인 명륜당",
+      request_type: "UPDATE",
       plus: true,
+      request_plus: 10,
       point: 10,
       request_point: 20,
+      available: true,
+      request_available: true,
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "율전이",
       date: "2023-07-12T04:05:08.000Z",
-      available: true,
-      request_available: true,
     },
     {
       request_id: 2,
       pl_id: 10199,
       name: "특별 이벤트",
       pf_name: "온라인 명륜당",
+      request_type: "UPDATE",
       plus: true,
+      request_plus: 10,
       point: 10,
       request_point: 20,
+      available: true,
+      request_available: true,
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "율전이",
       date: "2023-05-10T04:05:08.000Z",
-      available: true,
-      request_available: true,
     },
     {
       request_id: 0,
       pl_id: 10103,
       name: "강좌 수료",
       pf_name: "온라인 명륜당",
+      request_type: "UPDATE",
       plus: true,
+      request_plus: 10,
       point: 20,
       request_point: 10,
+      available: true,
+      request_available: true,
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "율전이",
       date: "2023-07-12T04:05:08.000Z",
-      available: true,
-      request_available: true,
     },
     {
       request_id: 3,
       pl_id: 20101,
       name: "SOSD 가입",
       pf_name: "SOSD",
+      request_type: "UPDATE",
       plus: true,
+      request_plus: 10,
       point: 10,
       request_point: 20,
+      available: true,
+      request_available: true,
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      available: true,
-      request_available: true,
     },
     {
       request_id: 4,
       pl_id: 20102,
       name: "SOSD 상위 10%",
       pf_name: "SOSD",
+      request_type: "UPDATE",
       plus: true,
+      request_plus: 10,
       point: 10,
       request_point: 20,
+      available: true,
+      request_available: true,
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      available: true,
-      request_available: true,
     },
     {
       request_id: 5,
       pl_id: 20103,
       name: "SOSD 특별 이벤트",
       pf_name: "SOSD",
+      request_type: "UPDATE",
       plus: true,
+      request_plus: 10,
       point: 10,
       request_point: 20,
+      available: true,
+      request_available: false,
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      available: true,
-      request_available: false,
     },
     {
       request_id: 6,
       pl_id: 20104,
       name: "SOSD 상위 10%",
       pf_name: "온라인 명륜당",
+      request_type: "UPDATE",
       plus: true,
+      request_plus: 10,
       point: 10,
       request_point: 20,
+      available: true,
+      request_available: true,
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      available: true,
-      request_available: true,
     },
     {
       request_id: 7,
       pl_id: 20105,
       name: "SOSD 특별 이벤트",
+      pf_name: "SOSD",
+      request_type: "UPDATE",
+      request_plus: 10,
       point: 10,
       request_point: 20,
+      available: true,
+      request_available: true,
       date: "2023-05-10T04:05:08.000Z",
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
-      available: true,
-      request_available: true,
     },
     {
       request_id: 8,
       pl_id: 20106,
       name: "SOSD 상위 10%",
       pf_name: "온라인 명륜당",
+      request_type: "UPDATE",
       plus: true,
+      request_plus: 10,
       point: 10,
       request_point: 20,
+      available: true,
+      request_available: true,
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      available: true,
-      request_available: true,
     },
     {
       request_id: 1,
       pl_id: 20107,
       name: "SOSD 특별 이벤트",
       pf_name: "온라인 명륜당",
+      request_type: "UPDATE",
       plus: true,
+      request_plus: 10,
       point: 10,
       request_point: 20,
+      available: true,
+      request_available: true,
       reason:
         "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,",
       create_user_name: "명륜이",
       date: "2023-05-10T04:05:08.000Z",
-      available: true,
-      request_available: true,
     },
   ];
 
@@ -469,7 +524,15 @@ export const createProposedPolicy = (name, point, create_user_id, reason) => {};
 
 /**
  * Fetch User List
- * @returns {Promise<{user_id: number, st_id: number, st_name: string, dept: string, point_total: number, point_plus: number, user_authority: string}[]>} 사용자 배열을 반환하는 프로미스 객체
+ * @returns {Promise<{
+ * user_id: number,
+ * st_id: number,
+ * st_name: string,
+ * dept: string,
+ * point_total: number,
+ * point_plus: number,
+ * user_authority: string
+ * }[]>} 사용자 배열을 반환하는 프로미스 객체
  *  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
 export const fetchUsers = async () => {
