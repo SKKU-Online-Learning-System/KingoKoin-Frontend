@@ -19,6 +19,7 @@ import Users from "./pages/Users/Users";
 import Sidebar from "./components/Sidebar";
 import Top1 from "./components/Top1";
 import Top2 from "./components/Top2";
+import Policies from "./pages/Policy/Policies";
 
 const queryClient = new QueryClient();
 
@@ -27,7 +28,7 @@ function App() {
     palette: {
       mode: "light",
       primary: {
-        main: "#214A3A",
+        main: "#2B6653",
         contrastText: "#F2F2F2",
       },
       secondary: {
@@ -72,12 +73,13 @@ function App() {
       },
       body: {
         fontFamily: "Noto Sans KR",
-        fontSize: "12px",
+        fontSize: "14px",
         fontWeight: "100",
+        lineHeight: "2em",
       },
       caption: {
         fontFamily: "Noto Sans KR",
-        fontSize: "8px",
+        fontSize: "10px",
         fontWeight: "100",
       },
     },
@@ -157,6 +159,18 @@ function App() {
                     <Top2 />
                     <Sidebar>
                       <Policy />
+                    </Sidebar>
+                  </>
+                }
+              />
+              <Route
+                path="/policies"
+                element={
+                  <>
+                    <Top1 />
+                    <Top2 />
+                    <Sidebar>
+                      <Policies />
                     </Sidebar>
                   </>
                 }
