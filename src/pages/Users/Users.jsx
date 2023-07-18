@@ -5,6 +5,7 @@ import {
   CardHeader,
   Chip,
   Typography,
+  Grow,
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import {
@@ -117,6 +118,7 @@ const UserPlaceholderCard = ({ handleRowClick }) => {
 function Users() {
   const [selectedRow, setSelectedRow] = useState({});
   const [detailShow, setDetailShow] = useState(false);
+  const [grow, setGrow] = useState(false);
 
   // selectedRow를 이용하여 데이터 불러오기
   const {
@@ -131,6 +133,14 @@ function Users() {
   const handleRowClick = (params) => {
     setSelectedRow(params.row);
     setDetailShow(true);
+    handleGrow();
+  };
+
+  const handleGrow = () => {
+    setGrow(false);
+    setTimeout(() => {
+      setGrow(true);
+    }, 300);
   };
 
   return (
@@ -139,14 +149,26 @@ function Users() {
         <div className="flex gap-6">
           <UsersCard handleRowClick={handleRowClick} />
           {detailShow ? (
-            <UserPointGraph details={details} />
+            <Grow in={grow}>
+              <div className="flex-1 min-h-full">
+                <UserPointGraph details={details} />
+              </div>
+            </Grow>
           ) : (
             <UserPlaceholderCard />
           )}
         </div>
       </section>
       <section>
-        {detailShow ? <UserPointHistory details={details} /> : ""}
+        {detailShow ? (
+          <Grow in={grow}>
+            <div>
+              <UserPointHistory details={details} />
+            </div>
+          </Grow>
+        ) : (
+          ""
+        )}
       </section>
     </div>
   );
