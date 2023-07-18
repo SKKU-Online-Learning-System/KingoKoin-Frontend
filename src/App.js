@@ -90,7 +90,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route
-                path="/"
+                path="/main/"
                 element={
                   <>
                     <Login />
@@ -98,7 +98,7 @@ function App() {
                 }
               />
               <Route
-                path="/login"
+                path="/main/login"
                 element={
                   <>
                     <Login />
@@ -106,7 +106,7 @@ function App() {
                 }
               />
               <Route
-                path="/dashboard"
+                path="/main/dashboard"
                 element={
                   <>
                     <Top1 />
@@ -118,7 +118,7 @@ function App() {
                 }
               />
               <Route
-                path="/users"
+                path="/main/users"
                 element={
                   <>
                     <Top1 />
@@ -130,7 +130,7 @@ function App() {
                 }
               />
               <Route
-                path="/koin"
+                path="/main/koin"
                 element={
                   <>
                     <Top1 />
@@ -142,7 +142,7 @@ function App() {
                 }
               />
               <Route
-                path="/policy"
+                path="/main/policy"
                 element={
                   <>
                     <Top1 />
