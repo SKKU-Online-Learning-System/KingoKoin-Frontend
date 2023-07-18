@@ -18,7 +18,6 @@ import Users from "./pages/Users/Users";
 import Sidebar from "./components/Sidebar";
 import Top1 from "./components/Top1";
 import Top2 from "./components/Top2";
-import Policies from "./pages/Policy/Policies";
 
 const queryClient = new QueryClient();
 
@@ -150,18 +149,6 @@ function App() {
                     <Top2 />
                     <Sidebar>
                       <Policy />
-                    </Sidebar>
-                  </>
-                }
-              />
-              <Route
-                path="/policies"
-                element={
-                  <>
-                    <Top1 />
-                    <Top2 />
-                    <Sidebar>
-                      <Policies />
                     </Sidebar>
                   </>
                 }
