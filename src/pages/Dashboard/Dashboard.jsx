@@ -55,7 +55,7 @@ export const UserPointHistory = ({ details }) => {
       flex: 1,
       valueGetter: (params) => (params.row.plus ? "" : params.row.point),
     },
-    { field: "point_total", headerName: "보유한 코인", flex: 1 },
+    { field: "z", headerName: "보유한 코인", flex: 1 },
   ];
 
   return (
@@ -126,7 +126,7 @@ function Dashboard(props) {
               />
               <CardContent>
                 <div className="flex items-end">
-                  <Counter start={0} end={koin.point_total} duration={1000} />
+                  <Counter start={0} end={koin.zl} duration={1000} />
                   <div
                     className={
                       details[0].plus
