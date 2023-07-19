@@ -1,6 +1,6 @@
 export const information = {};
 
-const numberOfStudents = 10;
+const numberOfStudents = 10000;
 
 for (let i = 1; i <= numberOfStudents; i++) {
     const st_grade = Math.floor(Math.random() * (2023 - 2015 + 1)) + 2015; // 2015부터 2023 사이의 랜덤한 값 생성
@@ -12,9 +12,10 @@ for (let i = 1; i <= numberOfStudents; i++) {
     st_name: `학생${i}`,
     st_grade: parseInt(st_grade),
     st_degree: parseInt(st_degree),
-    dept: "SW",
+    dept: "SW", 
     point: Math.floor(Math.random() * 300) + 1, // 1부터 10 사이의 랜덤한 숫자 생성
   };
+  console.log(st_id);
 
   const studentKey = `student${i}`;
   information[studentKey] = student;

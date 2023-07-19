@@ -13,6 +13,7 @@ const StudentCoinPage = () => {
   const [studentCoin, setStudentCoin] = useState(0);
   const [coinHistory, setCoinHistory] = useState([]);
   const [uploadedData, setUploadedData] = useState([]);
+  const [InputData, setInputData] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [pendingGrantHistory, setPendingGrantHistory] = useState([]);
   const [customContent, setCustomContent] = useState('');
@@ -48,31 +49,22 @@ const StudentCoinPage = () => {
     }
   };
   
-    
-  
-
   const handleContentChange = (selectedOption) => {
     if (selectedOption) {
       const { value, coinValue } = selectedOption;
       if (value === '직접입력') {
         setContent(value);
         setCoinValue('');
-      } 
-      
-      else {
+      } else {
         setContent(value);
         setCoinValue(coinValue || '');
       }
-    } 
-    
-    else {
+    } else {
       setContent('');
       setCoinValue('');
     }
   };
   
-  
-
   const handleStudentLookup = () => {
     if (!studentId || isNaN(studentId)) {
       setStudentName('');
@@ -104,39 +96,36 @@ const StudentCoinPage = () => {
     const student = Object.values(information).find(
       (data) => data.st_id === parseInt(studentId)
     );
-  
+
     if (!coinValue || isNaN(parseInt(coinValue))) {
       setShowModal(false);
       return;
     }
-  
+
     if (student) {
       const newCoin = student.point + parseInt(coinValue);
       student.point = newCoin;
-  
+
       setStudentName(student.st_name);
       setCoinValue('');
       setStudentCoin(newCoin);
-  
+
       const newCoinHistory = {
         date: new Date().toLocaleString(),
         content: content === '직접입력' ? customContent : content,
         studentId: studentId,
         coinValue: parseInt(coinValue),
       };
-  
-      setPendingGrantHistory([newCoinHistory, ...pendingGrantHistory]);
+
       setCoinHistory([newCoinHistory, ...coinHistory]);
-      setUploadedData([newCoinHistory, ...uploadedData]);
-  
+      setInputData([newCoinHistory, ...InputData]);
+
       console.log(`부여된 코인: ${coinValue}, 학생의 현재 코인: ${newCoin}`);
     }
-  
+
     setShowModal(false);
   };  
   
-  
-
   const cancelGrantCoins = () => {
     setShowModal(false);
     setPendingGrantHistory([]);
@@ -284,38 +273,39 @@ const StudentCoinPage = () => {
           </div>
         </div>
 
+
         <div className="pl-12">
-          <div className="text-2xl font-bold pb-10">업로드한 엑셀 파일</div>
+          <div className="text-2xl font-bold pb-10">엑셀 파일 업로드</div>
           <div className="mt-4">
-              <input
-                type="file"
-                id="fileUpload"
-                onChange={handleFileUpload}
-                className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none"
-              />
-            </div>
-          {uploadedData.length > 0 && (
-            <table className="pl-20 table-auto">
-              <thead className="bg-SKKU_GREEN text-gray-200">
-                <tr className="text-center">
-                  <th className="px-12">학번</th>
-                  <th className="px-16">내용</th>
-                  <th className="px-8">코인 수</th>
-                  <th className="px-24">시간</th>
-                </tr>
-              </thead>
-              <tbody className="text-center bg-gray-50">
-                {uploadedData.map((data, index) => (
-                  <tr key={index}>
-                    <td>{data.studentId}</td>
-                    <td>{data.content}</td>
-                    <td>{data.coinValue}</td>
-                    <td>{data.date}</td>
+            <input
+              type="file"
+              id="fileUpload"
+              onChange={handleFileUpload}
+              className="border border-gray-300 px-3 py-2 rounded-lg focus:outline-none"
+            />
+            {uploadedData.length > 0 && (
+              <table className="pl-20 table-auto">
+                <thead className="bg-SKKU_GREEN text-gray-200">
+                  <tr className="text-center">
+                    <th className="px-12">학번</th>
+                    <th className="px-16">내용</th>
+                    <th className="px-8">코인 수</th>
+                    <th className="px-24">시간</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
+                </thead>
+                <tbody className="text-center bg-gray-50">
+                  {uploadedData.map((data, index) => (
+                    <tr key={index}>
+                      <td>{data.studentId}</td>
+                      <td>{data.content}</td>
+                      <td>{data.coinValue}</td>
+                      <td>{data.date}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
         </div>
       </div>
 
@@ -342,17 +332,23 @@ const StudentCoinPage = () => {
                   <td>{history.date}</td>
                 </tr>
               ))}
+              {InputData.map((data, index) => (
+                <tr key={index}>
+                  <td>{data.studentId}</td>
+                  <td>{data.content}</td>
+                  <td>{data.coinValue}</td>
+                  <td>{data.date}</td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
-
-        
       </div>
 
       <Modal
         isOpen={showModal}
-        className="fixed inset-0 flex items-center justify-center" // Position the modal in the center
-        overlayClassName="fixed inset-0 bg-black bg-opacity-50" // Style the overlay
+        className="fixed inset-0 flex items-center justify-center"
+        overlayClassName="fixed inset-0 bg-black bg-opacity-50"
         onRequestClose={() => setShowModal(false)}
         contentLabel="부여 확인"
       >
