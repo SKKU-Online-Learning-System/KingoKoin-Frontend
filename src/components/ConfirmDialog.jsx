@@ -8,21 +8,14 @@ import {
 } from "@mui/material";
 import { MdInfoOutline } from "react-icons/md";
 
-function ConfirmDialog({ open, desc, handleConfirm, handleCancel }) {
+function ConfirmDialog({ open, children, handleConfirm, handleCancel }) {
   return (
-    <Dialog
-      open={open}
-      onClose={handleCancel}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
+    <Dialog open={open} onClose={handleCancel}>
+      <DialogTitle>
         <MdInfoOutline />
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          {desc}
-        </DialogContentText>
+        <DialogContentText>{children}</DialogContentText>
       </DialogContent>
       <DialogActions>
         <Button variant="contained" color="primary" onClick={handleConfirm}>
