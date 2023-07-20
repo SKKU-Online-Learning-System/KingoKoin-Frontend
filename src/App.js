@@ -18,7 +18,6 @@ import Users from "./pages/Users/Users";
 import Sidebar from "./components/Sidebar";
 import Top1 from "./components/Top1";
 import Top2 from "./components/Top2";
-import Policies from "./pages/Policy/Policies";
 
 const queryClient = new QueryClient();
 
@@ -91,7 +90,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route
-                path="/"
+                path="/main/"
                 element={
                   <>
                     <Login />
@@ -99,7 +98,7 @@ function App() {
                 }
               />
               <Route
-                path="/login"
+                path="/main/login"
                 element={
                   <>
                     <Login />
@@ -107,7 +106,7 @@ function App() {
                 }
               />
               <Route
-                path="/dashboard"
+                path="/main/dashboard"
                 element={
                   <>
                     <Top1 />
@@ -119,7 +118,7 @@ function App() {
                 }
               />
               <Route
-                path="/users"
+                path="/main/users"
                 element={
                   <>
                     <Top1 />
@@ -131,7 +130,7 @@ function App() {
                 }
               />
               <Route
-                path="/koin"
+                path="/main/koin"
                 element={
                   <>
                     <Top1 />
@@ -143,25 +142,13 @@ function App() {
                 }
               />
               <Route
-                path="/policy"
+                path="/main/policy"
                 element={
                   <>
                     <Top1 />
                     <Top2 />
                     <Sidebar>
                       <Policy />
-                    </Sidebar>
-                  </>
-                }
-              />
-              <Route
-                path="/policies"
-                element={
-                  <>
-                    <Top1 />
-                    <Top2 />
-                    <Sidebar>
-                      <Policies />
                     </Sidebar>
                   </>
                 }
