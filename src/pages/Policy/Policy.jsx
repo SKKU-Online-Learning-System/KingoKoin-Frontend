@@ -26,6 +26,8 @@ import { useQuery } from "react-query";
 import { fetchPolicies, fetchProposedPolicies } from "../../api";
 import CustomPagination from "../../components/CustomPagination";
 import Loader from "../../components/Loader";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import { FLATFORMS } from "../../utils";
 
 // policy detail type
 const POLICY_UPDATE = "수정";
@@ -35,6 +37,12 @@ const ACTIVE = "활성화";
 const INACTIVE = "비활성화";
 
 const PolicyCreateCard = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = () => {
+    setOpen(false);
+  };
+
   const [value, setValue] = useState({
     createName: "",
     createPfName: "",
@@ -44,10 +52,18 @@ const PolicyCreateCard = () => {
   });
 
   const [platform, setPlatform] = useState([]);
-  const PLATFORM_LIST = ["온라인 명륜당", "SOSD", ""];
 
   return (
     <Card className="relative w-[466px] h-full">
+      <ConfirmDialog
+        open={open}
+        handleConfirm={handleConfirm}
+        handleCancel={() => {
+          setOpen(false);
+        }}
+      >
+        정말로 생성하시겠습니까?
+      </ConfirmDialog>
       <CardHeader
         title={
           <TextField
@@ -81,7 +97,7 @@ const PolicyCreateCard = () => {
                 selected.map((value) => <Chip key={value} label={value} />)
               }
             >
-              {PLATFORM_LIST.map((pfName) => (
+              {FLATFORMS.map((pfName) => (
                 <MenuItem key={pfName} value={pfName}>
                   {pfName}
                 </MenuItem>
@@ -117,8 +133,14 @@ const PolicyCreateCard = () => {
         />
       </CardContent>
       <CardActions className="absolute bottom-0 p-4">
-        <Button variant="contained">생성</Button>
-        <Button variant="contained">취소</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          생성
+        </Button>
       </CardActions>
     </Card>
   );
@@ -189,6 +211,11 @@ const ProposedPolicyReadCard = ({ row }) => {
 
 const PolicyUpdateCard = ({ row }) => {
   const [value, setValue] = useState(row);
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     setValue(row);
@@ -196,6 +223,15 @@ const PolicyUpdateCard = ({ row }) => {
 
   return (
     <Card className="relative w-[466px] h-full">
+      <ConfirmDialog
+        open={open}
+        handleConfirm={handleConfirm}
+        handleCancel={() => {
+          setOpen(false);
+        }}
+      >
+        정말로 수정하시겠습니까?
+      </ConfirmDialog>
       <CardHeader
         title={value.name}
         titleTypographyProps={{ variant: "title-m" }}
@@ -264,8 +300,14 @@ const PolicyUpdateCard = ({ row }) => {
         />
       </CardContent>
       <CardActions className="absolute bottom-0 p-4">
-        <Button variant="contained">수정</Button>
-        <Button variant="contained">취소</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          수정
+        </Button>
       </CardActions>
     </Card>
   );
