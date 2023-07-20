@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { MdInfoOutline } from "react-icons/md";
 
-function ConfirmDialog({ open, action, handleConfirm, handleCancel }) {
+function ConfirmDialog({ open, desc, handleConfirm, handleCancel }) {
   return (
     <Dialog
       open={open}
@@ -21,7 +21,7 @@ function ConfirmDialog({ open, action, handleConfirm, handleCancel }) {
       </DialogTitle>
       <DialogContent>
         <DialogContentText id="alert-dialog-description">
-          정말로 {action} 하시겠습니까?
+          {desc}
         </DialogContentText>
       </DialogContent>
       <DialogActions>
