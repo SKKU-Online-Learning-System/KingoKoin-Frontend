@@ -482,7 +482,7 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
       />
       <CardContent>
         <DataGrid
-          className="h-[317px]"
+          className="h-[318px]"
           rows={rows}
           columns={columns}
           initialState={{

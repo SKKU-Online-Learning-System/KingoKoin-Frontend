@@ -79,6 +79,8 @@ const UsersCard = ({ handleRowClick }) => {
   if (usersIsLoading) return <Loader className="w-[662px] h-[495px]" />;
   if (usersError) return <div>{usersError.message}</div>;
 
+  console.log(users);
+
   const rows = users.data.map((it) => ({
     ...it,
     id: it.user_id,
@@ -113,7 +115,7 @@ const UsersCard = ({ handleRowClick }) => {
       />
       <CardContent>
         <DataGrid
-          className="h-[369px]"
+          className="h-[370px]"
           rows={rows}
           columns={columns}
           initialState={{

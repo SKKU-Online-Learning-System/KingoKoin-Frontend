@@ -12,7 +12,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Koin from "./pages/Koin/Koin";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
-import Policy from "./pages/Policy/Policy";
+import Policies from "./pages/Policies/Policies";
 import Users from "./pages/Users/Users";
 
 import Sidebar from "./components/Sidebar";
@@ -142,13 +142,13 @@ function App() {
                 }
               />
               <Route
-                path="/main/policy"
+                path="/main/policies"
                 element={
                   <>
                     <Top1 />
                     <Top2 />
                     <Sidebar>
-                      <Policy />
+                      <Policies />
                     </Sidebar>
                   </>
                 }
