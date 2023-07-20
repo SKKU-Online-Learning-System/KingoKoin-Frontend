@@ -523,6 +523,11 @@ export const fetchPolicies = async () => {
 export const createProposedPolicy = (name, point, create_user_id, reason) => {};
 
 /**
+ * @interface user
+ *
+ */
+
+/**
  * Fetch User List
  * @returns {Promise<{
  * user_id: number,
@@ -535,7 +540,7 @@ export const createProposedPolicy = (name, point, create_user_id, reason) => {};
  * }[]>} 사용자 배열을 반환하는 프로미스 객체
  *  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
-export const fetchUsers = async () => {
+export const fetchUsers = async (paginationModel) => {
   const dummyUsers = [
     {
       user_id: 1,
@@ -582,12 +587,68 @@ export const fetchUsers = async () => {
       point_plus: 240,
       user_authority: "사용자",
     },
+    {
+      user_id: 6,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
+    {
+      user_id: 7,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
+    {
+      user_id: 8,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
+    {
+      user_id: 9,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
+    {
+      user_id: 10,
+      st_id: 2023123456,
+      st_name: "율전이",
+      dept: "글로벌바이오메디컬공학과",
+      point_total: 180,
+      point_plus: 240,
+      user_authority: "사용자",
+    },
   ];
 
   const result = new Promise(function (resolve, reject) {
     setTimeout(() => {
-      resolve(dummyUsers);
-    }, 500);
+      resolve({
+        length: dummyUsers.length,
+        data: dummyUsers
+          .slice(
+            paginationModel.pageSize * paginationModel.page,
+            paginationModel.pageSize * (paginationModel.page + 1)
+          )
+          .map((it) => ({
+            ...it,
+            id: it.user_id,
+          })),
+      });
+    }, 100);
   });
 
   return result;

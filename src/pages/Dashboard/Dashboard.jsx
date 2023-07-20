@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
 import { dummyLinks, fetchFaqs, fetchKoin, fetchKoinDetails } from "../../api";
@@ -12,13 +12,15 @@ import {
   AccordionSummary,
   Typography,
   AccordionDetails,
+  Button,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import CustomPagination from "../../components/CustomPagination";
+import ConfirmDialog from "../../components/ConfirmDialog";
 
 export const UserPointGraph = ({ details }) => {
   return (
-    <Card className="flex-1 h-min-full">
+    <Card className="flex-1 h-full">
       <CardHeader
         title="누적코인보유량"
         titleTypographyProps={{ variant: "display" }}
@@ -68,6 +70,7 @@ export const UserPointHistory = ({ details }) => {
       />
       <CardContent>
         <DataGrid
+          className="h-[317px]"
           rows={rows}
           columns={columns}
           initialState={{
@@ -84,6 +87,50 @@ export const UserPointHistory = ({ details }) => {
         />
       </CardContent>
     </Card>
+  );
+};
+
+const KoinLink = ({ pfInfo }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = (url) => {
+    // window.location.href = {url};
+    window.open(url, "_blank");
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <ConfirmDialog
+        open={open}
+        handleConfirm={() => {
+          handleConfirm(pfInfo.pf_link);
+        }}
+        handleCancel={() => {
+          setOpen(false);
+        }}
+      >{`${pfInfo.pf_name}으로 이동하시겠습니까?`}</ConfirmDialog>
+      <Button
+        key={pfInfo.pf_name}
+        onClick={() => {
+          setOpen(true);
+        }}
+        className="flex justify-center items-center gap-1 w-[258px] h-[156px] bg-background rounded-lg border-solid border-2 border-primaryhover:shadow-lg hover:scale-[1.03] transition-all"
+      >
+        {pfInfo.pf_logo ? (
+          <>
+            <img
+              className="w-8 h-8"
+              src={pfInfo.pf_logo}
+              alt={pfInfo.pf_name + " 링크"}
+            />
+            <div className="text-label-l">{pfInfo.pf_name}</div>
+          </>
+        ) : (
+          <div className="font-gugi text-xl">{pfInfo.pf_name}</div>
+        )}
+      </Button>
+    </>
   );
 };
 
@@ -187,30 +234,13 @@ function Dashboard(props) {
         </div>
         <Card className="bg-transparent shadow-none w-full">
           <CardHeader
-            title="코인 획득처"
+            title="연관 사이트로 이동"
             titleTypographyProps={{ variant: "display" }}
           />
           <CardContent>
             <div className="flex flex-wrap gap-3 w-full">
               {links.map((it) => (
-                <a
-                  key={it.pf_name}
-                  href={it.pf_link}
-                  className="flex justify-center items-center gap-1 w-[258px] h-[156px] bg-background rounded-lg border-solid border-2 border-primary"
-                >
-                  {it.pf_logo ? (
-                    <>
-                      <img
-                        className="w-8 h-8"
-                        src={it.pf_logo}
-                        alt={it.pf_name + " 링크"}
-                      />
-                      <div className="text-label-l">{it.pf_name}</div>
-                    </>
-                  ) : (
-                    <div className="font-gugi text-xl">{it.pf_name}</div>
-                  )}
-                </a>
+                <KoinLink pfInfo={it} key={it.pf_name} />
               ))}
             </div>
           </CardContent>
