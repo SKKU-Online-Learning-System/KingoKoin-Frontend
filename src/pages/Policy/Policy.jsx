@@ -9,7 +9,7 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  Grow,
+  Fade,
   Input,
   InputLabel,
   MenuItem,
@@ -47,7 +47,7 @@ const PolicyCreateCard = () => {
   const PLATFORM_LIST = ["온라인 명륜당", "SOSD", ""];
 
   return (
-    <Card className="relative w-[466px]">
+    <Card className="relative w-[466px] h-full">
       <CardHeader
         title={
           <TextField
@@ -285,15 +285,6 @@ const PolicyPlaceholderCard = ({ handleRowClick }) => {
   return (
     <div className="flex flex-col gap-4 items-center justify-center w-[466px] min-h-full border-dashed border-primary border-2 text-primary">
       <Typography variant="title-l">목록에서 정책을 선택하세요.</Typography>
-      <Button
-        variant="contained"
-        endIcon={<MdAdd />}
-        onClick={() => {
-          handleRowClick(POLICY_CREATE, {});
-        }}
-      >
-        정책생성
-      </Button>
     </div>
   );
 };
@@ -340,7 +331,21 @@ const PoliciesCard = ({ handleRowClick }) => {
       <CardHeader
         title="정책 조회"
         titleTypographyProps={{ variant: "display" }}
-        subheader={`${policies.length}건`}
+        subheader={
+          <div className="relative flex items-end justify-between">
+            {`${policies.length}건`}
+            <Button
+              className="absolute right-0"
+              variant="contained"
+              endIcon={<MdAdd />}
+              onClick={() => {
+                handleRowClick(POLICY_CREATE, {});
+              }}
+            >
+              정책생성
+            </Button>
+          </div>
+        }
         subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
       />
       <CardContent>
@@ -435,6 +440,7 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
       />
       <CardContent>
         <DataGrid
+          className="h-[317px]"
           rows={rows}
           columns={columns}
           initialState={{
@@ -460,19 +466,21 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
 const Policies = () => {
   const [detail, setDetail] = useState({});
   const [detailShow, setDetailShow] = useState(false);
-  const [grow, setGrow] = useState(false);
+  const [fade, setFade] = useState(false);
 
   const handleRowClick = (type, params) => {
     setDetailShow(true);
-    setDetail({ type, row: params.row });
-    handleGrow();
+    setTimeout(() => {
+      setDetail({ type, row: params.row });
+    }, 100);
+    handleFade();
   };
 
-  const handleGrow = () => {
-    setGrow(false);
+  const handleFade = () => {
+    setFade(false);
     setTimeout(() => {
-      setGrow(true);
-    }, 300);
+      setFade(true);
+    }, 100);
   };
 
   const handleDetailType = (type) => {
@@ -492,9 +500,9 @@ const Policies = () => {
     <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
       <section className="flex gap-6">
         {detailShow ? (
-          <Grow in={grow}>
+          <Fade in={fade}>
             <div className="min-h-full">{handleDetailType(detail.type)}</div>
-          </Grow>
+          </Fade>
         ) : (
           <PolicyPlaceholderCard handleRowClick={handleRowClick} />
         )}
