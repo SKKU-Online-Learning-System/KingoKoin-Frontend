@@ -31,7 +31,7 @@ function QuickSearchToolbar() {
           .map((value) => value.trim())
           .filter((value) => value !== "")
       }
-      placeholder="이름을 입력하세요."
+      placeholder="학번을 입력하세요."
     />
   );
 }
@@ -43,8 +43,7 @@ const UserAuthority = (params) => {
 };
 
 const UsersCard = ({ handleRowClick }) => {
-  const [queryOptions, setQueryOptions] = React.useState({});
-
+  const [queryOptions, setQueryOptions] = useState({});
   const [paginationModel, setPaginationModel] = useState({
     pageSize: 4,
     page: 0,
@@ -54,16 +53,12 @@ const UsersCard = ({ handleRowClick }) => {
     isLoading: usersIsLoading,
     error: usersError,
     data: users,
-  } = useQuery(["users", paginationModel.page], () => {
-    return fetchUsers(paginationModel);
-  });
+  } = useQuery(["users", paginationModel.page], () =>
+    fetchUsers(paginationModel, queryOptions)
+  );
 
+  // pagination
   const [rowCountState, setRowCountState] = useState(users?.length || 0);
-
-  const onFilterChange = useCallback((filterModel) => {
-    console.log(filterModel);
-    setQueryOptions({ filterModel: { ...filterModel } });
-  }, []);
 
   useEffect(() => {
     setRowCountState((prevRowCountState) =>
@@ -71,7 +66,17 @@ const UsersCard = ({ handleRowClick }) => {
     );
   }, [users?.length, setRowCountState]);
 
-  if (usersIsLoading) return <Loader className="w-[662px] h-[472.4px]" />;
+  // filter
+  const onFilterChange = useCallback((filterModel) => {
+    setQueryOptions({ ...queryOptions, filterModel: { ...filterModel } });
+  }, []);
+
+  // sort
+  const handleSortModelChange = useCallback((sortModel) => {
+    setQueryOptions({ ...queryOptions, sortModel: [...sortModel] });
+  }, []);
+
+  if (usersIsLoading) return <Loader className="w-[662px] h-[495px]" />;
   if (usersError) return <div>{usersError.message}</div>;
 
   const rows = users.data.map((it) => ({
@@ -80,10 +85,16 @@ const UsersCard = ({ handleRowClick }) => {
   }));
 
   const columns = [
-    { field: "st_name", headerName: "이름", flex: 1 },
-    { field: "st_id", headerName: "학번", flex: 1 },
-    { field: "dept", headerName: "학과", flex: 2 },
-    { field: "point_total", headerName: "보유코인", flex: 1 },
+    { field: "st_name", headerName: "이름", flex: 1, sortable: false },
+    { field: "st_id", headerName: "학번", flex: 1, sortable: false },
+    { field: "dept", headerName: "학과", flex: 2, sortable: false },
+    {
+      field: "point_total",
+      headerName: "보유코인",
+      flex: 1,
+      filterable: false,
+    },
+    // 1차 개발에서 보류된 내용
     // {
     //   field: "user_authority",
     //   headerName: "권한",
@@ -97,6 +108,8 @@ const UsersCard = ({ handleRowClick }) => {
       <CardHeader
         title="사용자 조회"
         titleTypographyProps={{ variant: "display" }}
+        subheader={`${users.length}건`}
+        subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
       />
       <CardContent>
         <DataGrid
@@ -111,14 +124,19 @@ const UsersCard = ({ handleRowClick }) => {
               },
             },
           }}
-          rowCount={rowCountState}
           loading={usersIsLoading}
-          filterMode="server"
-          onFilterModelChange={onFilterChange}
+          // pagination
+          rowCount={rowCountState}
           pageSizeOptions={[paginationModel.pageSize]}
           paginationModel={paginationModel}
           paginationMode="server"
           onPaginationModelChange={setPaginationModel}
+          // sort
+          sortingMode="server"
+          onSortModelChange={handleSortModelChange}
+          // filter
+          filterMode="server"
+          onFilterModelChange={onFilterChange}
           onRowClick={handleRowClick}
           slots={{
             toolbar: QuickSearchToolbar,
@@ -148,7 +166,7 @@ function Users() {
     isLoading: detailsIsLoading,
     error: detailsError,
     data: details,
-  } = useQuery("KoinDetails", fetchKoinDetails);
+  } = useQuery("KoinDetails", () => fetchKoinDetails(selectedRow.user_id));
 
   if (detailsError) return <div>{detailsError.message}</div>;
 
