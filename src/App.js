@@ -14,6 +14,7 @@ import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
 import Policies from "./pages/Policies/Policies";
 import Users from "./pages/Users/Users";
+import Analysis from "./pages/Analysis/Analysis";
 
 import Sidebar from "./components/Sidebar";
 import Top1 from "./components/Top1";
@@ -149,6 +150,18 @@ function App() {
                     <Top2 />
                     <Sidebar>
                       <Policies />
+                    </Sidebar>
+                  </>
+                }
+              />
+              <Route
+                path="/main/analysis"
+                element={
+                  <>
+                    <Top1 />
+                    <Top2 />
+                    <Sidebar>
+                      <Analysis />
                     </Sidebar>
                   </>
                 }
