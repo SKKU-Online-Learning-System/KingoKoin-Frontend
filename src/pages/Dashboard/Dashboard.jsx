@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
-import { dummyLinks, fetchFaqs, fetchKoin, fetchKoinDetails } from "../../api";
+import {
+  dummyPlatforms,
+  fetchFaqs,
+  fetchKoin,
+  fetchKoinDetails,
+} from "../../api";
 import Counter from "./Counter";
 import Loader from "../../components/Loader";
 import {
@@ -70,7 +75,6 @@ export const UserPointHistory = ({ details }) => {
       />
       <CardContent>
         <DataGrid
-          className="h-[318px]"
           rows={rows}
           columns={columns}
           initialState={{
@@ -141,7 +145,7 @@ function Dashboard(props) {
     data: faqs,
   } = useQuery("Faqs", fetchFaqs);
 
-  const links = dummyLinks;
+  const links = dummyPlatforms;
 
   const {
     isLoading: koinIsLoading,
