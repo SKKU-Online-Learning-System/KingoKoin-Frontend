@@ -155,7 +155,7 @@ export const fetchKoinDetails = async (user_id) => {
  * pf_link: string
  * }[]}
  */
-export const dummyLinks = [
+export const dummyPlatforms = [
   {
     pf_name: "온라인명륜당",
     pf_logo: null,
@@ -421,83 +421,92 @@ export const fetchProposedPolicies = async () => {
 
 /**
  * Fetch Policy List
- * @returns {Promise<{pl_id: number, name: string, pf_name: string, plus: boolean, point: number, created_date: string, available: boolean,
+ * @returns {Promise<{plId: number, plName: string, pfName: string, plus: boolean, point: number, created_date: string, available: boolean,
  * request_available: false}[]>} 정책 배열을 반환하는 프로미스 객체
  *  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
 export const fetchPolicies = async () => {
   const dummyPolicy = [
     {
-      pl_id: 10101,
-      name: "온라인 명륜당 가입",
-      pf_name: "온라인 명륜당",
+      plId: 10101,
+      plName: "온라인 명륜당 가입",
+      pfName: "온라인 명륜당",
       plus: true,
       point: 5,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
     {
-      pl_id: 10102,
-      name: "강좌 시청",
-      pf_name: "온라인 명륜당",
+      plId: 10102,
+      plName: "강좌 시청",
+      pfName: "온라인 명륜당",
       plus: true,
       point: 1,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
     {
-      pl_id: 10103,
-      name: "강좌 수료 완료",
-      pf_name: "온라인 명륜당",
+      plId: 10103,
+      plName: "강좌 수료 완료",
+      pfName: "온라인 명륜당",
       plus: true,
       point: 20,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
     {
-      pl_id: 20101,
-      name: "특별 이벤트",
-      pf_name: "온라인 명륜당",
+      plId: 20101,
+      plName: "특별 이벤트",
+      pfName: "온라인 명륜당",
       plus: false,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: false,
     },
     {
-      pl_id: 20102,
-      name: "화상강연 참석",
-      pf_name: "소프트웨어학과 행정실",
+      plId: 20102,
+      plName: "화상강연 참석",
+      pfName: "소프트웨어학과 행정실",
       plus: true,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
     {
-      pl_id: 10202,
-      name: "SOSD 가입",
-      pf_name: "SOSD",
+      plId: 10202,
+      plName: "SOSD 가입",
+      pfName: "SOSD",
       plus: true,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
     {
-      pl_id: 10104,
-      name: "온라인 명륜당 가입",
-      pf_name: "온라인 명륜당",
+      plId: 20103,
+      plName: "해외 봉사 활동 참여",
+      pfName: "온라인 명륜당",
       plus: true,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
     {
-      pl_id: 10105,
-      name: "온라인 명륜당 가입",
-      pf_name: "온라인 명륜당",
+      plId: 30101,
+      plName: "세미나실 초과 대여 ",
+      pfName: "온라인 명륜당",
       plus: true,
       point: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: false,
+    },
+    {
+      plId: 99999,
+      plName: "직접입력",
+      pfName: "소프트웨어학과 행정실",
+      plus: true,
+      point: 0,
+      created_date: "2023-05-10T04:05:08.000Z",
+      available: true,
     },
   ];
 

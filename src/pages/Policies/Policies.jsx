@@ -150,13 +150,13 @@ const ProposedPolicyReadCard = ({ row }) => {
   return (
     <Card className="relative w-[466px]">
       <CardHeader
-        title={row.name}
+        title={row.plName}
         titleTypographyProps={{ variant: "title-m" }}
         subheader={
           <div className="flex items-center justify-between">
             <Chip
               variant="filled"
-              label={row.pf_name}
+              label={row.pfName}
               size="small"
               className="mt-2"
             />
@@ -233,13 +233,13 @@ const PolicyUpdateCard = ({ row }) => {
         정말로 수정하시겠습니까?
       </ConfirmDialog>
       <CardHeader
-        title={value.name}
+        title={value.plName}
         titleTypographyProps={{ variant: "title-m" }}
         subheader={
           <div className="flex items-center justify-between">
             <Chip
               variant="filled"
-              label={value.pf_name}
+              label={value.pfName}
               size="small"
               className="mt-2"
             />
@@ -344,16 +344,16 @@ const PoliciesCard = ({ handleRowClick }) => {
 
   const rows = policies.map((it) => ({
     ...it,
-    id: it.pl_id,
+    id: it.plId,
     created_date: new Date(it.created_date).toLocaleDateString("ko-KR", {
       timeZone: "UTC",
     }),
   }));
 
   const columns = [
-    { field: "name", headerName: "정책명", width: 200 },
-    { field: "pl_id", headerName: "정책코드", flex: 1 },
-    { field: "pf_name", headerName: "제공처", width: 150 },
+    { field: "plName", headerName: "정책명", width: 200 },
+    { field: "plId", headerName: "정책코드", flex: 1 },
+    { field: "pfName", headerName: "제공처", width: 150 },
     {
       field: "point",
       headerName: "코인값",
@@ -452,7 +452,7 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
 
   const rows = proposedPolicies.map((it) => ({
     ...it,
-    id: it.pl_id,
+    id: it.plId,
     date: new Date(it.date).toLocaleDateString("ko-KR", {
       timeZone: "UTC",
     }),
@@ -460,8 +460,8 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
 
   const columns = [
     { field: "name", headerName: "정책명", flex: 2 },
-    { field: "pl_id", headerName: "정책코드", flex: 1 },
-    { field: "pf_name", headerName: "제공처", flex: 1.5 },
+    { field: "plId", headerName: "정책코드", flex: 1 },
+    { field: "pfName", headerName: "제공처", flex: 1.5 },
     {
       field: "request_type",
       headerName: "구분",
