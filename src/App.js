@@ -94,7 +94,7 @@ function App() {
                 path="/main/"
                 element={
                   <>
-                    <Login />
+                    <Main />
                   </>
                 }
               />
