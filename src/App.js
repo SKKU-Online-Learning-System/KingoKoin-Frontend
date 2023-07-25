@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound/NotFound";
 import Policies from "./pages/Policies/Policies";
 import Users from "./pages/Users/Users";
 import Analysis from "./pages/Analysis/Analysis";
+import Main from "./pages/Main/Main";
 
 import Sidebar from "./components/Sidebar";
 import Top1 from "./components/Top1";
