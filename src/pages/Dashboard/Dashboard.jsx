@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "react-query";
 import { BiChevronDown } from "react-icons/bi";
 import {
   dummyPlatforms,
   fetchFaqs,
   fetchKoin,
-  fetchKoinDetails,
+  fetchCoinDetails,
 } from "../../api";
 import Counter from "./Counter";
 import Loader from "../../components/Loader";
@@ -17,82 +17,10 @@ import {
   AccordionSummary,
   Typography,
   AccordionDetails,
-  Button,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import CustomPagination from "../../components/CustomPagination";
 import SiteLink from "../../components/SiteLink";
-
-export const UserPointGraph = ({ details }) => {
-  return (
-    <Card className="flex-1 h-full">
-      <CardHeader
-        title="누적코인보유량"
-        titleTypographyProps={{ variant: "display" }}
-      />
-      <CardContent>GRAPH</CardContent>
-    </Card>
-  );
-};
-
-export const UserPointHistory = ({ details }) => {
-  const PAGE_SIZE = 4;
-
-  const rows = details.map((it) => ({
-    ...it,
-    id: it.dt_id,
-    modified_date: new Date(it.modified_date).toLocaleDateString("ko-KR", {
-      timeZone: "UTC",
-    }),
-  }));
-
-  const columns = [
-    { field: "modified_date", headerName: "날짜", flex: 1 },
-    { field: "pf_name", headerName: "제공처", flex: 1.2 },
-    { field: "pl_name", headerName: "내용", flex: 1.5 },
-    {
-      field: "point_plus",
-      headerName: "획득한 코인",
-      flex: 1,
-      valueGetter: (params) => (params.row.plus ? params.row.point : ""),
-    },
-    {
-      field: "point_minus",
-      headerName: "사용한 코인",
-      flex: 1,
-      valueGetter: (params) => (params.row.plus ? "" : params.row.point),
-    },
-    { field: "point_total", headerName: "보유한 코인", flex: 1 },
-  ];
-
-  return (
-    <Card className="flex-1">
-      <CardHeader
-        title="코인 내역"
-        titleTypographyProps={{ variant: "display" }}
-        subheader={`${details.length}건`}
-        subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
-      />
-      <CardContent>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: PAGE_SIZE,
-              },
-            },
-          }}
-          pageSizeOptions={[PAGE_SIZE]}
-          slots={{
-            pagination: CustomPagination,
-          }}
-        />
-      </CardContent>
-    </Card>
-  );
-};
+import UserCoinHistory from "../../components/UserCoinHistory";
+import UserCoinGraph from "../../components/UserCoinGraph";
 
 function Dashboard(props) {
   const {
@@ -113,7 +41,7 @@ function Dashboard(props) {
     isLoading: detailsIsLoading,
     error: detailsError,
     data: details,
-  } = useQuery("KoinDetails", fetchKoinDetails);
+  } = useQuery("KoinDetails", fetchCoinDetails);
 
   const isLoading = faqsIsLoading || koinIsLoading || detailsIsLoading;
   const error = faqsError || koinError || detailsError;
@@ -190,7 +118,7 @@ function Dashboard(props) {
               </CardContent>
             </Card>
           </div>
-          <UserPointGraph details={details} />
+          <UserCoinGraph details={details} />
         </div>
         <Card className="bg-transparent shadow-none w-full">
           <CardHeader
@@ -207,7 +135,7 @@ function Dashboard(props) {
         </Card>
       </section>
       <section className="flex flex-col gap-4">
-        <UserPointHistory details={details} />
+        <UserCoinHistory details={details} />
       </section>
       <section className="flex flex-col gap-4">
         <Card className="bg-transparent shadow-none w-full">

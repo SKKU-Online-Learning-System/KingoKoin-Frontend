@@ -9,7 +9,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import Koin from "./pages/Koin/Koin";
+import Coin from "./pages/Coin/Coin";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
 import Policies from "./pages/Policies/Policies";
@@ -120,7 +120,7 @@ function App() {
                 }
               />
               <Route
-                path="/main/users"
+                path="/main/admin/users"
                 element={
                   <>
                     <Top1 />
@@ -132,19 +132,19 @@ function App() {
                 }
               />
               <Route
-                path="/main/koin"
+                path="/main/admin/coin"
                 element={
                   <>
                     <Top1 />
                     <Top2 />
                     <Sidebar>
-                      <Koin />
+                      <Coin />
                     </Sidebar>
                   </>
                 }
               />
               <Route
-                path="/main/policies"
+                path="/main/admin/policies"
                 element={
                   <>
                     <Top1 />
@@ -156,7 +156,7 @@ function App() {
                 }
               />
               <Route
-                path="/main/analysis"
+                path="/main/admin/analysis"
                 element={
                   <>
                     <Top1 />

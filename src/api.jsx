@@ -43,12 +43,13 @@ export const fetchKoin = async (user_id) => {
  * modified_date: string
  * }>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
  */
-export const fetchKoinDetails = async (user_id) => {
-  const dummyKoinDetails = [
+export const fetchCoinDetails = async (user_id) => {
+  const dummyCoinDetails = [
     {
       dt_id: 0,
       pf_name: "소프트웨어학과 행정실",
       pl_name: "장비 대여",
+      adGroup: "소프트웨어학과",
       plus: false,
       point: 10,
       point_total: 180,
@@ -58,6 +59,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 1,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 강좌 수강",
+      adGroup: "온라인명륜당",
       plus: true,
       point: 10,
       point_total: 190,
@@ -67,6 +69,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 2,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 가입",
+      adGroup: "온라인명륜당",
       plus: true,
       point: 20,
       point_total: 170,
@@ -76,6 +79,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 3,
       pf_name: "SOSD",
       pl_name: "분기별 상위 10%",
+      adGroup: "SOSD",
       plus: false,
       point: 50,
       point_total: 120,
@@ -85,6 +89,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 4,
       pf_name: "소프트웨어학과 행정실",
       pl_name: "킹고인과의 만남 강연 참석",
+      adGroup: "소프트웨어학과",
       plus: true,
       point: 10,
       point_total: 100,
@@ -94,6 +99,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 5,
       pf_name: "SOSD",
       pl_name: "특별 이벤트",
+      adGroup: "SOSD",
       plus: true,
       point: 10,
       point_total: 90,
@@ -103,6 +109,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 6,
       pf_name: "SOSD",
       pl_name: "SOSD 회원가입",
+      adGroup: "SOSD",
       plus: true,
       point: 20,
       point_total: 70,
@@ -112,6 +119,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 7,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 회원가입",
+      adGroup: "온라인명륜당",
       plus: false,
       point: 50,
       point_total: 100,
@@ -121,6 +129,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 8,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 회원가입",
+      adGroup: "온라인명륜당",
       plus: true,
       point: 50,
       point_total: 100,
@@ -130,6 +139,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 9,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 회원가입",
+      adGroup: "온라인명륜당",
       plus: false,
       point: 50,
       point_total: 100,
@@ -139,7 +149,7 @@ export const fetchKoinDetails = async (user_id) => {
 
   const result = new Promise(function (resolve, reject) {
     setTimeout(() => {
-      resolve(dummyKoinDetails);
+      resolve(dummyCoinDetails);
     }, 500);
   });
 

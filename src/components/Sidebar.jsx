@@ -9,6 +9,7 @@ import { NavLink } from "react-router-dom";
 import React from "react";
 
 const Sidebar = ({ children }) => {
+  // 권한에 따라 보여줄 메뉴 수정
   const menuItem = [
     {
       path: "/main/dashboard",
@@ -16,22 +17,22 @@ const Sidebar = ({ children }) => {
       icon: <MdOutlineDashboard />,
     },
     {
-      path: "/main/users",
+      path: "/main/admin/users",
       name: "사용자 관리",
       icon: <MdPerson />,
     },
     {
-      path: "/main/koin",
+      path: "/main/admin/coin",
       name: "코인 부여",
       icon: <MdOutlineMonetizationOn />,
     },
     {
-      path: "/main/analysis",
+      path: "/main/admin/analysis",
       name: "코인 분석",
       icon: <MdShowChart />,
     },
     {
-      path: "/main/policies",
+      path: "/main/admin/policies",
       name: "정책 관리",
       icon: <MdPolicy />,
     },
@@ -54,9 +55,7 @@ const Sidebar = ({ children }) => {
               className="link flex gap-1 p-4 w-full items-center hover:"
             >
               <div className="icon">{item.icon}</div>
-              <div className="text-label-l link_text font-noto-sans-kr font-light">
-                {item.name}
-              </div>
+              <div className="text-label-l">{item.name}</div>
             </NavLink>
           ))}
         </div>
