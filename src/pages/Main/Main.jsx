@@ -28,6 +28,7 @@ function Faqs() {
   const [expanded, setExpanded] = useState(null);
 
   if (faqIsLoading) return <Loader />;
+  if (faqError) return <div>{faqError.message}</div>;
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
