@@ -42,22 +42,22 @@ function App() {
     typography: {
       display: {
         fontFamily: "Noto Sans KR",
-        fontSize: "30px",
+        fontSize: "24px",
         fontWeight: "700",
       },
       logo: {
         fontFamily: "Gugi",
-        fontSize: "24px",
+        fontSize: "18px",
         fontWeight: "400",
       },
       "title-m": {
         fontFamily: "Noto Sans KR",
-        fontSize: "24px",
+        fontSize: "18px",
         fontWeight: "500",
       },
       "title-l": {
         fontFamily: "Noto Sans KR",
-        fontSize: "24px",
+        fontSize: "18px",
         fontWeight: "300",
       },
 
