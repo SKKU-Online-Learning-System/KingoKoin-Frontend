@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { information } from "../../dummy"; // 생성된 학생 더미 정보
 import * as xlsx from "xlsx";
 import {
   Card,
