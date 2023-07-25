@@ -7,14 +7,15 @@ import TabContext from '@mui/lab/TabContext';
 import Tabs from '@mui/material/Tabs';
 import TabPanel from '@mui/lab/TabPanel';
 import { createTheme, ThemeProvider } from "@mui/material";
-import { dummyFNQs, dummyLinks } from "../../api.tsx";
-import videosrc from "../../assets/video.mp4";
+import { fetchFaqs, dummyPlatforms } from "../../api.jsx";
 import { styled } from '@mui/material/styles';
 import ArrowForwardIosSharpIcon from '@mui/icons-material/ArrowForwardIosSharp';
 import MuiAccordion from '@mui/material/Accordion';
 import MuiAccordionSummary from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
+import { useQuery } from "react-query";
+import Loader from "../../components/Loader";
 
 function Main() {
     const [value, setValue] = useState('1');
@@ -36,7 +37,11 @@ function Main() {
       },
     });
   
-    const [FNQ, setFNQ] = useState(dummyFNQs);
+    const { isLoading: faqIsLoading, error: faqError, data: faq} = useQuery("faq", fetchFaqs);
+
+    if(faqIsLoading) return <Loader/>
+
+    console.log(faq)
   
     const Accordion = styled((props) => (
       <MuiAccordion disableGutters elevation={0} square {...props} />
@@ -86,9 +91,9 @@ function Main() {
     
       return (
         <div>
-          {dummyFNQs.map((it, index) => (
+          {faq.map((it, index) => (
             <div
-              key={it.id}
+              key={it.faq_id}
               className="flex flex-col gap-4 "
             >
               <div className="w-full justify-between items-center mb-4">
@@ -168,9 +173,6 @@ function Main() {
             <Logo></Logo>
             <div className="bg-lightGray h-[0.5px]"></div>
             <div className="flex justify-center pb-8">
-                <video muted autoPlay loop width="100%">
-                    <source src={videosrc} type="video/mp4"/>
-                </video>
             </div>
                 <Container fixed>
                 <ThemeProvider theme={theme}>
@@ -210,7 +212,7 @@ function Main() {
                         <hr className="bg-[#2B6653] w-[30px] ml-10 p-0.5"></hr>
                         <div className="text-title-l p-8 text-xl">
                             <div className="flex gap-16">
-                            {dummyLinks.map((it) => (
+                            {dummyPlatforms.map((it) => (
                                 <a
                                 key={it.pf_name}
                                 href={it.pf_link}
