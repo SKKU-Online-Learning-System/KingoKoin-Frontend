@@ -1,7 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { BiChevronDown, BiChevronUp } from "react-icons/bi";
-import { dummyLinks, fetchFaqs, fetchKoin, fetchKoinDetails } from "../../api";
+import {
+  dummyPlatforms,
+  fetchFaqs,
+  fetchKoin,
+  fetchKoinDetails,
+} from "../../api";
 import Counter from "./Counter";
 import Loader from "../../components/Loader";
 import {
@@ -12,13 +17,15 @@ import {
   AccordionSummary,
   Typography,
   AccordionDetails,
+  Button,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import CustomPagination from "../../components/CustomPagination";
+import ConfirmDialog from "../../components/ConfirmDialog";
 
 export const UserPointGraph = ({ details }) => {
   return (
-    <Card className="flex-1 h-min-full">
+    <Card className="flex-1 h-full">
       <CardHeader
         title="누적코인보유량"
         titleTypographyProps={{ variant: "display" }}
@@ -41,7 +48,7 @@ export const UserPointHistory = ({ details }) => {
 
   const columns = [
     { field: "modified_date", headerName: "날짜", flex: 1 },
-    { field: "pf_name", headerName: "제공처", flex: 1.5 },
+    { field: "pf_name", headerName: "제공처", flex: 1.2 },
     { field: "pl_name", headerName: "내용", flex: 1.5 },
     {
       field: "point_plus",
@@ -55,7 +62,7 @@ export const UserPointHistory = ({ details }) => {
       flex: 1,
       valueGetter: (params) => (params.row.plus ? "" : params.row.point),
     },
-    { field: "z", headerName: "보유한 코인", flex: 1 },
+    { field: "point_total", headerName: "보유한 코인", flex: 1 },
   ];
 
   return (
@@ -87,6 +94,50 @@ export const UserPointHistory = ({ details }) => {
   );
 };
 
+const KoinLink = ({ pfInfo }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = (url) => {
+    // window.location.href = {url};
+    window.open(url, "_blank");
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <ConfirmDialog
+        open={open}
+        handleConfirm={() => {
+          handleConfirm(pfInfo.pf_link);
+        }}
+        handleCancel={() => {
+          setOpen(false);
+        }}
+      >{`${pfInfo.pf_name}으로 이동하시겠습니까?`}</ConfirmDialog>
+      <Button
+        key={pfInfo.pf_name}
+        onClick={() => {
+          setOpen(true);
+        }}
+        className="flex justify-center items-center gap-1 w-[258px] h-[156px] bg-background rounded-lg border-solid border-2 border-primaryhover:shadow-lg hover:scale-[1.03] transition-all"
+      >
+        {pfInfo.pf_logo ? (
+          <>
+            <img
+              className="w-8 h-8"
+              src={pfInfo.pf_logo}
+              alt={pfInfo.pf_name + " 링크"}
+            />
+            <div className="text-label-l">{pfInfo.pf_name}</div>
+          </>
+        ) : (
+          <div className="font-gugi text-xl">{pfInfo.pf_name}</div>
+        )}
+      </Button>
+    </>
+  );
+};
+
 function Dashboard(props) {
   const {
     isLoading: faqsIsLoading,
@@ -94,7 +145,7 @@ function Dashboard(props) {
     data: faqs,
   } = useQuery("Faqs", fetchFaqs);
 
-  const links = dummyLinks;
+  const links = dummyPlatforms;
 
   const {
     isLoading: koinIsLoading,
@@ -126,7 +177,7 @@ function Dashboard(props) {
               />
               <CardContent>
                 <div className="flex items-end">
-                  <Counter start={0} end={koin.zl} duration={1000} />
+                  <Counter start={0} end={koin.point_plus} duration={1000} />
                   <div
                     className={
                       details[0].plus
@@ -187,30 +238,13 @@ function Dashboard(props) {
         </div>
         <Card className="bg-transparent shadow-none w-full">
           <CardHeader
-            title="코인 획득처"
+            title="연관 사이트로 이동"
             titleTypographyProps={{ variant: "display" }}
           />
           <CardContent>
             <div className="flex flex-wrap gap-3 w-full">
               {links.map((it) => (
-                <a
-                  key={it.pf_name}
-                  href={it.pf_link}
-                  className="flex justify-center items-center gap-1 w-[258px] h-[156px] bg-background rounded-lg border-solid border-2 border-primary"
-                >
-                  {it.pf_logo ? (
-                    <>
-                      <img
-                        className="w-8 h-8"
-                        src={it.pf_logo}
-                        alt={it.pf_name + " 링크"}
-                      />
-                      <div className="text-label-l">{it.pf_name}</div>
-                    </>
-                  ) : (
-                    <div className="font-gugi text-xl">{it.pf_name}</div>
-                  )}
-                </a>
+                <KoinLink pfInfo={it} key={it.pf_name} />
               ))}
             </div>
           </CardContent>

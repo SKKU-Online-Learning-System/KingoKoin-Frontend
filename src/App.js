@@ -13,13 +13,13 @@ import Koin from "./pages/Koin/Koin";
 import Main from "./pages/Main/Main";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
-import Policy from "./pages/Policy/Policy";
+import Policies from "./pages/Policies/Policies";
 import Users from "./pages/Users/Users";
+import Analysis from "./pages/Analysis/Analysis";
 
 import Sidebar from "./components/Sidebar";
 import Top1 from "./components/Top1";
 import Top2 from "./components/Top2";
-import Policies from "./pages/Policy/Policies";
 
 const queryClient = new QueryClient();
 
@@ -92,7 +92,7 @@ function App() {
           <BrowserRouter>
             <Routes>
               <Route
-                path="/"
+                path="/main/"
                 element={
                   <>
                     <Login />
@@ -100,15 +100,7 @@ function App() {
                 }
               />
               <Route
-                path="/main"
-                element={
-                  <>
-                    <Main />
-                  </>
-                }
-              />
-              <Route
-                path="/login"
+                path="/main/login"
                 element={
                   <>
                     <Login />
@@ -116,7 +108,7 @@ function App() {
                 }
               />
               <Route
-                path="/dashboard"
+                path="/main/dashboard"
                 element={
                   <>
                     <Top1 />
@@ -128,7 +120,7 @@ function App() {
                 }
               />
               <Route
-                path="/users"
+                path="/main/users"
                 element={
                   <>
                     <Top1 />
@@ -140,7 +132,7 @@ function App() {
                 }
               />
               <Route
-                path="/koin"
+                path="/main/koin"
                 element={
                   <>
                     <Top1 />
@@ -152,25 +144,25 @@ function App() {
                 }
               />
               <Route
-                path="/policy"
-                element={
-                  <>
-                    <Top1 />
-                    <Top2 />
-                    <Sidebar>
-                      <Policy />
-                    </Sidebar>
-                  </>
-                }
-              />
-              <Route
-                path="/policies"
+                path="/main/policies"
                 element={
                   <>
                     <Top1 />
                     <Top2 />
                     <Sidebar>
                       <Policies />
+                    </Sidebar>
+                  </>
+                }
+              />
+              <Route
+                path="/main/analysis"
+                element={
+                  <>
+                    <Top1 />
+                    <Top2 />
+                    <Sidebar>
+                      <Analysis />
                     </Sidebar>
                   </>
                 }

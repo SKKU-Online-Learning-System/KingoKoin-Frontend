@@ -20,11 +20,9 @@ import ConfirmDialog from "../../components/ConfirmDialog";
 import { useQuery } from "react-query";
 import Loader from "../../components/Loader";
 import { DataGrid } from "@mui/x-data-grid";
-import { UserPointHistory } from "../Dashboard/Dashboard";
-import { fetchKoinDetails } from "../../api";
 
-const ExcelCard = () => {
-  const PAGE_SIZE = 100;
+export const ExcelCard = () => {
+  const PAGE_SIZE = 50;
 
   const [koinDetail, setKoinDetail] = useState({
     stId: "",
@@ -318,24 +316,4 @@ const GiveKoinCard = () => {
   );
 };
 
-const Koin = () => {
-  const {
-    isLoading: detailsIsLoading,
-    error: detailsError,
-    data: details,
-  } = useQuery("KoinDetails", fetchKoinDetails);
-
-  if (detailsIsLoading) return <Loader />;
-
-  return (
-    <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
-      <section className="flex gap-6">
-        <GiveKoinCard />
-        <ExcelCard />
-      </section>
-      <UserPointHistory details={details} />
-    </div>
-  );
-};
-
-export default Koin;
+export default GiveKoinCard;

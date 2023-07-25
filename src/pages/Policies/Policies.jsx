@@ -6,26 +6,28 @@ import {
   CardHeader,
   Chip,
   Divider,
+  FormControl,
+  FormControlLabel,
+  FormLabel,
+  Fade,
+  Input,
+  InputLabel,
+  MenuItem,
+  Radio,
+  RadioGroup,
+  Select,
   TextField,
   Typography,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-  InputLabel,
-  FormControl,
-  Select,
-  Input,
-  MenuItem,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import React, { useCallback, useEffect, useState } from "react";
+import { MdAdd, MdOutlineArrowForward } from "react-icons/md";
 import { useQuery } from "react-query";
 import { fetchPolicies, fetchProposedPolicies } from "../../api";
+import CustomPagination from "../../components/CustomPagination";
 import Loader from "../../components/Loader";
 import ConfirmDialog from "../../components/ConfirmDialog";
-import CustomPagination from "../../components/CustomPagination";
-import { MdAdd, MdOutlineArrowForward } from "react-icons/md";
+import { FLATFORMS } from "../../utils";
 
 // policy detail type
 const POLICY_UPDATE = "수정";
@@ -35,6 +37,12 @@ const ACTIVE = "활성화";
 const INACTIVE = "비활성화";
 
 const PolicyCreateCard = () => {
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = () => {
+    setOpen(false);
+  };
+
   const [value, setValue] = useState({
     createName: "",
     createPfName: "",
@@ -44,10 +52,18 @@ const PolicyCreateCard = () => {
   });
 
   const [platform, setPlatform] = useState([]);
-  const PLATFORM_LIST = ["온라인 명륜당", "SOSD", ""];
 
   return (
-    <Card className="relative w-[466px]">
+    <Card className="relative w-[466px] h-full">
+      <ConfirmDialog
+        open={open}
+        handleConfirm={handleConfirm}
+        handleCancel={() => {
+          setOpen(false);
+        }}
+      >
+        정말로 생성하시겠습니까?
+      </ConfirmDialog>
       <CardHeader
         title={
           <TextField
@@ -81,7 +97,7 @@ const PolicyCreateCard = () => {
                 selected.map((value) => <Chip key={value} label={value} />)
               }
             >
-              {PLATFORM_LIST.map((pfName) => (
+              {FLATFORMS.map((pfName) => (
                 <MenuItem key={pfName} value={pfName}>
                   {pfName}
                 </MenuItem>
@@ -111,14 +127,20 @@ const PolicyCreateCard = () => {
           required
           multiline
           rows={5}
-          label="신청사유"
-          placeholder="신청사유를 작성해주세요."
+          label="설명"
+          placeholder="설명을 작성해주세요."
           className="w-full"
         />
       </CardContent>
       <CardActions className="absolute bottom-0 p-4">
-        <Button variant="contained">생성</Button>
-        <Button variant="contained">취소</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          생성
+        </Button>
       </CardActions>
     </Card>
   );
@@ -128,13 +150,13 @@ const ProposedPolicyReadCard = ({ row }) => {
   return (
     <Card className="relative w-[466px]">
       <CardHeader
-        title={row.name}
+        title={row.plName}
         titleTypographyProps={{ variant: "title-m" }}
         subheader={
           <div className="flex items-center justify-between">
             <Chip
               variant="filled"
-              label={row.pf_name}
+              label={row.pfName}
               size="small"
               className="mt-2"
             />
@@ -189,21 +211,35 @@ const ProposedPolicyReadCard = ({ row }) => {
 
 const PolicyUpdateCard = ({ row }) => {
   const [value, setValue] = useState(row);
+  const [open, setOpen] = useState(false);
+
+  const handleConfirm = () => {
+    setOpen(false);
+  };
 
   useEffect(() => {
     setValue(row);
   }, [row]);
 
   return (
-    <Card className="relative w-[466px]">
+    <Card className="relative w-[466px] h-full">
+      <ConfirmDialog
+        open={open}
+        handleConfirm={handleConfirm}
+        handleCancel={() => {
+          setOpen(false);
+        }}
+      >
+        정말로 수정하시겠습니까?
+      </ConfirmDialog>
       <CardHeader
-        title={value.name}
+        title={value.plName}
         titleTypographyProps={{ variant: "title-m" }}
         subheader={
           <div className="flex items-center justify-between">
             <Chip
               variant="filled"
-              label={value.pf_name}
+              label={value.pfName}
               size="small"
               className="mt-2"
             />
@@ -258,14 +294,20 @@ const PolicyUpdateCard = ({ row }) => {
           required
           multiline
           rows={5}
-          label="신청사유"
-          placeholder="신청사유를 작성해주세요."
+          label="설명"
+          placeholder="설명을 작성해주세요."
           className="w-full"
         />
       </CardContent>
       <CardActions className="absolute bottom-0 p-4">
-        <Button variant="contained">수정</Button>
-        <Button variant="contained">취소</Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setOpen(true);
+          }}
+        >
+          수정
+        </Button>
       </CardActions>
     </Card>
   );
@@ -285,15 +327,6 @@ const PolicyPlaceholderCard = ({ handleRowClick }) => {
   return (
     <div className="flex flex-col gap-4 items-center justify-center w-[466px] min-h-full border-dashed border-primary border-2 text-primary">
       <Typography variant="title-l">목록에서 정책을 선택하세요.</Typography>
-      <Button
-        variant="contained"
-        endIcon={<MdAdd />}
-        onClick={() => {
-          handleRowClick(POLICY_CREATE, {});
-        }}
-      >
-        정책생성
-      </Button>
     </div>
   );
 };
@@ -311,16 +344,16 @@ const PoliciesCard = ({ handleRowClick }) => {
 
   const rows = policies.map((it) => ({
     ...it,
-    id: it.pl_id,
+    id: it.plId,
     created_date: new Date(it.created_date).toLocaleDateString("ko-KR", {
       timeZone: "UTC",
     }),
   }));
 
   const columns = [
-    { field: "name", headerName: "정책명", width: 200 },
-    { field: "pl_id", headerName: "정책코드", flex: 1 },
-    { field: "pf_name", headerName: "제공처", width: 150 },
+    { field: "plName", headerName: "정책명", width: 200 },
+    { field: "plId", headerName: "정책코드", flex: 1 },
+    { field: "pfName", headerName: "제공처", width: 150 },
     {
       field: "point",
       headerName: "코인값",
@@ -336,11 +369,25 @@ const PoliciesCard = ({ handleRowClick }) => {
   ];
 
   return (
-    <Card className="flex-1">
+    <Card className="flex-1 h-full">
       <CardHeader
         title="정책 조회"
         titleTypographyProps={{ variant: "display" }}
-        subheader={`${policies.length}건`}
+        subheader={
+          <div className="relative flex items-end justify-between">
+            {`${policies.length}건`}
+            <Button
+              className="absolute right-0"
+              variant="contained"
+              endIcon={<MdAdd />}
+              onClick={() => {
+                handleRowClick(POLICY_CREATE, {});
+              }}
+            >
+              정책생성
+            </Button>
+          </div>
+        }
         subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
       />
       <CardContent>
@@ -405,7 +452,7 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
 
   const rows = proposedPolicies.map((it) => ({
     ...it,
-    id: it.pl_id,
+    id: it.plId,
     date: new Date(it.date).toLocaleDateString("ko-KR", {
       timeZone: "UTC",
     }),
@@ -413,8 +460,8 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
 
   const columns = [
     { field: "name", headerName: "정책명", flex: 2 },
-    { field: "pl_id", headerName: "정책코드", flex: 1 },
-    { field: "pf_name", headerName: "제공처", flex: 1.5 },
+    { field: "plId", headerName: "정책코드", flex: 1 },
+    { field: "pfName", headerName: "제공처", flex: 1.5 },
     {
       field: "request_type",
       headerName: "구분",
@@ -426,7 +473,7 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
   ];
 
   return (
-    <Card className="flex-1">
+    <Card className="flex-1 h-full">
       <CardHeader
         title="승인대기 정책 조회"
         titleTypographyProps={{ variant: "display" }}
@@ -435,6 +482,7 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
       />
       <CardContent>
         <DataGrid
+          className="h-[318px]"
           rows={rows}
           columns={columns}
           initialState={{
@@ -460,10 +508,21 @@ const ProposedPoliciesCard = ({ handleRowClick }) => {
 const Policies = () => {
   const [detail, setDetail] = useState({});
   const [detailShow, setDetailShow] = useState(false);
+  const [fade, setFade] = useState(false);
 
   const handleRowClick = (type, params) => {
     setDetailShow(true);
-    setDetail({ type, row: params.row });
+    setTimeout(() => {
+      setDetail({ type, row: params.row });
+    }, 100);
+    handleFade();
+  };
+
+  const handleFade = () => {
+    setFade(false);
+    setTimeout(() => {
+      setFade(true);
+    }, 100);
   };
 
   const handleDetailType = (type) => {
@@ -483,14 +542,13 @@ const Policies = () => {
     <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
       <section className="flex gap-6">
         {detailShow ? (
-          handleDetailType(detail.type)
+          <Fade in={fade}>
+            <div className="min-h-full">{handleDetailType(detail.type)}</div>
+          </Fade>
         ) : (
           <PolicyPlaceholderCard handleRowClick={handleRowClick} />
         )}
         <PoliciesCard handleRowClick={handleRowClick} />
-      </section>
-      <section className="flex gap-6">
-        <ProposedPoliciesCard handleRowClick={handleRowClick} />
       </section>
     </div>
   );
