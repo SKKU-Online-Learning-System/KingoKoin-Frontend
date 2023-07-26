@@ -662,3 +662,73 @@ export const fetchUsers = async (paginationModel) => {
 
   return result;
 };
+
+/**
+ * Fetch Statics
+ * @returns {Promise<{
+ * smId: number,
+ * year: number,
+ * month: number,
+ * pointTotal: number,
+ * createdDate: string,
+ * modifiedDate": string
+ * }[]>}
+ */
+
+export const fetchStatics = async () => {
+  const dummygetStaticsByMonth = [
+    {
+      smId: 1, 
+      year: 2023, 
+      month: 7, 
+      pointTotal: 1700,
+      transactionTotal: 500, 
+      createdDate: "2023-06-30T04:05:08.000Z",
+      modifiedDate: "2023-06-30T04:05:08.000Z"
+    },
+    {
+      smId: 2, 
+      year: 2023, 
+      month: 6, 
+      pointTotal: 1300, 
+      transactionTotal: 350, 
+      createdDate: "2023-05-30T04:05:08.000Z",
+      modifiedDate: "2023-05-30T04:05:08.000Z"
+    },
+    {
+      smId: 3, 
+      year: 2023, 
+      month: 5, 
+      pointTotal: 1100, 
+      transactionTotal: 200, 
+      createdDate: "2023-04-30T04:05:08.000Z",
+      modifiedDate: "2023-04-30T04:05:08.000Z"
+    },
+    {
+      smId: 4, 
+      year: 2023, 
+      month: 4, 
+      pointTotal: 900, 
+      transactionTotal: 150, 
+      createdDate: "2023-03-30T04:05:08.000Z",
+      modifiedDate: "2023-03-30T04:05:08.000Z"
+    },
+    {
+      smId: 5, 
+      year: 2023, 
+      month: 3, 
+      pointTotal: 500, 
+      transactionTotal: 100, 
+      createdDate: "2023-02-30T04:05:08.000Z",
+      modifiedDate: "2023-02-30T04:05:08.000Z"
+    },
+  ];
+
+  const result = new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      resolve(dummygetStaticsByMonth);
+    }, 500);
+  });
+
+  return result;
+};

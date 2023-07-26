@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import logo from "../../assets/main_logo_eng.png";
+import banner from "../../assets/banner.jpg";
+import main from "../../assets/main.jpg";
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -41,8 +43,6 @@ function Main() {
 
     if(faqIsLoading) return <Loader/>
 
-    console.log(faq)
-  
     const Accordion = styled((props) => (
       <MuiAccordion disableGutters elevation={0} square {...props} />
     ))(({ theme }) => ({
@@ -149,8 +149,7 @@ function Main() {
                     <div className="flex justify-end text-surface text-s font-noto-sans-kr font-light">
                         <a className="p-2" href='https://www.skku.edu/skku/etc/pop_email.do' target='_blank' rel="noreferrer">이메일</a><p className="p-2">|</p>
                         <a className="p-2" href='https://www.skku.edu/skku/etc/pop_email.do' target='_blank' rel="noreferrer">무료수집거부</a><p className="p-2">|</p>
-                        <a className="p-2" href='https://www.skku.edu/skku/etc/private.do' target='_blank' rel="noreferrer">개인정보처리방침</a><p className="p-2">|</p>
-                        <a className="p-2" href='/'>Contact us</a>
+                        <a className="p-2" href='https://www.skku.edu/skku/etc/private.do' target='_blank' rel="noreferrer">개인정보처리방침</a>
                     </div>
                 </div>
                 
@@ -172,7 +171,9 @@ function Main() {
             </div>
             <Logo></Logo>
             <div className="bg-lightGray h-[0.5px]"></div>
-            <div className="flex justify-center pb-8">
+            <div className="relative flex justify-center mb-8">
+              <img src={banner} className="w-full"></img>
+              <p className="absolute h-full w-full flex justify-center items-center bottom-0 right-0 bg-gradient-to-t from-black opacity-80 to-transparent text-right text-white font-bold text-[60px] p-4">K I N G O C O I N</p>
             </div>
                 <Container fixed>
                 <ThemeProvider theme={theme}>
@@ -188,12 +189,16 @@ function Main() {
                         <div>
                         <h1 className="text-title-m p-8">킹고코인이란?</h1>
                         <hr className="bg-[#2B6653] w-[30px] ml-10 p-0.5"></hr>
-                        <div className="font-noto-sans-kr text-xl font-extralight p-8 ">킹고코인은 성균관대에 학생들의 비교과 활동에 대한 인센티브로서 블록체인 기반의 
+                        <div className="w-full">
+                          <img src={main} className="h-[300px] items-center"></img>
+                          <p className="font-noto-sans-kr text-xl font-extralight p-8 ">
+                            킹고코인은 성균관대에 학생들의 비교과 활동에 대한 인센티브로서 블록체인 기반의 
                             마일리지 플랫폼입니다. 킹고 코인은 수강 및 질의응답 활동 등에 참여한 구성원들에게 마일리지를 부여하는 시스템입니다.<br/><br/>
                             킹고 코인은 구성원들의 활동을 투명하게 기록하기 위해 퍼블릭 블록체인 플랫폼과 오프 체인 방식을 채택하였습니다. 이는 활동 내역을 퍼블릭 블록체인에 
                             오프 체인 방식으로 모아서 저장하고, 데이터의 신뢰성과 보존성을 보장히며 활동 내역을 신뢰성 있게 영구히 보존할 수 있습니다.<br/><br/>
                             킹고 코인을 통해 성균관대 구성원들은 활동에 대한 인센티브를 받을 수 있을 뿐만 아니라, 마일리지를 활용하여 다양한 혜택과 교내 서비스를 이용할 수 있게 
                             될 것입니다. 이를 통해 학생들의 참여와 활발한 비교과 활동이 장려되고, 성균관대의 학습 및 커뮤니티 환경을 더욱 발전시키는 것이 킹고코인의 목표입니다.
+                          </p>
                         </div>
                         </div>
                     </TabPanel>

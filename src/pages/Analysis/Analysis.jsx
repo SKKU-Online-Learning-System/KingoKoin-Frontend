@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useQuery } from 'react-query';
+import Loader from "../../components/Loader";
+import { fetchStatics } from "../../api.jsx";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HighchartsMore from 'highcharts/highcharts-more';
@@ -12,9 +15,34 @@ import {
   Switch,
 } from "@mui/material";
 
-HighchartsMore(Highcharts);
-solidGauge(Highcharts);
+function Analysis() {
 
+  HighchartsMore(Highcharts);
+  solidGauge(Highcharts);
+  
+  const {
+    isLoading: staticsIsLoading,
+    error: staticsError,
+    data: statics,
+  } = useQuery("statics", fetchStatics);
+
+  const toggleGraph = () => {
+    setShowMonthlyGraph((prevShowMonthlyGraph) => !prevShowMonthlyGraph);
+  };
+
+  const [showMonthlyGraph, setShowMonthlyGraph] = useState(true);
+
+  useEffect(() => {
+    const options = showMonthlyGraph ? optionsMonthly : optionsTransaction;
+  
+    Highcharts.chart('monthly-graph-container', options);
+    Highcharts.chart('koin-plus-graph-container', showMonthlyGraph ? optionsKoinPlusByMonth : optionsTransactionPlusByMonth);
+    Highcharts.chart('koin-minus-graph-container', showMonthlyGraph ? optionsKoinMinusByMonth : optionsTransactionMinusByMonth);
+  }, [showMonthlyGraph]);
+  
+  if (staticsIsLoading) return <Loader />;
+  if (staticsError) return <div>error</div>;
+  
 const optionsMonthly = {
   chart: {
     type: 'line'
@@ -25,8 +53,8 @@ const optionsMonthly = {
   title: {
     text: ''
   },
-  xAxis: {
-    categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+  xAxis: { 
+    categories: statics.map((it, index) => statics[statics.length - 1 - index].month) 
   },
   yAxis: {
     title: {
@@ -35,11 +63,11 @@ const optionsMonthly = {
   },
   colors: ['#2B6653'], 
   legend: {
-    enabled: false // 시리즈 이름 숨기기
+    enabled: false 
   },
   series: [{
     name: '코인 보유량',
-    data: [1000, 1500, 1300, 1200, 1500, 1800, 2000, 1200, 1500, 1800, 1000, 1200]
+    data: statics.map((it, index) => statics[statics.length - 1 - index].pointTotal) 
   }]
 };
 
@@ -54,7 +82,7 @@ const optionsTransaction = {
     text: ''
   },
   xAxis: {
-    categories: ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
+    categories: statics.map((it, index) => statics[statics.length - 1 - index].month) 
   },
   yAxis: {
     title: {
@@ -63,11 +91,11 @@ const optionsTransaction = {
   },
   colors: ['#2B6653'], 
   legend: {
-    enabled: false // 시리즈 이름 숨기기
+    enabled: false
   },
   series: [{
     name: "트랜젝션 수",
-    data: [50, 30, 20, 40, 10, 15, 25, 35, 45, 50, 55, 60]
+    data: statics.map((it, index) => statics[statics.length - 1 - index].transactionTotal) 
   }]
 };
 
@@ -110,7 +138,7 @@ const optionsKoinPlusByMonth = {
         },
       }
     },
-    colors: ["#2B6653", "#598D7C", "#82AB9E"], 
+    colors: ["#2B6653", "#3b937c", "#62b4a0", "#b7ded5"], 
     series: [{
       name: 'Categories',
       colorByPoint: true,
@@ -174,7 +202,7 @@ const optionsKoinPlusByMonth = {
         }
       }
     },
-    colors: ["#2B6653", "#598D7C", "#82AB9E"], 
+    colors: ["#2B6653", "#3b937c", "#62b4a0", "#b7ded5"], 
     series: [{
       name: 'Categories',
       colorByPoint: true,
@@ -239,7 +267,7 @@ const optionsKoinMinusByMonth = {
       
     }
   },
-  colors: ["#2B6653", "#598D7C", "#82AB9E"], 
+  colors: ["#2B6653", "#3b937c", "#62b4a0"], 
   series: [{
     name: 'AWS',
     colorByPoint: true,
@@ -299,7 +327,7 @@ const optionsTransactionMinusByMonth = {
       }
     }
   },
-  colors: ["#2B6653", "#598D7C", "#82AB9E"],
+  colors: ["#2B6653", "#3b937c", "#62b4a0"], 
   series: [{
     name: 'Categories',
     colorByPoint: true,
@@ -351,11 +379,11 @@ const optionsTransactionMinusByMonth = {
     },
     yAxis: {
       min: 0,
-      max: 300,
+      max: 200,
       stops: [
-        [0.1, '#82AB9E'], // green
-        [0.3, '#598D7C'], // yellow
-        [0.6, '#2B6653'] // red
+        [0.1, '#62b4a0'], 
+        [0.3, '#3b937c'], 
+        [0.6, '#2B6653'] 
       ],
       lineWidth: 0,
       tickWidth: 0,
@@ -380,10 +408,9 @@ const optionsTransactionMinusByMonth = {
     series: [{
       borderRadius: 10,
       name: 'Speed',
-      data: [160],
+      data: [60],
       dataLabels: {
-        format: '<div style="text-align:center"><span style="font-size:32px;color:' +
-        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y} 개</span></div>',
+        format: '<div class="text-center"><span class="text-3xl text-black">{y} 개</span></div>',
         verticalAlign: 'top', 
         y: -50 
       },
@@ -424,11 +451,11 @@ const optionsTransactionMinusByMonth = {
     },
     yAxis: {
       min: 0,
-      max: 300,
+      max: 200,
       stops: [
-        [0.1, '#82AB9E'], // green
-        [0.3, '#598D7C'], // yellow
-        [0.6, '#2B6653'] // red
+        [0.1, '#62b4a0'], 
+        [0.3, '#3b937c'], 
+        [0.6, '#2B6653'] 
       ],
       lineWidth: 0,
       tickWidth: 0,
@@ -453,10 +480,9 @@ const optionsTransactionMinusByMonth = {
     series: [{
       borderRadius: 10,
       name: 'Speed',
-      data: [240],
+      data: [110],
       dataLabels: {
-        format: '<div style="text-align:center"><span style="font-size:32px;color:' +
-        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y} 개</span></div>',
+        format: '<div class="text-center"><span class="text-3xl text-black">{y} 개</span></div>',
         verticalAlign: 'top', 
         y: -50 
       },
@@ -497,11 +523,11 @@ const optionsTransactionMinusByMonth = {
     },
     yAxis: {
       min: 0,
-      max: 300,
+      max: 200,
       stops: [
-        [0.1, '#82AB9E'], // green
-        [0.3, '#598D7C'], // yellow
-        [0.6, '#2B6653'] // red
+        [0.1, '#62b4a0'], 
+        [0.3, '#3b937c'], 
+        [0.6, '#2B6653'] 
       ],
       lineWidth: 0,
       tickWidth: 0,
@@ -526,10 +552,9 @@ const optionsTransactionMinusByMonth = {
     series: [{
       borderRadius: 10,
       name: 'Speed',
-      data: [80],
+      data: [50],
       dataLabels: {
-        format: '<div style="text-align:center"><span style="font-size:32px;color:' +
-        ((Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black') + '">{y} 개</span></div>',
+        format: '<div class="text-center"><span class="text-3xl text-black">{y} 개</span></div>',
         verticalAlign: 'top', 
         y: -50 
       },
@@ -539,21 +564,6 @@ const optionsTransactionMinusByMonth = {
     }]
   };
 
-
-function Analysis() {
-  const [showMonthlyGraph, setShowMonthlyGraph] = useState(true);
-
-const toggleGraph = () => {
-  setShowMonthlyGraph((prevShowMonthlyGraph) => !prevShowMonthlyGraph);
-};
-
-useEffect(() => {
-  const options = showMonthlyGraph ? optionsMonthly : optionsTransaction;
-
-  Highcharts.chart('monthly-graph-container', options);
-  Highcharts.chart('koin-plus-graph-container', showMonthlyGraph ? optionsKoinPlusByMonth : optionsTransactionPlusByMonth);
-  Highcharts.chart('koin-minus-graph-container', showMonthlyGraph ? optionsKoinMinusByMonth : optionsTransactionMinusByMonth);
-}, [showMonthlyGraph]);
 
   return (
     <div className='flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto'>
