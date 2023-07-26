@@ -202,14 +202,38 @@ export const fetchFaqs = () => {
   const dummyFaqs = [
     {
       faq_id: 0,
-      question: "킹고코인에 사용기한이 있나요?",
-      answer: "킹고코인은 매년 초기화됩니다.",
+      question: "Q. 킹고코인에 사용기한이 있나요?",
+      answer:
+        "A. 킹고코인은 매년 초기화됩니다. 따라서 보유 중인 코인이 사라지기 전에 적절하게 사용하는 것이 권장됩니다.",
     },
     {
       faq_id: 1,
-      question: "휴학생도 킹고코인을 사용할 수 있나요?",
+      question: "Q. 킹고코인을 어디에 사용할 수 있나요?",
       answer:
-        "킹고코인 포인트는 AWS, GPU 개인사용 크레딧, IT 기기대여, 세미나실 사용 등에 사용될 수 있으며, 코리아챌린지와 글로벌챌린지를 비롯한 각종 학과내 행사에 있어서 선발 기준에 적용될 수 있습니다.",
+        "A. 킹고코인은 AWS, GPU 개인사용 크레딧, IT 기기대여, 세미나실 사용 등에 사용될 수 있으며, 코리아챌린지와 글로벌챌린지를 비롯한 소프트웨어학과내 각종 행사에 있어서 선발 기준에 적용될 수 있습니다.",
+    },
+    {
+      faq_id: 2,
+      question: "Q. 타과생도 킹고코인을 사용할 수 있나요?",
+      answer:
+        "A. 현재 킹고코인은 소프트웨어학과 원전공생들을 대상으로 하고 있습니다.",
+    },
+    {
+      faq_id: 3,
+      question: "Q. 코인 내역에 오류가 발생한 것 같은데 어떻게 해야하나요?",
+      answer:
+        "A. 홈페이지 아래 이메일로 코인 내역의 스크린샷과 함께 문의 메일을 작성해주시면 확인 후 처리해드리도록 하겠습니다.",
+    },
+    {
+      faq_id: 4,
+      question: "Q. 휴학생도 킹고코인을 사용할 수 있나요?",
+      answer:
+        "A. 성균관대학교 소프트웨어학과 원전공생이라면 학년, 휴학유무와 관계없이 킹고코인을 획득하거나 사용하실 수 있습니다. 다만 혜택에 있어서 휴학유무에 따라 각종 행사 내 선발 기준에 제한이 있을 수 있습니다.",
+    },
+    {
+      faq_id: 5,
+      question: "Q. 나의 킹고코인 정보가 궁금해요",
+      answer: "A. ",
     },
   ];
 
@@ -700,7 +724,7 @@ export const getCoin = async (userId) => {
 
 /**
  * getCoinDetailByAdminId
- * @param {number} adminId - 운영자 식별자
+ * @param {number} adId - 운영자 식별자
  * @return {Promise<{
  * dtId: number,
  * coinId: number,
@@ -717,9 +741,15 @@ export const getCoin = async (userId) => {
  * modifiedDate: string
  * }[]>} 객체를 반환하는 프로미스 객체
  */
+<<<<<<< Updated upstream
 export const getCoinDetailByAdminId = (adminId) => {
   const route = `/api/koin/admin/${adminId}`;
   const result = axios.get(HOST + route);
+=======
+export const getCoinDetailByAdminId = (adId) => {
+  const path = `/admin/${adId}`;
+  const result = axios.get(HOST + COIN_ROUTE + path);
+>>>>>>> Stashed changes
   return result;
 };
 
@@ -759,7 +789,7 @@ export const getCoinDetail = async (userId) => {
  * @param {number} plId 정책 식별자
  * @param {string} gainedDate 부여 날짜
  * @returns {Promise<{
- * detailId: number
+ * dtId: number
  * }>} 정책 내역 식별자를 반환하는 프로미스 객체
  */
 

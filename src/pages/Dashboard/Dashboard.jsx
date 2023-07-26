@@ -61,7 +61,7 @@ function Dashboard(props) {
               />
               <CardContent>
                 <div className="flex items-end">
-                  <Counter start={0} end={koin.point_plus} duration={1000} />
+                  <Counter start={0} end={coin.point_total} duration={1000} />
                   <div
                     className={
                       details[0].plus
