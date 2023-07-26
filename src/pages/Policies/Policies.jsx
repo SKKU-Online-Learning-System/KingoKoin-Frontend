@@ -47,7 +47,7 @@ const PolicyCreateCard = () => {
     createName: "",
     createPfName: "",
     createPlus: true,
-    createPoint: 0,
+    createCoin: 0,
     reason: "",
   });
 
@@ -114,12 +114,12 @@ const PolicyCreateCard = () => {
           variant="standard"
           type="number"
           className="w-16"
-          value={value.createPlus ? value.createPoint : -value.createPoint}
+          value={value.createPlus ? value.createCoin : -value.createCoin}
           onChange={(e) => {
             setValue({
               ...value,
               createPlus: e.currentTarget.value >= 0,
-              createPoint: Math.abs(e.currentTarget.value),
+              createCoin: Math.abs(e.currentTarget.value),
             });
           }}
         />
@@ -171,11 +171,11 @@ const ProposedPolicyReadCard = ({ row }) => {
           <Typography variant="label-l">코인 값</Typography>
           <div className="flex items-center gap-1">
             <Typography variant="body">
-              {row.plus ? row.point : -row.point}
+              {row.plus ? row.coin : -row.coin}
             </Typography>
             <MdOutlineArrowForward />
             <Typography variant="body">
-              {row.request_plus ? row.request_point : -row.request_point}
+              {row.request_plus ? row.request_coin : -row.request_coin}
             </Typography>
           </div>
         </div>
@@ -255,12 +255,12 @@ const PolicyUpdateCard = ({ row }) => {
           variant="standard"
           type="number"
           className="w-16"
-          value={value.plus ? value.point : -value.point}
+          value={value.plus ? value.coin : -value.coin}
           onChange={(e) => {
             setValue({
               ...value,
               plus: e.currentTarget.value >= 0,
-              point: Math.abs(e.currentTarget.value),
+              coin: Math.abs(e.currentTarget.value),
             });
           }}
         />
@@ -355,7 +355,7 @@ const PoliciesCard = ({ handleRowClick }) => {
     { field: "plId", headerName: "정책코드", flex: 1 },
     { field: "pfName", headerName: "제공처", width: 150 },
     {
-      field: "point",
+      field: "coin",
       headerName: "코인값",
       flex: 1,
       valueGetter: (params) => (params.row.plus ? params.value : -params.value),

@@ -96,7 +96,7 @@ const UsersCard = ({ handleRowClick }) => {
     { field: "st_id", headerName: "학번", flex: 1, sortable: false },
     { field: "dept", headerName: "학과", flex: 2, sortable: false },
     {
-      field: "point_total",
+      field: "coin_total",
       headerName: "보유코인",
       flex: 1,
       filterable: false,
@@ -173,7 +173,7 @@ function Users() {
     isLoading: detailsIsLoading,
     error: detailsError,
     data: details,
-  } = useQuery("KoinDetails", () => fetchCoinDetails(selectedRow.user_id));
+  } = useQuery("CoinDetails", () => fetchCoinDetails(selectedRow.user_id));
 
   if (detailsIsLoading) return <Loader />;
   if (detailsError) return <div>{detailsError.message}</div>;

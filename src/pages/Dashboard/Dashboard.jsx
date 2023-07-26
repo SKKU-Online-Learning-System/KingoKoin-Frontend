@@ -4,7 +4,7 @@ import { BiChevronDown } from "react-icons/bi";
 import {
   dummyPlatforms,
   fetchFaqs,
-  fetchKoin,
+  fetchCoin,
   fetchCoinDetails,
 } from "../../api";
 import Counter from "./Counter";
@@ -32,19 +32,19 @@ function Dashboard(props) {
   const links = dummyPlatforms;
 
   const {
-    isLoading: koinIsLoading,
-    error: koinError,
-    data: koin,
-  } = useQuery("Koin", fetchKoin);
+    isLoading: coinIsLoading,
+    error: coinError,
+    data: coin,
+  } = useQuery("Coin", fetchCoin);
 
   const {
     isLoading: detailsIsLoading,
     error: detailsError,
     data: details,
-  } = useQuery("KoinDetails", fetchCoinDetails);
+  } = useQuery("CoinDetails", fetchCoinDetails);
 
-  const isLoading = faqsIsLoading || koinIsLoading || detailsIsLoading;
-  const error = faqsError || koinError || detailsError;
+  const isLoading = faqsIsLoading || coinIsLoading || detailsIsLoading;
+  const error = faqsError || coinError || detailsError;
 
   if (isLoading) return <Loader />;
   if (error) return <div>An error has occurred: {error.message}</div>;
@@ -61,7 +61,7 @@ function Dashboard(props) {
               />
               <CardContent>
                 <div className="flex items-end">
-                  <Counter start={0} end={koin.point_plus} duration={1000} />
+                  <Counter start={0} end={coin.coin_plus} duration={1000} />
                   <div
                     className={
                       details[0].plus
@@ -69,7 +69,7 @@ function Dashboard(props) {
                         : "flex text-red-600"
                     }
                   >
-                    {details[0].point}
+                    {details[0].coin}
                     {details[0].plus ? "▲" : "▼"}
                   </div>
                 </div>
@@ -82,7 +82,7 @@ function Dashboard(props) {
               />
               <CardContent>
                 <div className="flex items-end">
-                  <Counter start={0} end={koin.point_plus} duration={1000} />
+                  <Counter start={0} end={coin.coin_plus} duration={1000} />
                   <div
                     className={
                       details[0].plus
@@ -90,7 +90,7 @@ function Dashboard(props) {
                         : "flex text-red-600"
                     }
                   >
-                    {details[0].point}
+                    {details[0].coin}
                     {details[0].plus ? "▲" : "▼"}
                   </div>
                 </div>
@@ -103,7 +103,7 @@ function Dashboard(props) {
               />
               <CardContent>
                 <div className="flex items-end">
-                  <Counter start={0} end={koin.point_minus} duration={1000} />
+                  <Counter start={0} end={coin.coin_minus} duration={1000} />
                   <div
                     className={
                       details[0].plus
@@ -111,7 +111,7 @@ function Dashboard(props) {
                         : "flex text-primary"
                     }
                   >
-                    {details[0].point}
+                    {details[0].coin}
                     {details[0].plus ? "▼" : "▲"}
                   </div>
                 </div>

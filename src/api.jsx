@@ -16,28 +16,31 @@ import SOSD_LOGO from "./assets/sosd_logo.svg";
 // }
 
 /**
- * Fetch Koin
+ * Fetch Coin
  * @param {number} user_id - 유저 식별자
  * @return {Promise<{
- * point_total: number,
- * point_plus: number,
- * point_minus: number
+ * coin_total: number,
+ * coin_plus: number,
+ * coin_minus: number
  * }>} 코인 객체를 반환하는 프로미스 객체
  */
-export const fetchKoin = async (user_id) => {
-  try {
-    const url = host + koinRouting;
-    const response = await axios.get(url);
+export const fetchCoin = async () => {
+  const dummyCoin = {
+    coin_total: 180,
+    coin_plus: 240,
+    coin_minus: 60,
+  };
 
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  const result = new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      resolve(dummyCoin);
+    }, 500);
+  });
+  return result;
 };
 
 /**
- * Fetch KoinDetails
+ * Fetch CoinDetails
  * @param {number} user_id 유저 식별자
  * @param {number} page n번째 페이지
  * @param {number} size 페이지 크기
@@ -46,8 +49,8 @@ export const fetchKoin = async (user_id) => {
  * pf_name: string,
  * pl_name: string,
  * plus: boolean,
- * point:number,
- * point_total: number,
+ * coin:number,
+ * coin_total: number,
  * modified_date: string
  * }>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
  */
@@ -59,8 +62,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "장비 대여",
       adGroup: "소프트웨어학과",
       plus: false,
-      point: 10,
-      point_total: 180,
+      coin: 10,
+      coin_total: 180,
       modified_date: "2023-07-12T04:05:08.000Z",
     },
     {
@@ -69,8 +72,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "온라인명륜당 강좌 수강",
       adGroup: "온라인명륜당",
       plus: true,
-      point: 10,
-      point_total: 190,
+      coin: 10,
+      coin_total: 190,
       modified_date: "2023-07-11T04:05:08.000Z",
     },
     {
@@ -79,8 +82,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "온라인명륜당 가입",
       adGroup: "온라인명륜당",
       plus: true,
-      point: 20,
-      point_total: 170,
+      coin: 20,
+      coin_total: 170,
       modified_date: "2023-07-11T04:05:08.000Z",
     },
     {
@@ -89,8 +92,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "분기별 상위 10%",
       adGroup: "SOSD",
       plus: false,
-      point: 50,
-      point_total: 120,
+      coin: 50,
+      coin_total: 120,
       modified_date: "2023-07-01T04:05:08.000Z",
     },
     {
@@ -99,8 +102,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "킹고인과의 만남 강연 참석",
       adGroup: "소프트웨어학과",
       plus: true,
-      point: 10,
-      point_total: 100,
+      coin: 10,
+      coin_total: 100,
       modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
@@ -109,8 +112,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "특별 이벤트",
       adGroup: "SOSD",
       plus: true,
-      point: 10,
-      point_total: 90,
+      coin: 10,
+      coin_total: 90,
       modified_date: "2023-05-09T04:05:08.000Z",
     },
     {
@@ -119,8 +122,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "SOSD 회원가입",
       adGroup: "SOSD",
       plus: true,
-      point: 20,
-      point_total: 70,
+      coin: 20,
+      coin_total: 70,
       modified_date: "2023-05-05T04:05:08.000Z",
     },
     {
@@ -129,8 +132,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "온라인명륜당 회원가입",
       adGroup: "온라인명륜당",
       plus: false,
-      point: 50,
-      point_total: 100,
+      coin: 50,
+      coin_total: 100,
       modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
@@ -139,8 +142,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "온라인명륜당 회원가입",
       adGroup: "온라인명륜당",
       plus: true,
-      point: 50,
-      point_total: 100,
+      coin: 50,
+      coin_total: 100,
       modified_date: "2023-05-10T04:05:08.000Z",
     },
     {
@@ -149,8 +152,8 @@ export const fetchCoinDetails = async (user_id) => {
       pl_name: "온라인명륜당 회원가입",
       adGroup: "온라인명륜당",
       plus: false,
-      point: 50,
-      point_total: 100,
+      coin: 50,
+      coin_total: 100,
       modified_date: "2023-05-10T04:05:08.000Z",
     },
   ];
@@ -161,7 +164,7 @@ export const fetchCoinDetails = async (user_id) => {
     }, 500);
   });
 
-  // axios.get<IKoinDetail[]>(`.../api/koin/${user_id}/detail?page="${page}"&size="${size}"`)
+  // axios.get<ICoinDetail[]>(`.../api/Coin/${user_id}/detail?page="${page}"&size="${size}"`)
   return result;
 };
 
@@ -231,7 +234,7 @@ export const fetchFaqs = () => {
     }, 500);
   });
 
-  // axios.get<IKoinDetail[]>(".../api/koin/${user_id}?=”${}”")
+  // axios.get<ICoinDetail[]>(".../api/Coin/${user_id}?=”${}”")
   return result;
 };
 
@@ -245,8 +248,8 @@ export const fetchFaqs = () => {
  * request_type: string,
  * plus: boolean,
  * request_plus: number,
- * point: number,
- * request_point: number,
+ * coin: number,
+ * request_coin: number,
  * available: boolean,
  * request_available: boolean,
  * reason: string,
@@ -265,8 +268,8 @@ export const fetchProposedPolicies = async () => {
       request_type: "UPDATE",
       plus: true,
       request_plus: 10,
-      point: 10,
-      request_point: 20,
+      coin: 10,
+      request_coin: 20,
       available: true,
       request_available: true,
       reason:
@@ -282,8 +285,8 @@ export const fetchProposedPolicies = async () => {
       request_type: "UPDATE",
       plus: true,
       request_plus: 10,
-      point: 10,
-      request_point: 20,
+      coin: 10,
+      request_coin: 20,
       available: true,
       request_available: true,
       reason:
@@ -299,8 +302,8 @@ export const fetchProposedPolicies = async () => {
       request_type: "UPDATE",
       plus: true,
       request_plus: 10,
-      point: 20,
-      request_point: 10,
+      coin: 20,
+      request_coin: 10,
       available: true,
       request_available: true,
       reason:
@@ -316,8 +319,8 @@ export const fetchProposedPolicies = async () => {
       request_type: "UPDATE",
       plus: true,
       request_plus: 10,
-      point: 10,
-      request_point: 20,
+      coin: 10,
+      request_coin: 20,
       available: true,
       request_available: true,
       reason:
@@ -333,8 +336,8 @@ export const fetchProposedPolicies = async () => {
       request_type: "UPDATE",
       plus: true,
       request_plus: 10,
-      point: 10,
-      request_point: 20,
+      coin: 10,
+      request_coin: 20,
       available: true,
       request_available: true,
       reason:
@@ -350,8 +353,8 @@ export const fetchProposedPolicies = async () => {
       request_type: "UPDATE",
       plus: true,
       request_plus: 10,
-      point: 10,
-      request_point: 20,
+      coin: 10,
+      request_coin: 20,
       available: true,
       request_available: false,
       reason:
@@ -367,8 +370,8 @@ export const fetchProposedPolicies = async () => {
       request_type: "UPDATE",
       plus: true,
       request_plus: 10,
-      point: 10,
-      request_point: 20,
+      coin: 10,
+      request_coin: 20,
       available: true,
       request_available: true,
       reason:
@@ -383,8 +386,8 @@ export const fetchProposedPolicies = async () => {
       pf_name: "SOSD",
       request_type: "UPDATE",
       request_plus: 10,
-      point: 10,
-      request_point: 20,
+      coin: 10,
+      request_coin: 20,
       available: true,
       request_available: true,
       date: "2023-05-10T04:05:08.000Z",
@@ -400,8 +403,8 @@ export const fetchProposedPolicies = async () => {
       request_type: "UPDATE",
       plus: true,
       request_plus: 10,
-      point: 10,
-      request_point: 20,
+      coin: 10,
+      request_coin: 20,
       available: true,
       request_available: true,
       reason:
@@ -417,8 +420,8 @@ export const fetchProposedPolicies = async () => {
       request_type: "UPDATE",
       plus: true,
       request_plus: 10,
-      point: 10,
-      request_point: 20,
+      coin: 10,
+      request_coin: 20,
       available: true,
       request_available: true,
       reason:
@@ -439,7 +442,7 @@ export const fetchProposedPolicies = async () => {
 
 /**
  * Fetch Policy List
- * @returns {Promise<{plId: number, plName: string, pfName: string, plus: boolean, point: number, created_date: string, available: boolean,
+ * @returns {Promise<{plId: number, plName: string, pfName: string, plus: boolean, coin: number, created_date: string, available: boolean,
  * request_available: false}[]>} 정책 배열을 반환하는 프로미스 객체
  *  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
@@ -450,7 +453,7 @@ export const fetchPolicies = async () => {
       plName: "온라인 명륜당 가입",
       pfName: "온라인 명륜당",
       plus: true,
-      point: 5,
+      coin: 5,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
@@ -459,7 +462,7 @@ export const fetchPolicies = async () => {
       plName: "강좌 시청",
       pfName: "온라인 명륜당",
       plus: true,
-      point: 1,
+      coin: 1,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
@@ -468,7 +471,7 @@ export const fetchPolicies = async () => {
       plName: "강좌 수료 완료",
       pfName: "온라인 명륜당",
       plus: true,
-      point: 20,
+      coin: 20,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
@@ -477,7 +480,7 @@ export const fetchPolicies = async () => {
       plName: "특별 이벤트",
       pfName: "온라인 명륜당",
       plus: false,
-      point: 10,
+      coin: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: false,
     },
@@ -486,7 +489,7 @@ export const fetchPolicies = async () => {
       plName: "화상강연 참석",
       pfName: "소프트웨어학과 행정실",
       plus: true,
-      point: 10,
+      coin: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
@@ -495,7 +498,7 @@ export const fetchPolicies = async () => {
       plName: "SOSD 가입",
       pfName: "SOSD",
       plus: true,
-      point: 10,
+      coin: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
@@ -504,7 +507,7 @@ export const fetchPolicies = async () => {
       plName: "해외 봉사 활동 참여",
       pfName: "온라인 명륜당",
       plus: true,
-      point: 10,
+      coin: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
@@ -513,7 +516,7 @@ export const fetchPolicies = async () => {
       plName: "세미나실 초과 대여 ",
       pfName: "온라인 명륜당",
       plus: true,
-      point: 10,
+      coin: 10,
       created_date: "2023-05-10T04:05:08.000Z",
       available: false,
     },
@@ -522,7 +525,7 @@ export const fetchPolicies = async () => {
       plName: "직접입력",
       pfName: "소프트웨어학과 행정실",
       plus: true,
-      point: 0,
+      coin: 0,
       created_date: "2023-05-10T04:05:08.000Z",
       available: true,
     },
@@ -541,13 +544,13 @@ export const fetchPolicies = async () => {
  * Create Proposed Policy
  * @param {string} name
  * @param {number} pl_id DB에추가필요
- * @param {number} point
+ * @param {number} coin
  * @param {number} create_user_id
  * @param {string} reason
  * @returns {Promise<{result: boolean}>} 성공여부를 반환하는 프로미스 객체
  *  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
-export const createProposedPolicy = (name, point, create_user_id, reason) => {};
+export const createProposedPolicy = (name, coin, create_user_id, reason) => {};
 
 /**
  * Fetch User List
@@ -556,8 +559,8 @@ export const createProposedPolicy = (name, point, create_user_id, reason) => {};
  * st_id: number,
  * st_name: string,
  * dept: string,
- * point_total: number,
- * point_plus: number,
+ * coin_total: number,
+ * coin_plus: number,
  * user_authority: string
  * }[]>} 사용자 배열을 반환하는 프로미스 객체
  *  * 보안과 관련된 파라미터가 필요할 수 있다.
@@ -569,8 +572,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
     {
@@ -578,8 +581,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
     {
@@ -587,8 +590,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
     {
@@ -596,8 +599,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
     {
@@ -605,8 +608,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
     {
@@ -614,8 +617,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
     {
@@ -623,8 +626,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
     {
@@ -632,8 +635,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
     {
@@ -641,8 +644,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
     {
@@ -650,8 +653,8 @@ export const fetchUsers = async (paginationModel) => {
       st_id: 2023123456,
       st_name: "율전이",
       dept: "글로벌바이오메디컬공학과",
-      point_total: 180,
-      point_plus: 240,
+      coin_total: 180,
+      coin_plus: 240,
       user_authority: "사용자",
     },
   ];
@@ -677,6 +680,11 @@ export const fetchUsers = async (paginationModel) => {
 };
 
 // 07.26(수) api 문서 반영 (수정 요청 사항 반영)
+
+// 구현에서 제외한 api 목록
+// - 코인 자동 부여 (postAutocoin)
+// - 학생 저장 및 업데이트 (postUsers)
+// - 일별 통계 값 조회 (getStaticsByDay)
 
 const HOST = "http://kingocoin-dev.cs.skku.edu:8080";
 const COIN_ROUTE = "/api/coin";
@@ -771,7 +779,7 @@ export const getCoinDetail = async (userId) => {
  * detailId: number
  * }>} 정책 내역 식별자를 반환하는 프로미스 객체
  */
-export const postManualPoint = async (
+export const postManualcoin = async (
   stId,
   stName,
   title,
@@ -781,7 +789,7 @@ export const postManualPoint = async (
   plId,
   gainedDate
 ) => {
-  const path = `/point/manual`;
+  const path = `/coin/manual`;
   const result = axios.post(HOST + COIN_ROUTE + path, {
     stId,
     stName,
@@ -809,8 +817,8 @@ export const postManualPoint = async (
  * stId: number,
  * stName: string,
  * dept: string,
- * pointTotal: number,
- * pointPlus: number,
+ * coinTotal: number,
+ * coinPlus: number,
  * role: string
  * }[]>} 학생 정보 배열을 반환하는 프로미스 객체
  */
@@ -859,7 +867,7 @@ export const getUserRole = (userId) => {
  * plName: string,
  * pfName: string,
  * plus: boolean,
- * point: number,
+ * coin: number,
  * available: boolean
  * }[]>} 정책 배열을 반환하는 프로미스 객체
  */

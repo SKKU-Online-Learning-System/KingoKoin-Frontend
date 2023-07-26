@@ -34,7 +34,7 @@ const ExcelCard = () => {
     title: "",
     pfName: "",
     plus: true,
-    point: 0,
+    coin: 0,
     createdDate: dayjs(),
   });
 
@@ -194,12 +194,12 @@ const ExcelCard = () => {
                 className="flex-1"
                 label="코인값"
                 type="number"
-                value={coinDetail.plus ? coinDetail.point : -coinDetail.point}
+                value={coinDetail.plus ? coinDetail.coin : -coinDetail.coin}
                 onChange={(e) => {
                   setCoinDetail({
                     ...coinDetail,
                     plus: e.target.value >= 0,
-                    point: Math.abs(e.target.value),
+                    coin: Math.abs(e.target.value),
                   });
                 }}
                 size="small"
@@ -220,14 +220,14 @@ const ExcelCard = () => {
   );
 };
 
-const GiveKoinCard = () => {
+const GiveCoinCard = () => {
   const [coinDetail, setCoinDetail] = useState({
     stId: "",
     stName: "",
     title: "",
     pfName: "",
     plus: true,
-    point: 0,
+    coin: 0,
     createdDate: dayjs(),
   });
 
@@ -255,7 +255,7 @@ const GiveKoinCard = () => {
         }}
       >
         {`${coinDetail.stId} 학번의 ${coinDetail.stName} 학생에게 ${
-          coinDetail.plus ? coinDetail.point : -coinDetail.point
+          coinDetail.plus ? coinDetail.coin : -coinDetail.coin
         }코인을 부여하시겠습니까?`}
       </ConfirmDialog>
       <CardHeader
@@ -331,12 +331,12 @@ const GiveKoinCard = () => {
               className="flex-1"
               label="코인값"
               type="number"
-              value={coinDetail.plus ? coinDetail.point : -coinDetail.point}
+              value={coinDetail.plus ? coinDetail.coin : -coinDetail.coin}
               onChange={(e) => {
                 setCoinDetail({
                   ...coinDetail,
                   plus: e.target.value >= 0,
-                  point: Math.abs(e.target.value),
+                  coin: Math.abs(e.target.value),
                 });
               }}
               size="small"
@@ -356,7 +356,7 @@ const GiveKoinCard = () => {
   );
 };
 
-const UserPointHistory = ({ details }) => {
+const UserCoinHistory = ({ details }) => {
   const PAGE_SIZE = 4;
 
   const rows = details.map((it) => ({
@@ -372,16 +372,16 @@ const UserPointHistory = ({ details }) => {
     { field: "pl_name", headerName: "내용", flex: 1.5 },
     { field: "adGroup", headerName: "제공처", flex: 1.2 },
     {
-      field: "point_plus",
+      field: "coin_plus",
       headerName: "부여한 코인",
       flex: 1,
-      valueGetter: (params) => (params.row.plus ? params.row.point : ""),
+      valueGetter: (params) => (params.row.plus ? params.row.coin : ""),
     },
     {
-      field: "point_minus",
+      field: "coin_minus",
       headerName: "차감한 코인",
       flex: 1,
-      valueGetter: (params) => (params.row.plus ? "" : params.row.point),
+      valueGetter: (params) => (params.row.plus ? "" : params.row.coin),
     },
   ];
 
@@ -414,7 +414,7 @@ const UserPointHistory = ({ details }) => {
   );
 };
 
-const Koin = () => {
+const Coin = () => {
   const {
     isLoading: detailsIsLoading,
     error: detailsError,
@@ -427,12 +427,12 @@ const Koin = () => {
   return (
     <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
       <section className="flex gap-6">
-        <GiveKoinCard />
+        <GiveCoinCard />
         <ExcelCard />
       </section>
-      <UserPointHistory details={details} />
+      <UserCoinHistory details={details} />
     </div>
   );
 };
 
-export default Koin;
+export default Coin;
