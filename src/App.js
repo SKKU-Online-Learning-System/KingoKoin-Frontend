@@ -5,21 +5,9 @@ import {
 } from "@mui/material";
 import React from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import { RouterProvider } from "react-router-dom";
+import router from "./Router";
 import "./App.css";
-import Dashboard from "./pages/Dashboard/Dashboard";
-import Coin from "./pages/Coin/Coin";
-import Login from "./pages/Login/Login";
-import NotFound from "./pages/NotFound/NotFound";
-import Policies from "./pages/Policies/Policies";
-import Users from "./pages/Users/Users";
-import Analysis from "./pages/Analysis/Analysis";
-import Main from "./pages/Main/Main";
-
-import Sidebar from "./components/Sidebar";
-import Top1 from "./components/Top1";
-import Top2 from "./components/Top2";
 
 const queryClient = new QueryClient();
 
@@ -89,87 +77,7 @@ function App() {
     <ThemeProvider theme={lightTheme}>
       <StyledEngineProvider injectFirst>
         <QueryClientProvider client={queryClient}>
-          <BrowserRouter>
-            <Routes>
-              <Route
-                path="/main/"
-                element={
-                  <>
-                    <Main />
-                  </>
-                }
-              />
-              <Route
-                path="/main/login"
-                element={
-                  <>
-                    <Login />
-                  </>
-                }
-              />
-              <Route
-                path="/main/dashboard"
-                element={
-                  <>
-                    <Top1 />
-                    <Top2 />
-                    <Sidebar>
-                      <Dashboard />
-                    </Sidebar>
-                  </>
-                }
-              />
-              <Route
-                path="/main/admin/users"
-                element={
-                  <>
-                    <Top1 />
-                    <Top2 />
-                    <Sidebar>
-                      <Users />
-                    </Sidebar>
-                  </>
-                }
-              />
-              <Route
-                path="/main/admin/coin"
-                element={
-                  <>
-                    <Top1 />
-                    <Top2 />
-                    <Sidebar>
-                      <Coin />
-                    </Sidebar>
-                  </>
-                }
-              />
-              <Route
-                path="/main/admin/policies"
-                element={
-                  <>
-                    <Top1 />
-                    <Top2 />
-                    <Sidebar>
-                      <Policies />
-                    </Sidebar>
-                  </>
-                }
-              />
-              <Route
-                path="/main/admin/analysis"
-                element={
-                  <>
-                    <Top1 />
-                    <Top2 />
-                    <Sidebar>
-                      <Analysis />
-                    </Sidebar>
-                  </>
-                }
-              />
-              <Route path="*" element={<NotFound />} /> {/* catch-all route */}
-            </Routes>
-          </BrowserRouter>
+          <RouterProvider router={router} />
         </QueryClientProvider>
       </StyledEngineProvider>
     </ThemeProvider>

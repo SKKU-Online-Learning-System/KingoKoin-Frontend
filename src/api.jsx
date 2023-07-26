@@ -242,11 +242,6 @@ export const fetchFaqs = () => {
       answer:
         "A. 성균관대학교 소프트웨어학과 원전공생이라면 학년, 휴학유무와 관계없이 킹고코인을 획득하거나 사용하실 수 있습니다. 다만 혜택에 있어서 휴학유무에 따라 각종 행사 내 선발 기준에 제한이 있을 수 있습니다.",
     },
-    {
-      faq_id: 5,
-      question: "Q. 나의 킹고코인 정보가 궁금해요",
-      answer: "A. ",
-    },
   ];
 
   const result = new Promise(function (resolve, reject) {
@@ -754,20 +749,9 @@ export const getCoin = async (userId) => {
  * modifiedDate: string
  * }[]>} 객체를 반환하는 프로미스 객체
  */
-<<<<<<< Updated upstream
-export const getCoinDetailByAdminId = (adminId) => {
-<<<<<<< HEAD
-  const route = `/api/koin/admin/${adminId}`;
-  const result = axios.get(HOST + route);
-=======
 export const getCoinDetailByAdminId = (adId) => {
   const path = `/admin/${adId}`;
   const result = axios.get(HOST + COIN_ROUTE + path);
->>>>>>> Stashed changes
-=======
-  const path = `/admin/${adminId}`;
-  const result = axios.get(HOST + COIN_ROUTE + path);
->>>>>>> dev
   return result;
 };
 
