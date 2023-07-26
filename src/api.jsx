@@ -2,6 +2,15 @@ import axios from "axios";
 import SKKU_EMBLEM from "./assets/skku_emblem_kor.png";
 import SOSD_LOGO from "./assets/sosd_logo.svg";
 
+
+const host = 'http://kingocoin-dev.cs.skku.edu:8080/'
+const koinRouting = '/api/koin'
+const userRouting = 'api/user'
+const policyRouting = 'api/routing'
+const staticsRouting = 'api/statics'
+const devRouting = 'api/dev'
+const platformRouting = 'api/platform'
+
 /**
  * Fetch Koin
  * @param {number} user_id - 유저 식별자
@@ -11,21 +20,20 @@ import SOSD_LOGO from "./assets/sosd_logo.svg";
  * point_minus: number
  * }>} 코인 객체를 반환하는 프로미스 객체
  */
+
 export const fetchKoin = async (user_id) => {
-  const dummyKoin = {
-    point_total: 180,
-    point_plus: 240,
-    point_minus: 60,
-  };
+  try {
+    const url = host + koinRouting
+    const response = await axios.get(url);
 
-  const result = new Promise(function (resolve, reject) {
-    setTimeout(() => {
-      resolve(dummyKoin);
-    }, 500);
-  });
+    return response;
 
-  // axios.get<IPoint>(".../api/koin/point/`{user_id}/total")
-  return result;
+  } 
+  
+  catch (error) {
+    console.log(error);
+    throw error;
+  }
 };
 
 /**
@@ -661,4 +669,48 @@ export const fetchUsers = async (paginationModel) => {
   });
 
   return result;
+};
+
+
+
+
+/**
+ * Manual Point
+ * @param {number} stId
+ * @param {string} stName
+ * @param {string} title
+ * @param {number} point
+ * @param {number} adId
+ * @param {number} plId
+ * @param {string} gainedDate - 형식: "yyyy-MM-ddTHH:mm:ss"
+ * @returns {Promise<{
+ *   detailId: number
+ * }>}
+ */
+
+export const manualPoint = async (stId, stName, title, point, adId, plId, gainedDate) => {
+  const url = host + koinRouting + '/point/manual';
+
+  const requestData = {
+    stId,
+    stName,
+    title,
+    point,
+    adId,
+    plId,
+    gainedDate
+  };
+
+  try {
+    const response = await axios.post(url, requestData);
+
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      throw new Error('API 호출 오류');
+    }
+  } catch (error) {
+    console.error('API 호출 오류:', error);
+    throw error;
+  }
 };
