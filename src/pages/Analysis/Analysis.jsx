@@ -3,14 +3,7 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import HighchartsMore from "highcharts/highcharts-more";
 import solidGauge from "highcharts/modules/solid-gauge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Grid,
-  Button,
-  Switch,
-} from "@mui/material";
+import { Card, CardContent, CardHeader, Grid, Switch } from "@mui/material";
 
 HighchartsMore(Highcharts);
 solidGauge(Highcharts);
