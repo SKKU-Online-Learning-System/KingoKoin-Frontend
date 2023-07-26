@@ -3,7 +3,14 @@ import Highcharts from "highcharts";
 import HighchartsReact from "highcharts-react-official";
 import HighchartsMore from "highcharts/highcharts-more";
 import solidGauge from "highcharts/modules/solid-gauge";
-import { Card, CardContent, CardHeader, Grid, Switch } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
+  Button,
+  Switch,
+} from "@mui/material";
 
 HighchartsMore(Highcharts);
 solidGauge(Highcharts);
@@ -612,11 +619,11 @@ function Analysis() {
 
     Highcharts.chart("monthly-graph-container", options);
     Highcharts.chart(
-      "koin-plus-graph-container",
+      "coin-plus-graph-container",
       showMonthlyGraph ? optionsKoinPlusByMonth : optionsTransactionPlusByMonth
     );
     Highcharts.chart(
-      "koin-minus-graph-container",
+      "coin-minus-graph-container",
       showMonthlyGraph
         ? optionsKoinMinusByMonth
         : optionsTransactionMinusByMonth
@@ -706,7 +713,7 @@ function Analysis() {
                 />
                 <CardContent>
                   <div className="flex items-center">
-                    <div id="koin-plus-graph-container" />
+                    <div id="coin-plus-graph-container" />
                   </div>
                 </CardContent>
               </Card>
@@ -721,7 +728,7 @@ function Analysis() {
                 />
                 <CardContent>
                   <div className="flex items-center">
-                    <div id="koin-minus-graph-container" />
+                    <div id="coin-minus-graph-container" />
                   </div>
                 </CardContent>
               </Card>

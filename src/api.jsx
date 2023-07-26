@@ -2,8 +2,21 @@ import axios from "axios";
 import SKKU_EMBLEM from "./assets/skku_emblem_kor.png";
 import SOSD_LOGO from "./assets/sosd_logo.svg";
 
+// TODO: api 연결시 에러 핸들링
+//
+// try {
+//   if (await result.status === 200) {
+//     return result
+//   } else {
+//     throw new Error("API 호출 오류");
+//   }
+// } catch (error) {
+//   console.error("API 호출 오류:", error);
+//   throw error;
+// }
+
 /**
- * Fetch Koin
+ * Fetch Coin
  * @param {number} user_id - 유저 식별자
  * @return {Promise<{
  * point_total: number,
@@ -11,25 +24,24 @@ import SOSD_LOGO from "./assets/sosd_logo.svg";
  * point_minus: number
  * }>} 코인 객체를 반환하는 프로미스 객체
  */
-export const fetchKoin = async (user_id) => {
-  const dummyKoin = {
-    point_total: 180,
-    point_plus: 240,
-    point_minus: 60,
+export const fetchCoin = async (user_id) => {
+  const dummyCoin = {
+    point_total: 18,
+    point_plus: 24,
+    point_minus: 6,
   };
 
   const result = new Promise(function (resolve, reject) {
     setTimeout(() => {
-      resolve(dummyKoin);
+      resolve(dummyCoin);
     }, 500);
   });
 
-  // axios.get<IPoint>(".../api/koin/point/`{user_id}/total")
   return result;
 };
 
 /**
- * Fetch KoinDetails
+ * Fetch CoinDetails
  * @param {number} user_id 유저 식별자
  * @param {number} page n번째 페이지
  * @param {number} size 페이지 크기
@@ -153,7 +165,7 @@ export const fetchCoinDetails = async (user_id) => {
     }, 500);
   });
 
-  // axios.get<IKoinDetail[]>(`.../api/koin/${user_id}/detail?page="${page}"&size="${size}"`)
+  // axios.get<ICoinDetail[]>(`.../api/coin/${user_id}/detail?page="${page}"&size="${size}"`)
   return result;
 };
 
@@ -247,7 +259,7 @@ export const fetchFaqs = () => {
     }, 500);
   });
 
-  // axios.get<IKoinDetail[]>(".../api/koin/${user_id}?=”${}”")
+  // axios.get<ICoinDetail[]>(".../api/coin/${user_id}?=”${}”")
   return result;
 };
 
@@ -566,11 +578,6 @@ export const fetchPolicies = async () => {
 export const createProposedPolicy = (name, point, create_user_id, reason) => {};
 
 /**
- * @interface user
- *
- */
-
-/**
  * Fetch User List
  * @returns {Promise<{
  * user_id: number,
@@ -700,6 +707,12 @@ export const fetchUsers = async (paginationModel) => {
 // 07.26(수) api 문서 반영 (수정 요청 사항 반영)
 
 const HOST = "http://kingocoin-dev.cs.skku.edu:8080";
+const COIN_ROUTE = "/api/coin";
+const USER_ROUTE = "api/user";
+const POLICY_ROUTE = "api/policy";
+const STATICS_ROUTE = "api/statics";
+const DEV_ROUTE = "api/dev";
+const PLATFORM_ROUTE = "api/platform";
 
 // Coin
 
@@ -717,8 +730,8 @@ const HOST = "http://kingocoin-dev.cs.skku.edu:8080";
  * }>} 코인 객체를 반환하는 프로미스 객체
  */
 export const getCoin = async (userId) => {
-  const route = `/api/coin/${userId}`;
-  const result = axios.get(HOST + route);
+  const path = `/${userId}`;
+  const result = axios.get(HOST + COIN_ROUTE + path);
   return result;
 };
 
@@ -743,6 +756,7 @@ export const getCoin = async (userId) => {
  */
 <<<<<<< Updated upstream
 export const getCoinDetailByAdminId = (adminId) => {
+<<<<<<< HEAD
   const route = `/api/koin/admin/${adminId}`;
   const result = axios.get(HOST + route);
 =======
@@ -750,6 +764,10 @@ export const getCoinDetailByAdminId = (adId) => {
   const path = `/admin/${adId}`;
   const result = axios.get(HOST + COIN_ROUTE + path);
 >>>>>>> Stashed changes
+=======
+  const path = `/admin/${adminId}`;
+  const result = axios.get(HOST + COIN_ROUTE + path);
+>>>>>>> dev
   return result;
 };
 
@@ -773,8 +791,8 @@ export const getCoinDetailByAdminId = (adId) => {
  * }>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
  */
 export const getCoinDetail = async (userId) => {
-  const route = `/api/koin/${userId}/detail`;
-  const result = axios.get(HOST + route);
+  const path = `/${userId}/detail`;
+  const result = axios.get(HOST + COIN_ROUTE + path);
   return result;
 };
 
@@ -792,7 +810,6 @@ export const getCoinDetail = async (userId) => {
  * dtId: number
  * }>} 정책 내역 식별자를 반환하는 프로미스 객체
  */
-
 export const postManualPoint = async (
   stId,
   stName,
@@ -803,8 +820,8 @@ export const postManualPoint = async (
   plId,
   gainedDate
 ) => {
-  const route = `/point/manual`;
-  const result = axios.post(HOST + route, {
+  const path = `/point/manual`;
+  const result = axios.post(HOST + COIN_ROUTE + path, {
     stId,
     stName,
     title,
@@ -837,8 +854,8 @@ export const postManualPoint = async (
  * }[]>} 학생 정보 배열을 반환하는 프로미스 객체
  */
 export const getUsersBySearch = (page, size, column, search) => {
-  const route = `/api/user/?page=${page}&size=${size}&column=${column}&search=${search}`;
-  const result = axios.get(HOST + route);
+  const path = `/?page=${page}&size=${size}&column=${column}&search=${search}`;
+  const result = axios.get(HOST + USER_ROUTE + path);
   return result;
 };
 
@@ -854,8 +871,8 @@ export const getUsersBySearch = (page, size, column, search) => {
  * }>} 학생 정보를 반환하는 프로미스 객체
  */
 export const getUserDetail = (userId) => {
-  const route = `/api/user/${userId}/info`;
-  const result = axios.get(HOST + route);
+  const path = `/${userId}/info`;
+  const result = axios.get(HOST + USER_ROUTE + path);
   return result;
 };
 
@@ -867,10 +884,12 @@ export const getUserDetail = (userId) => {
  * }>} 사용자 권한을 반환하는 프로미스 객체
  */
 export const getUserRole = (userId) => {
-  const route = `/api/user/${userId}/auth`;
-  const result = axios.get(HOST + route);
+  const path = `/${userId}/auth`;
+  const result = axios.get(HOST + USER_ROUTE + path);
   return result;
 };
+
+// policy
 
 /**
  * getPolicies
@@ -884,8 +903,8 @@ export const getUserRole = (userId) => {
  * }[]>} 정책 배열을 반환하는 프로미스 객체
  */
 export const getPolicies = (userId) => {
-  const route = `/api/policy`;
-  const result = axios.get(HOST + route);
+  const path = ``;
+  const result = axios.get(HOST + POLICY_ROUTE + path);
   return result;
 };
 
@@ -901,8 +920,8 @@ export const getPolicies = (userId) => {
  * }[]>} 정책 식별자를 반환하는 프로미스 객체
  */
 export const PostCreate = (plName, pfName, plus, coin, available) => {
-  const route = `/api/policy/create`;
-  const result = axios.post(HOST + route, {
+  const path = `/create`;
+  const result = axios.post(HOST + POLICY_ROUTE + path, {
     plName,
     pfName,
     plus,
@@ -926,8 +945,8 @@ export const PostCreate = (plName, pfName, plus, coin, available) => {
  * }[]>} 정책 식별자를 반환하는 프로미스 객체
  */
 export const PostModify = (plId, plName, pfName, plus, coin, available) => {
-  const route = `/api/policy/create`;
-  const result = axios.post(HOST + route, {
+  const path = `/modify`;
+  const result = axios.post(HOST + POLICY_ROUTE + path, {
     plId,
     plName,
     pfName,
@@ -953,15 +972,15 @@ export const PostModify = (plId, plName, pfName, plus, coin, available) => {
  * }[]>} 정책 배열을 반환하는 프로미스 객체
  */
 export const getStaticsByMonth = () => {
-  const route = `/api/statics/month`;
-  const result = axios.get(HOST + route);
+  const path = `/month`;
+  const result = axios.get(HOST + STATICS_ROUTE + path);
   return result;
 };
 
 // platform
 
 /**
- * getFlatforms
+ * getPlatforms
  * @returns {Promise<{
  * smId: number,
  * year: number,
@@ -971,8 +990,8 @@ export const getStaticsByMonth = () => {
  * modifiedDate: string
  * }[]>} 정책 배열을 반환하는 프로미스 객체
  */
-export const getFlatforms = () => {
-  const route = `/api/platform/`;
-  const result = axios.get(HOST + route);
+export const getPlatforms = () => {
+  const path = ``;
+  const result = axios.get(HOST + PLATFORM_ROUTE + path);
   return result;
 };
