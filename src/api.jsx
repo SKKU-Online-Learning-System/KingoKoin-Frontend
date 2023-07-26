@@ -11,30 +11,28 @@ const staticsRouting = 'api/statics'
 const devRouting = 'api/dev'
 const platformRouting = 'api/platform'
 
-/**
+/*
  * Fetch Koin
  * @param {number} user_id - 유저 식별자
- * @return {Promise<{
- * point_total: number,
- * point_plus: number,
- * point_minus: number
- * }>} 코인 객체를 반환하는 프로미스 객체
+ * @return {Promise<{ point_curr: number, point_used: number, point_all: number }>} 코인 객체를 반환하는 프로미스 객체
  */
-
 export const fetchKoin = async (user_id) => {
-  try {
-    const url = host + koinRouting
-    const response = await axios.get(url);
+  const dummyKoin = {
+    point_total: 180,
+    point_plus: 60,
+    point_minus: 240,
+  };
 
-    return response;
+  const result = new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      resolve(dummyKoin);
+    }, 500);
+  });
 
-  } 
-  
-  catch (error) {
-    console.log(error);
-    throw error;
-  }
+  // axios.get<IPoint>(".../api/koin/point/`{user_id}/total")
+  return result;
 };
+
 
 /**
  * Fetch KoinDetails
