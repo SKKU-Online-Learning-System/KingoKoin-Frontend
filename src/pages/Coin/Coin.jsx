@@ -220,7 +220,7 @@ const ExcelCard = () => {
   );
 };
 
-const GiveKoinCard = () => {
+const GiveCoinCard = () => {
   const [coinDetail, setCoinDetail] = useState({
     stId: "",
     stName: "",
@@ -414,7 +414,7 @@ const UserPointHistory = ({ details }) => {
   );
 };
 
-const Koin = () => {
+const Coin = () => {
   const {
     isLoading: detailsIsLoading,
     error: detailsError,
@@ -427,7 +427,7 @@ const Koin = () => {
   return (
     <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
       <section className="flex gap-6">
-        <GiveKoinCard />
+        <GiveCoinCard />
         <ExcelCard />
       </section>
       <UserPointHistory details={details} />
@@ -435,4 +435,4 @@ const Koin = () => {
   );
 };
 
-export default Koin;
+export default Coin;

@@ -16,7 +16,7 @@ import SOSD_LOGO from "./assets/sosd_logo.svg";
 // }
 
 /**
- * Fetch Koin
+ * Fetch Coin
  * @param {number} user_id - 유저 식별자
  * @return {Promise<{
  * point_total: number,
@@ -24,20 +24,24 @@ import SOSD_LOGO from "./assets/sosd_logo.svg";
  * point_minus: number
  * }>} 코인 객체를 반환하는 프로미스 객체
  */
-export const fetchKoin = async (user_id) => {
-  try {
-    const url = host + koinRouting;
-    const response = await axios.get(url);
+export const fetchCoin = async (user_id) => {
+  const dummyCoin = {
+    point_total: 18,
+    point_plus: 24,
+    point_minus: 6,
+  };
 
-    return response;
-  } catch (error) {
-    console.log(error);
-    throw error;
-  }
+  const result = new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      resolve(dummyCoin);
+    }, 500);
+  });
+
+  return result;
 };
 
 /**
- * Fetch KoinDetails
+ * Fetch CoinDetails
  * @param {number} user_id 유저 식별자
  * @param {number} page n번째 페이지
  * @param {number} size 페이지 크기
@@ -161,7 +165,7 @@ export const fetchCoinDetails = async (user_id) => {
     }, 500);
   });
 
-  // axios.get<IKoinDetail[]>(`.../api/koin/${user_id}/detail?page="${page}"&size="${size}"`)
+  // axios.get<ICoinDetail[]>(`.../api/coin/${user_id}/detail?page="${page}"&size="${size}"`)
   return result;
 };
 
@@ -231,7 +235,7 @@ export const fetchFaqs = () => {
     }, 500);
   });
 
-  // axios.get<IKoinDetail[]>(".../api/koin/${user_id}?=”${}”")
+  // axios.get<ICoinDetail[]>(".../api/coin/${user_id}?=”${}”")
   return result;
 };
 

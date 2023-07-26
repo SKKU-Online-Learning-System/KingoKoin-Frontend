@@ -173,7 +173,7 @@ function Users() {
     isLoading: detailsIsLoading,
     error: detailsError,
     data: details,
-  } = useQuery("KoinDetails", () => fetchCoinDetails(selectedRow.user_id));
+  } = useQuery("CoinDetails", () => fetchCoinDetails(selectedRow.user_id));
 
   if (detailsIsLoading) return <Loader />;
   if (detailsError) return <div>{detailsError.message}</div>;
