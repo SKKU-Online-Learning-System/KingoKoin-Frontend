@@ -672,3 +672,277 @@ export const fetchUsers = async (paginationModel) => {
 
   return result;
 };
+
+// 07.26(수) api 문서 반영 (수정 요청 사항 반영)
+
+const HOST = "http://kingocoin-dev.cs.skku.edu:8080";
+
+// Coin
+
+/**
+ * getCoin
+ * @param {number} userId - 유저 식별자
+ * @return {Promise<{
+ * coinId: number,
+ * userId: number,
+ * coinTotal: number,
+ * coinPlus: number,
+ * coinMinus: number,
+ * createdDate: string,
+ * modifiedDate: string
+ * }>} 코인 객체를 반환하는 프로미스 객체
+ */
+export const getCoin = async (userId) => {
+  const route = `/api/coin/${userId}`;
+  const result = axios.get(HOST + route);
+  return result;
+};
+
+/**
+ * getCoinDetailByAdminId
+ * @param {number} adminId - 운영자 식별자
+ * @return {Promise<{
+ * dtId: number,
+ * coinId: number,
+ * coinTotal: number,
+ * plId: number,
+ * plName: string,
+ * adId: number,
+ * adGroup: string,
+ * title: string,
+ * plus: bool,
+ * coin: number,
+ * provider: string,
+ * createdDate: string,
+ * modifiedDate: string
+ * }[]>} 객체를 반환하는 프로미스 객체
+ */
+export const getCoinDetailByAdminId = (adminId) => {
+  const route = `/api/koin/admin/${adminId}`;
+  const result = axios.get(HOST + route);
+  return result;
+};
+
+/**
+ * getCoinDetail
+ * @param {number} userId 유저 식별자
+ * @returns {Promise<{
+ * dtId: number,
+ * coinId: number,
+ * coinTotal: number,
+ * plId: number,
+ * plName: string,
+ * adId: number,
+ * adGroup: string,
+ * title: string,
+ * plus: boolean,
+ * coin: number,
+ * provider: string,
+ * createdDate: string,
+ * modifiedDate: string
+ * }>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
+ */
+export const getCoinDetail = async (userId) => {
+  const route = `/api/koin/${userId}/detail`;
+  const result = axios.get(HOST + route);
+  return result;
+};
+
+/**
+ * postManualCoin
+ * @param {number} stId 학번
+ * @param {string} stName 학생명
+ * @param {string} title 제목 (자동부여시 정책명, 수동부여시 직접입력)
+ * @param {number} coin 코인값 (U)
+ * @param {number} plus 코인값 부호 (C)
+ * @param {number} adId 운영자 식별자 (수동부여시 전달)
+ * @param {number} plId 정책 식별자
+ * @param {string} gainedDate 부여 날짜
+ * @returns {Promise<{
+ * detailId: number
+ * }>} 정책 내역 식별자를 반환하는 프로미스 객체
+ */
+
+export const postManualPoint = async (
+  stId,
+  stName,
+  title,
+  coin,
+  plus,
+  adId,
+  plId,
+  gainedDate
+) => {
+  const route = `/point/manual`;
+  const result = axios.post(HOST + route, {
+    stId,
+    stName,
+    title,
+    coin,
+    plus,
+    adId,
+    plId,
+    gainedDate,
+  });
+
+  return result;
+};
+
+// User
+
+/**
+ * getUsersBySearch
+ * @param {number} page N번째 페이지
+ * @param {number} size 페이지당 row 개수
+ * @param {string} column 검색 필드명
+ * @param {string} search 검색 값
+ * @returns {Promise<{
+ * userId: number,
+ * stId: number,
+ * stName: string,
+ * dept: string,
+ * pointTotal: number,
+ * pointPlus: number,
+ * role: string
+ * }[]>} 학생 정보 배열을 반환하는 프로미스 객체
+ */
+export const getUsersBySearch = (page, size, column, search) => {
+  const route = `/api/user/?page=${page}&size=${size}&column=${column}&search=${search}`;
+  const result = axios.get(HOST + route);
+  return result;
+};
+
+/**
+ * getUserDetail
+ * @param {number} userId 사용자 식별자
+ * @returns {Promise<{
+ * stId: number,
+ * stName: number,
+ * stDegree: number,
+ * stStatus: number,
+ * stDept: number
+ * }>} 학생 정보를 반환하는 프로미스 객체
+ */
+export const getUserDetail = (userId) => {
+  const route = `/api/user/${userId}/info`;
+  const result = axios.get(HOST + route);
+  return result;
+};
+
+/**
+ * getUserRole
+ * @param {number} userId 사용자 식별자
+ * @returns {Promise<{
+ * role: string
+ * }>} 사용자 권한을 반환하는 프로미스 객체
+ */
+export const getUserRole = (userId) => {
+  const route = `/api/user/${userId}/auth`;
+  const result = axios.get(HOST + route);
+  return result;
+};
+
+/**
+ * getPolicies
+ * @returns {Promise<{
+ * plId: number,
+ * plName: string,
+ * pfName: string,
+ * plus: boolean,
+ * point: number,
+ * available: boolean
+ * }[]>} 정책 배열을 반환하는 프로미스 객체
+ */
+export const getPolicies = (userId) => {
+  const route = `/api/policy`;
+  const result = axios.get(HOST + route);
+  return result;
+};
+
+/**
+ * PostCreate
+ * @param {string} plName 정책명
+ * @param {string} pfName 플랫폼명
+ * @param {boolean} plus 코인값 부호
+ * @param {number} coin 코인값
+ * @param {boolean} available 정책 활성화 여부
+ * @returns {Promise<{
+ * plId: number
+ * }[]>} 정책 식별자를 반환하는 프로미스 객체
+ */
+export const PostCreate = (plName, pfName, plus, coin, available) => {
+  const route = `/api/policy/create`;
+  const result = axios.post(HOST + route, {
+    plName,
+    pfName,
+    plus,
+    coin,
+    available,
+  });
+
+  return result;
+};
+
+/**
+ * PostModify
+ * @param {number} plId 정책 식별자
+ * @param {string} plName 정책명
+ * @param {string} pfName 플랫폼명
+ * @param {boolean} plus 코인값 부호
+ * @param {number} coin 코인값
+ * @param {boolean} available 정책 활성화 여부
+ * @returns {Promise<{
+ * plId: number
+ * }[]>} 정책 식별자를 반환하는 프로미스 객체
+ */
+export const PostModify = (plId, plName, pfName, plus, coin, available) => {
+  const route = `/api/policy/create`;
+  const result = axios.post(HOST + route, {
+    plId,
+    plName,
+    pfName,
+    plus,
+    coin,
+    available,
+  });
+
+  return result;
+};
+
+// statics
+
+/**
+ * getStaticsByMonth
+ * @returns {Promise<{
+ * smId: number,
+ * year: number,
+ * month: number,
+ * coinTotal: number,
+ * createdDate: string,
+ * modifiedDate: string
+ * }[]>} 정책 배열을 반환하는 프로미스 객체
+ */
+export const getStaticsByMonth = () => {
+  const route = `/api/statics/month`;
+  const result = axios.get(HOST + route);
+  return result;
+};
+
+// platform
+
+/**
+ * getFlatforms
+ * @returns {Promise<{
+ * smId: number,
+ * year: number,
+ * month: number,
+ * coinTotal: number,
+ * createdDate: string,
+ * modifiedDate: string
+ * }[]>} 정책 배열을 반환하는 프로미스 객체
+ */
+export const getFlatforms = () => {
+  const route = `/api/platform/`;
+  const result = axios.get(HOST + route);
+  return result;
+};
