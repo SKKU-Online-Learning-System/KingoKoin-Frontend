@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useQuery, useQueryClient } from "react-query";
-import { BiChevronDown, BiChevronUp } from "react-icons/bi";
+import React from "react";
+import { useQuery } from "react-query";
+import { BiChevronDown } from "react-icons/bi";
 import {
   dummyPlatforms,
   fetchFaqs,
   fetchKoin,
-  fetchKoinDetails,
+  fetchCoinDetails,
 } from "../../api";
 import Counter from "./Counter";
 import Loader from "../../components/Loader";
@@ -17,126 +17,10 @@ import {
   AccordionSummary,
   Typography,
   AccordionDetails,
-  Button,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import CustomPagination from "../../components/CustomPagination";
-import ConfirmDialog from "../../components/ConfirmDialog";
-
-export const UserPointGraph = ({ details }) => {
-  return (
-    <Card className="flex-1 h-full">
-      <CardHeader
-        title="누적코인보유량"
-        titleTypographyProps={{ variant: "display" }}
-      />
-      <CardContent>GRAPH</CardContent>
-    </Card>
-  );
-};
-
-export const UserPointHistory = ({ details }) => {
-  const PAGE_SIZE = 4;
-
-  const rows = details.map((it) => ({
-    ...it,
-    id: it.dt_id,
-    modified_date: new Date(it.modified_date).toLocaleDateString("ko-KR", {
-      timeZone: "UTC",
-    }),
-  }));
-
-  const columns = [
-    { field: "modified_date", headerName: "날짜", flex: 1 },
-    { field: "pf_name", headerName: "제공처", flex: 1.2 },
-    { field: "pl_name", headerName: "내용", flex: 1.5 },
-    {
-      field: "point_plus",
-      headerName: "획득한 코인",
-      flex: 1,
-      valueGetter: (params) => (params.row.plus ? params.row.point : ""),
-    },
-    {
-      field: "point_minus",
-      headerName: "사용한 코인",
-      flex: 1,
-      valueGetter: (params) => (params.row.plus ? "" : params.row.point),
-    },
-    { field: "point_total", headerName: "보유한 코인", flex: 1 },
-  ];
-
-  return (
-    <Card className="flex-1">
-      <CardHeader
-        title="코인 내역"
-        titleTypographyProps={{ variant: "display" }}
-        subheader={`${details.length}건`}
-        subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
-      />
-      <CardContent>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: PAGE_SIZE,
-              },
-            },
-          }}
-          pageSizeOptions={[PAGE_SIZE]}
-          slots={{
-            pagination: CustomPagination,
-          }}
-        />
-      </CardContent>
-    </Card>
-  );
-};
-
-const KoinLink = ({ pfInfo }) => {
-  const [open, setOpen] = useState(false);
-
-  const handleConfirm = (url) => {
-    // window.location.href = {url};
-    window.open(url, "_blank");
-    setOpen(false);
-  };
-
-  return (
-    <>
-      <ConfirmDialog
-        open={open}
-        handleConfirm={() => {
-          handleConfirm(pfInfo.pf_link);
-        }}
-        handleCancel={() => {
-          setOpen(false);
-        }}
-      >{`${pfInfo.pf_name}으로 이동하시겠습니까?`}</ConfirmDialog>
-      <Button
-        key={pfInfo.pf_name}
-        onClick={() => {
-          setOpen(true);
-        }}
-        className="flex justify-center items-center gap-1 w-[258px] h-[156px] bg-background rounded-lg border-solid border-2 border-primaryhover:shadow-lg hover:scale-[1.03] transition-all"
-      >
-        {pfInfo.pf_logo ? (
-          <>
-            <img
-              className="w-8 h-8"
-              src={pfInfo.pf_logo}
-              alt={pfInfo.pf_name + " 링크"}
-            />
-            <div className="text-label-l">{pfInfo.pf_name}</div>
-          </>
-        ) : (
-          <div className="font-gugi text-xl">{pfInfo.pf_name}</div>
-        )}
-      </Button>
-    </>
-  );
-};
+import SiteLink from "../../components/SiteLink";
+import UserCoinHistory from "../../components/UserCoinHistory";
+import UserCoinGraph from "../../components/UserCoinGraph";
 
 function Dashboard(props) {
   const {
@@ -157,7 +41,7 @@ function Dashboard(props) {
     isLoading: detailsIsLoading,
     error: detailsError,
     data: details,
-  } = useQuery("KoinDetails", fetchKoinDetails);
+  } = useQuery("KoinDetails", fetchCoinDetails);
 
   const isLoading = faqsIsLoading || koinIsLoading || detailsIsLoading;
   const error = faqsError || koinError || detailsError;
@@ -234,7 +118,7 @@ function Dashboard(props) {
               </CardContent>
             </Card>
           </div>
-          <UserPointGraph details={details} />
+          <UserCoinGraph details={details} />
         </div>
         <Card className="bg-transparent shadow-none w-full">
           <CardHeader
@@ -244,14 +128,14 @@ function Dashboard(props) {
           <CardContent>
             <div className="flex flex-wrap gap-3 w-full">
               {links.map((it) => (
-                <KoinLink pfInfo={it} key={it.pf_name} />
+                <SiteLink pfInfo={it} key={it.pf_name} />
               ))}
             </div>
           </CardContent>
         </Card>
       </section>
       <section className="flex flex-col gap-4">
-        <UserPointHistory details={details} />
+        <UserCoinHistory details={details} />
       </section>
       <section className="flex flex-col gap-4">
         <Card className="bg-transparent shadow-none w-full">

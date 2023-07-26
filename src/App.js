@@ -9,12 +9,13 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import "./App.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
-import Koin from "./pages/Koin/Koin";
+import Coin from "./pages/Coin/Coin";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
 import Policies from "./pages/Policies/Policies";
 import Users from "./pages/Users/Users";
 import Analysis from "./pages/Analysis/Analysis";
+import Main from "./pages/Main/Main";
 
 import Sidebar from "./components/Sidebar";
 import Top1 from "./components/Top1";
@@ -41,22 +42,22 @@ function App() {
     typography: {
       display: {
         fontFamily: "Noto Sans KR",
-        fontSize: "30px",
+        fontSize: "24px",
         fontWeight: "700",
       },
       logo: {
         fontFamily: "Gugi",
-        fontSize: "24px",
+        fontSize: "18px",
         fontWeight: "400",
       },
       "title-m": {
         fontFamily: "Noto Sans KR",
-        fontSize: "24px",
+        fontSize: "18px",
         fontWeight: "500",
       },
       "title-l": {
         fontFamily: "Noto Sans KR",
-        fontSize: "24px",
+        fontSize: "18px",
         fontWeight: "300",
       },
 
@@ -94,7 +95,7 @@ function App() {
                 path="/main/"
                 element={
                   <>
-                    <Login />
+                    <Main />
                   </>
                 }
               />
@@ -119,7 +120,7 @@ function App() {
                 }
               />
               <Route
-                path="/main/users"
+                path="/main/admin/users"
                 element={
                   <>
                     <Top1 />
@@ -131,19 +132,19 @@ function App() {
                 }
               />
               <Route
-                path="/main/koin"
+                path="/main/admin/coin"
                 element={
                   <>
                     <Top1 />
                     <Top2 />
                     <Sidebar>
-                      <Koin />
+                      <Coin />
                     </Sidebar>
                   </>
                 }
               />
               <Route
-                path="/main/policies"
+                path="/main/admin/policies"
                 element={
                   <>
                     <Top1 />
@@ -155,7 +156,7 @@ function App() {
                 }
               />
               <Route
-                path="/main/analysis"
+                path="/main/admin/analysis"
                 element={
                   <>
                     <Top1 />

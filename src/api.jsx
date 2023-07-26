@@ -22,6 +22,9 @@ export const fetchKoin = async (user_id) => {
     point_plus: 60,
     point_minus: 240,
   };
+  try {
+    const url = host + koinRouting;
+    const response = await axios.get(url);
 
   const result = new Promise(function (resolve, reject) {
     setTimeout(() => {
@@ -49,12 +52,13 @@ export const fetchKoin = async (user_id) => {
  * modified_date: string
  * }>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
  */
-export const fetchKoinDetails = async (user_id) => {
-  const dummyKoinDetails = [
+export const fetchCoinDetails = async (user_id) => {
+  const dummyCoinDetails = [
     {
       dt_id: 0,
       pf_name: "소프트웨어학과 행정실",
       pl_name: "장비 대여",
+      adGroup: "소프트웨어학과",
       plus: false,
       point: 10,
       point_total: 180,
@@ -64,6 +68,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 1,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 강좌 수강",
+      adGroup: "온라인명륜당",
       plus: true,
       point: 10,
       point_total: 190,
@@ -73,6 +78,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 2,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 가입",
+      adGroup: "온라인명륜당",
       plus: true,
       point: 20,
       point_total: 170,
@@ -82,6 +88,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 3,
       pf_name: "SOSD",
       pl_name: "분기별 상위 10%",
+      adGroup: "SOSD",
       plus: false,
       point: 50,
       point_total: 120,
@@ -91,6 +98,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 4,
       pf_name: "소프트웨어학과 행정실",
       pl_name: "킹고인과의 만남 강연 참석",
+      adGroup: "소프트웨어학과",
       plus: true,
       point: 10,
       point_total: 100,
@@ -100,6 +108,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 5,
       pf_name: "SOSD",
       pl_name: "특별 이벤트",
+      adGroup: "SOSD",
       plus: true,
       point: 10,
       point_total: 90,
@@ -109,6 +118,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 6,
       pf_name: "SOSD",
       pl_name: "SOSD 회원가입",
+      adGroup: "SOSD",
       plus: true,
       point: 20,
       point_total: 70,
@@ -118,6 +128,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 7,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 회원가입",
+      adGroup: "온라인명륜당",
       plus: false,
       point: 50,
       point_total: 100,
@@ -127,6 +138,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 8,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 회원가입",
+      adGroup: "온라인명륜당",
       plus: true,
       point: 50,
       point_total: 100,
@@ -136,6 +148,7 @@ export const fetchKoinDetails = async (user_id) => {
       dt_id: 9,
       pf_name: "온라인명륜당",
       pl_name: "온라인명륜당 회원가입",
+      adGroup: "온라인명륜당",
       plus: false,
       point: 50,
       point_total: 100,
@@ -145,7 +158,7 @@ export const fetchKoinDetails = async (user_id) => {
 
   const result = new Promise(function (resolve, reject) {
     setTimeout(() => {
-      resolve(dummyKoinDetails);
+      resolve(dummyCoinDetails);
     }, 500);
   });
 
@@ -538,11 +551,6 @@ export const fetchPolicies = async () => {
 export const createProposedPolicy = (name, point, create_user_id, reason) => {};
 
 /**
- * @interface user
- *
- */
-
-/**
  * Fetch User List
  * @returns {Promise<{
  * user_id: number,
@@ -669,46 +677,283 @@ export const fetchUsers = async (paginationModel) => {
   return result;
 };
 
+// 07.26(수) api 문서 반영 (수정 요청 사항 반영)
 
+const HOST = "http://kingocoin-dev.cs.skku.edu:8080";
+const COIN_ROUTE = "/api/coin";
+const USER_ROUTE = "api/user";
+const POLICY_ROUTE = "api/policy";
+const STATICS_ROUTE = "api/statics";
+const DEV_ROUTE = "api/dev";
+const PLATFORM_ROUTE = "api/platform";
 
+// Coin
 
 /**
- * Manual Point
- * @param {number} stId
- * @param {string} stName
- * @param {string} title
- * @param {number} point
- * @param {number} adId
- * @param {number} plId
- * @param {string} gainedDate - 형식: "yyyy-MM-ddTHH:mm:ss"
- * @returns {Promise<{
- *   detailId: number
- * }>}
+ * getCoin
+ * @param {number} userId - 유저 식별자
+ * @return {Promise<{
+ * coinId: number,
+ * userId: number,
+ * coinTotal: number,
+ * coinPlus: number,
+ * coinMinus: number,
+ * createdDate: string,
+ * modifiedDate: string
+ * }>} 코인 객체를 반환하는 프로미스 객체
  */
+export const getCoin = async (userId) => {
+  const path = `/${userId}`;
+  const result = axios.get(HOST + COIN_ROUTE + path);
+  return result;
+};
 
-export const manualPoint = async (stId, stName, title, point, adId, plId, gainedDate) => {
-  const url = host + koinRouting + '/point/manual';
+/**
+ * getCoinDetailByAdminId
+ * @param {number} adminId - 운영자 식별자
+ * @return {Promise<{
+ * dtId: number,
+ * coinId: number,
+ * coinTotal: number,
+ * plId: number,
+ * plName: string,
+ * adId: number,
+ * adGroup: string,
+ * title: string,
+ * plus: bool,
+ * coin: number,
+ * provider: string,
+ * createdDate: string,
+ * modifiedDate: string
+ * }[]>} 객체를 반환하는 프로미스 객체
+ */
+export const getCoinDetailByAdminId = (adminId) => {
+  const path = `/admin/${adminId}`;
+  const result = axios.get(HOST + COIN_ROUTE + path);
+  return result;
+};
 
-  const requestData = {
+/**
+ * getCoinDetail
+ * @param {number} userId 유저 식별자
+ * @returns {Promise<{
+ * dtId: number,
+ * coinId: number,
+ * coinTotal: number,
+ * plId: number,
+ * plName: string,
+ * adId: number,
+ * adGroup: string,
+ * title: string,
+ * plus: boolean,
+ * coin: number,
+ * provider: string,
+ * createdDate: string,
+ * modifiedDate: string
+ * }>} 코인 거래내역 세부사항 배열을 반환하는 프로미스 객체
+ */
+export const getCoinDetail = async (userId) => {
+  const path = `/${userId}/detail`;
+  const result = axios.get(HOST + COIN_ROUTE + path);
+  return result;
+};
+
+/**
+ * postManualCoin
+ * @param {number} stId 학번
+ * @param {string} stName 학생명
+ * @param {string} title 제목 (자동부여시 정책명, 수동부여시 직접입력)
+ * @param {number} coin 코인값 (U)
+ * @param {number} plus 코인값 부호 (C)
+ * @param {number} adId 운영자 식별자 (수동부여시 전달)
+ * @param {number} plId 정책 식별자
+ * @param {string} gainedDate 부여 날짜
+ * @returns {Promise<{
+ * detailId: number
+ * }>} 정책 내역 식별자를 반환하는 프로미스 객체
+ */
+export const postManualPoint = async (
+  stId,
+  stName,
+  title,
+  coin,
+  plus,
+  adId,
+  plId,
+  gainedDate
+) => {
+  const path = `/point/manual`;
+  const result = axios.post(HOST + COIN_ROUTE + path, {
     stId,
     stName,
     title,
-    point,
+    coin,
+    plus,
     adId,
     plId,
-    gainedDate
-  };
+    gainedDate,
+  });
 
-  try {
-    const response = await axios.post(url, requestData);
+  return result;
+};
 
-    if (response.status === 200) {
-      return response.data;
-    } else {
-      throw new Error('API 호출 오류');
-    }
-  } catch (error) {
-    console.error('API 호출 오류:', error);
-    throw error;
-  }
+// User
+
+/**
+ * getUsersBySearch
+ * @param {number} page N번째 페이지
+ * @param {number} size 페이지당 row 개수
+ * @param {string} column 검색 필드명
+ * @param {string} search 검색 값
+ * @returns {Promise<{
+ * userId: number,
+ * stId: number,
+ * stName: string,
+ * dept: string,
+ * pointTotal: number,
+ * pointPlus: number,
+ * role: string
+ * }[]>} 학생 정보 배열을 반환하는 프로미스 객체
+ */
+export const getUsersBySearch = (page, size, column, search) => {
+  const path = `/?page=${page}&size=${size}&column=${column}&search=${search}`;
+  const result = axios.get(HOST + USER_ROUTE + path);
+  return result;
+};
+
+/**
+ * getUserDetail
+ * @param {number} userId 사용자 식별자
+ * @returns {Promise<{
+ * stId: number,
+ * stName: number,
+ * stDegree: number,
+ * stStatus: number,
+ * stDept: number
+ * }>} 학생 정보를 반환하는 프로미스 객체
+ */
+export const getUserDetail = (userId) => {
+  const path = `/${userId}/info`;
+  const result = axios.get(HOST + USER_ROUTE + path);
+  return result;
+};
+
+/**
+ * getUserRole
+ * @param {number} userId 사용자 식별자
+ * @returns {Promise<{
+ * role: string
+ * }>} 사용자 권한을 반환하는 프로미스 객체
+ */
+export const getUserRole = (userId) => {
+  const path = `/${userId}/auth`;
+  const result = axios.get(HOST + USER_ROUTE + path);
+  return result;
+};
+
+// policy
+
+/**
+ * getPolicies
+ * @returns {Promise<{
+ * plId: number,
+ * plName: string,
+ * pfName: string,
+ * plus: boolean,
+ * point: number,
+ * available: boolean
+ * }[]>} 정책 배열을 반환하는 프로미스 객체
+ */
+export const getPolicies = (userId) => {
+  const path = ``;
+  const result = axios.get(HOST + POLICY_ROUTE + path);
+  return result;
+};
+
+/**
+ * PostCreate
+ * @param {string} plName 정책명
+ * @param {string} pfName 플랫폼명
+ * @param {boolean} plus 코인값 부호
+ * @param {number} coin 코인값
+ * @param {boolean} available 정책 활성화 여부
+ * @returns {Promise<{
+ * plId: number
+ * }[]>} 정책 식별자를 반환하는 프로미스 객체
+ */
+export const PostCreate = (plName, pfName, plus, coin, available) => {
+  const path = `/create`;
+  const result = axios.post(HOST + POLICY_ROUTE + path, {
+    plName,
+    pfName,
+    plus,
+    coin,
+    available,
+  });
+
+  return result;
+};
+
+/**
+ * PostModify
+ * @param {number} plId 정책 식별자
+ * @param {string} plName 정책명
+ * @param {string} pfName 플랫폼명
+ * @param {boolean} plus 코인값 부호
+ * @param {number} coin 코인값
+ * @param {boolean} available 정책 활성화 여부
+ * @returns {Promise<{
+ * plId: number
+ * }[]>} 정책 식별자를 반환하는 프로미스 객체
+ */
+export const PostModify = (plId, plName, pfName, plus, coin, available) => {
+  const path = `/modify`;
+  const result = axios.post(HOST + POLICY_ROUTE + path, {
+    plId,
+    plName,
+    pfName,
+    plus,
+    coin,
+    available,
+  });
+
+  return result;
+};
+
+// statics
+
+/**
+ * getStaticsByMonth
+ * @returns {Promise<{
+ * smId: number,
+ * year: number,
+ * month: number,
+ * coinTotal: number,
+ * createdDate: string,
+ * modifiedDate: string
+ * }[]>} 정책 배열을 반환하는 프로미스 객체
+ */
+export const getStaticsByMonth = () => {
+  const path = `/month`;
+  const result = axios.get(HOST + STATICS_ROUTE + path);
+  return result;
+};
+
+// platform
+
+/**
+ * getPlatforms
+ * @returns {Promise<{
+ * smId: number,
+ * year: number,
+ * month: number,
+ * coinTotal: number,
+ * createdDate: string,
+ * modifiedDate: string
+ * }[]>} 정책 배열을 반환하는 프로미스 객체
+ */
+export const getPlatforms = () => {
+  const path = ``;
+  const result = axios.get(HOST + PLATFORM_ROUTE + path);
+  return result;
 };

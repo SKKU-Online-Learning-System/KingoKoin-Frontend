@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Card,
   CardContent,
   CardHeader,
@@ -7,7 +6,6 @@ import {
   Typography,
   Fade,
 } from "@mui/material";
-import Box from "@mui/material/Box";
 import {
   DataGrid,
   GridToolbarQuickFilter,
@@ -17,9 +15,10 @@ import React, { useState, useEffect, useCallback } from "react";
 import CustomPagination from "../../components/CustomPagination";
 
 import { useQuery } from "react-query";
-import { fetchKoinDetails, fetchUsers } from "../../api";
+import { fetchCoinDetails, fetchUsers } from "../../api";
 import Loader from "../../components/Loader";
-import { UserPointGraph, UserPointHistory } from "../Dashboard/Dashboard";
+import UserCoinHistory from "../../components/UserCoinHistory";
+import UserCoinGraph from "../../components/UserCoinGraph";
 
 function QuickSearchToolbar() {
   return (
@@ -67,14 +66,20 @@ const UsersCard = ({ handleRowClick }) => {
   }, [users?.length, setRowCountState]);
 
   // filter
-  const onFilterChange = useCallback((filterModel) => {
-    setQueryOptions({ ...queryOptions, filterModel: { ...filterModel } });
-  }, []);
+  const onFilterChange = useCallback(
+    (filterModel) => {
+      setQueryOptions({ ...queryOptions, filterModel: { ...filterModel } });
+    },
+    [queryOptions]
+  );
 
   // sort
-  const handleSortModelChange = useCallback((sortModel) => {
-    setQueryOptions({ ...queryOptions, sortModel: [...sortModel] });
-  }, []);
+  const handleSortModelChange = useCallback(
+    (sortModel) => {
+      setQueryOptions({ ...queryOptions, sortModel: [...sortModel] });
+    },
+    [queryOptions]
+  );
 
   if (usersIsLoading) return <Loader className="w-[662px] h-[495px]" />;
   if (usersError) return <div>{usersError.message}</div>;
@@ -168,8 +173,9 @@ function Users() {
     isLoading: detailsIsLoading,
     error: detailsError,
     data: details,
-  } = useQuery("KoinDetails", () => fetchKoinDetails(selectedRow.user_id));
+  } = useQuery("KoinDetails", () => fetchCoinDetails(selectedRow.user_id));
 
+  if (detailsIsLoading) return <Loader />;
   if (detailsError) return <div>{detailsError.message}</div>;
 
   const handleRowClick = (params) => {
@@ -192,7 +198,7 @@ function Users() {
           {detailShow ? (
             <Fade in={fade}>
               <div className="flex-1 min-h-full">
-                <UserPointGraph details={details} />
+                <UserCoinGraph details={details} />
               </div>
             </Fade>
           ) : (
@@ -205,7 +211,7 @@ function Users() {
         {detailShow ? (
           <Fade in={fade}>
             <div>
-              <UserPointHistory details={details} />
+              <UserCoinHistory details={details} />
             </div>
           </Fade>
         ) : (
