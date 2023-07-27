@@ -14,6 +14,7 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Main />,
+    errorElement: <NotFound />,
   },
   {
     path: "/main",
@@ -26,14 +27,17 @@ const router = createBrowserRouter([
   {
     path: "/main",
     element: <Frame />,
+    children: [{ path: "dashboard", element: <Dashboard /> }],
+  },
+  {
+    path: "/main/admin",
+    element: <Frame />,
     children: [
-      { path: "dashboard", element: <Dashboard /> },
-      { path: "admin/users", element: <Users /> },
-      { path: "admin/coin", element: <Coin /> },
-      { path: "admin/policies", element: <Policies /> },
-      { path: "admin/analysis", element: <Analysis /> },
+      { path: "users", element: <Users /> },
+      { path: "coin", element: <Coin /> },
+      { path: "policies", element: <Policies /> },
+      { path: "analysis", element: <Analysis /> },
     ],
-    errorElement: <NotFound />,
   },
 ]);
 
