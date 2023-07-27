@@ -15,6 +15,115 @@ import SOSD_LOGO from "./assets/sosd_logo.svg";
 //   throw error;
 // }
 
+const dummyPolicy = [
+  {
+    plId: 10101,
+    plName: "온라인 명륜당 가입",
+    pfName: "온라인 명륜당",
+    plus: true,
+    point: 5,
+    createdDate: "2023-05-10T04:05:08.000Z",
+    available: true,
+  },
+  {
+    plId: 10102,
+    plName: "강좌 시청",
+    pfName: "온라인 명륜당",
+    plus: true,
+    point: 1,
+    createdDate: "2023-05-10T04:05:08.000Z",
+    available: true,
+  },
+  {
+    plId: 10103,
+    plName: "강좌 수료 완료",
+    pfName: "온라인 명륜당",
+    plus: true,
+    point: 20,
+    createdDate: "2023-05-10T04:05:08.000Z",
+    available: true,
+  },
+  {
+    plId: 20101,
+    plName: "특별 이벤트",
+    pfName: "온라인 명륜당",
+    plus: false,
+    point: 10,
+    createdDate: "2023-05-10T04:05:08.000Z",
+    available: false,
+  },
+  {
+    plId: 20102,
+    plName: "화상강연 참석",
+    pfName: "소프트웨어학과 행정실",
+    plus: true,
+    point: 10,
+    createdDate: "2023-05-10T04:05:08.000Z",
+    available: true,
+  },
+  {
+    plId: 10202,
+    plName: "SOSD 가입",
+    pfName: "SOSD",
+    plus: true,
+    point: 10,
+    createdDate: "2023-05-10T04:05:08.000Z",
+    available: true,
+  },
+  {
+    plId: 20103,
+    plName: "해외 봉사 활동 참여",
+    pfName: "온라인 명륜당",
+    plus: true,
+    point: 10,
+    createdDate: "2023-05-10T04:05:08.000Z",
+    available: true,
+  },
+  {
+    plId: 30101,
+    plName: "세미나실 초과 대여 ",
+    pfName: "온라인 명륜당",
+    plus: true,
+    point: 10,
+    createdDate: "2023-05-10T04:05:08.000Z",
+    available: false,
+  },
+  {
+    plId: 99999,
+    plName: "직접입력",
+    pfName: "소프트웨어학과 행정실",
+    plus: true,
+    point: 0,
+    createdDate: "2023-05-10T04:05:08.000Z",
+    available: true,
+  },
+];
+
+const dummyPlatforms = [
+  {
+    pfName: "온라인명륜당",
+    pfLogo: null,
+    pfLink: "https://mrdang.cs.skku.edu",
+  },
+  {
+    pfName: "학과 행사 참석",
+    pfLogo: SKKU_EMBLEM,
+    pfLink:
+      "https://sw.skku.edu/sw/notice.do?mode=list&srCategoryId1=1587&srSearchKey=&srSearchVal=",
+  },
+  {
+    pfName: "오픈소스플랫폼",
+    pfLogo: SOSD_LOGO,
+    pfLink: "https://sosd.skku.edu",
+  },
+  {
+    pfName: "킹고인과의 만남",
+    pfLogo: SKKU_EMBLEM,
+    pfLink:
+      "https://sw.skku.edu/sw/notice.do?mode=list&srCategoryId1=1587&srSearchKey=&srSearchVal=",
+  },
+];
+
 /**
  * Fetch Coin
  * @param {number} user_id - 유저 식별자
@@ -166,95 +275,6 @@ export const fetchCoinDetails = async (user_id) => {
   });
 
   // axios.get<ICoinDetail[]>(`.../api/coin/${user_id}/detail?page="${page}"&size="${size}"`)
-  return result;
-};
-
-/**
- * Link List Data
- * @type {{
- * pf_name: string,
- * pf_logo: string,
- * pf_link: string
- * }[]}
- */
-export const dummyPlatforms = [
-  {
-    pf_name: "온라인명륜당",
-    pf_logo: null,
-    pf_link: "https://mrdang.cs.skku.edu",
-  },
-  {
-    pf_name: "학과 행사 참석",
-    pf_logo: SKKU_EMBLEM,
-    pf_link:
-      "https://sw.skku.edu/sw/notice.do?mode=list&srCategoryId1=1587&srSearchKey=&srSearchVal=",
-  },
-  {
-    pf_name: "오픈소스플랫폼",
-    pf_logo: SOSD_LOGO,
-    pf_link: "https://sosd.skku.edu",
-  },
-  {
-    pf_name: "킹고인과의 만남",
-    pf_logo: SKKU_EMBLEM,
-    pf_link:
-      "https://sw.skku.edu/sw/notice.do?mode=list&srCategoryId1=1587&srSearchKey=&srSearchVal=",
-  },
-];
-
-/**
- * Fetch FNQ List
- * @returns {Promise<{
- * faq_id: number,
- * question: string,
- * answer: string
- * }[]>} 자주 묻는 질문 배열을 반환하는 프로미스 객체
- */
-export const fetchFaqs = () => {
-  const dummyFaqs = [
-    {
-      faq_id: 0,
-      question: "Q. 킹고코인에 사용기한이 있나요?",
-      answer:
-        "A. 킹고코인은 매년 초기화됩니다. 따라서 보유 중인 코인이 사라지기 전에 적절하게 사용하는 것이 권장됩니다.",
-    },
-    {
-      faq_id: 1,
-      question: "Q. 킹고코인을 어디에 사용할 수 있나요?",
-      answer:
-        "A. 킹고코인은 AWS, GPU 개인사용 크레딧, IT 기기대여, 세미나실 사용 등에 사용될 수 있으며, 코리아챌린지와 글로벌챌린지를 비롯한 소프트웨어학과내 각종 행사에 있어서 선발 기준에 적용될 수 있습니다.",
-    },
-    {
-      faq_id: 2,
-      question: "Q. 타과생도 킹고코인을 사용할 수 있나요?",
-      answer:
-        "A. 현재 킹고코인은 소프트웨어학과 원전공생들을 대상으로 하고 있습니다.",
-    },
-    {
-      faq_id: 3,
-      question: "Q. 코인 내역에 오류가 발생한 것 같은데 어떻게 해야하나요?",
-      answer:
-        "A. 홈페이지 아래 이메일로 코인 내역의 스크린샷과 함께 문의 메일을 작성해주시면 확인 후 처리해드리도록 하겠습니다.",
-    },
-    {
-      faq_id: 4,
-      question: "Q. 휴학생도 킹고코인을 사용할 수 있나요?",
-      answer:
-        "A. 성균관대학교 소프트웨어학과 원전공생이라면 학년, 휴학유무와 관계없이 킹고코인을 획득하거나 사용하실 수 있습니다. 다만 혜택에 있어서 휴학유무에 따라 각종 행사 내 선발 기준에 제한이 있을 수 있습니다.",
-    },
-  ];
-
-  const result = new Promise(function (resolve, reject) {
-    setTimeout(() => {
-      resolve(
-        dummyFaqs.map((it) => {
-          return { ...it, isToggle: false };
-        })
-      );
-    }, 500);
-  });
-
-  // axios.get<ICoinDetail[]>(".../api/coin/${user_id}?=”${}”")
   return result;
 };
 
@@ -462,95 +482,11 @@ export const fetchProposedPolicies = async () => {
 
 /**
  * Fetch Policy List
- * @returns {Promise<{plId: number, plName: string, pfName: string, plus: boolean, point: number, created_date: string, available: boolean,
+ * @returns {Promise<{plId: number, plName: string, pfName: string, plus: boolean, point: number, createdDate: string, available: boolean,
  * request_available: false}[]>} 정책 배열을 반환하는 프로미스 객체
  *  * 보안과 관련된 파라미터가 필요할 수 있다.
  */
 export const fetchPolicies = async () => {
-  const dummyPolicy = [
-    {
-      plId: 10101,
-      plName: "온라인 명륜당 가입",
-      pfName: "온라인 명륜당",
-      plus: true,
-      point: 5,
-      created_date: "2023-05-10T04:05:08.000Z",
-      available: true,
-    },
-    {
-      plId: 10102,
-      plName: "강좌 시청",
-      pfName: "온라인 명륜당",
-      plus: true,
-      point: 1,
-      created_date: "2023-05-10T04:05:08.000Z",
-      available: true,
-    },
-    {
-      plId: 10103,
-      plName: "강좌 수료 완료",
-      pfName: "온라인 명륜당",
-      plus: true,
-      point: 20,
-      created_date: "2023-05-10T04:05:08.000Z",
-      available: true,
-    },
-    {
-      plId: 20101,
-      plName: "특별 이벤트",
-      pfName: "온라인 명륜당",
-      plus: false,
-      point: 10,
-      created_date: "2023-05-10T04:05:08.000Z",
-      available: false,
-    },
-    {
-      plId: 20102,
-      plName: "화상강연 참석",
-      pfName: "소프트웨어학과 행정실",
-      plus: true,
-      point: 10,
-      created_date: "2023-05-10T04:05:08.000Z",
-      available: true,
-    },
-    {
-      plId: 10202,
-      plName: "SOSD 가입",
-      pfName: "SOSD",
-      plus: true,
-      point: 10,
-      created_date: "2023-05-10T04:05:08.000Z",
-      available: true,
-    },
-    {
-      plId: 20103,
-      plName: "해외 봉사 활동 참여",
-      pfName: "온라인 명륜당",
-      plus: true,
-      point: 10,
-      created_date: "2023-05-10T04:05:08.000Z",
-      available: true,
-    },
-    {
-      plId: 30101,
-      plName: "세미나실 초과 대여 ",
-      pfName: "온라인 명륜당",
-      plus: true,
-      point: 10,
-      created_date: "2023-05-10T04:05:08.000Z",
-      available: false,
-    },
-    {
-      plId: 99999,
-      plName: "직접입력",
-      pfName: "소프트웨어학과 행정실",
-      plus: true,
-      point: 0,
-      created_date: "2023-05-10T04:05:08.000Z",
-      available: true,
-    },
-  ];
-
   const result = new Promise(function (resolve, reject) {
     setTimeout(() => {
       resolve(dummyPolicy);
@@ -729,6 +665,12 @@ export const getCoin = async (userId) => {
   const result = axios.get(HOST + COIN_ROUTE + path);
   return result;
 };
+// getCoin 사용 예제
+// const {
+//   isLoading: userCoinIsLoading,
+//   error: userCoinError,
+//   data: userCoin,
+// } = useQuery(["userCoin"], () => getCoin(userId));
 
 /**
  * getCoinDetailByAdminId
@@ -754,6 +696,12 @@ export const getCoinDetailByAdminId = (adId) => {
   const result = axios.get(HOST + COIN_ROUTE + path);
   return result;
 };
+// getCoinDetailByAdminId 사용 예제
+// const {
+//   isLoading: adCoinDetailIsLoading,
+//   error: adCoinDetailError,
+//   data: adCoinDetail,
+// } = useQuery(["adCoinDetail"], () => getCoinDetailByAdminId(adId));
 
 /**
  * getCoinDetail
@@ -779,6 +727,12 @@ export const getCoinDetail = async (userId) => {
   const result = axios.get(HOST + COIN_ROUTE + path);
   return result;
 };
+// getCoinDetail 사용 예제
+// const {
+//   isLoading: userCoinDetailIsLoading,
+//   error: userCoinDetailError,
+//   data: userCoinDetail,
+// } = useQuery(["userCoinDetail"], () => getCoinDetail(userId));
 
 /**
  * postManualCoin
@@ -842,6 +796,12 @@ export const getUsersBySearch = (page, size, column, search) => {
   const result = axios.get(HOST + USER_ROUTE + path);
   return result;
 };
+// getUsersBySearch 사용 예제
+// const {
+//   isLoading: usersIsLoading,
+//   error: usersError,
+//   data: users,
+// } = useQuery("users", () => getUsersBySearch(page, size, column, search));
 
 /**
  * getUserDetail
@@ -859,6 +819,12 @@ export const getUserDetail = (userId) => {
   const result = axios.get(HOST + USER_ROUTE + path);
   return result;
 };
+// getUserDetail 사용 예제
+// const {
+//   isLoading: userDetailIsLoading,
+//   error: userDetailError,
+//   data: userDetail,
+// } = useQuery(["userDetail", userId], () => getUserDetail(userId));
 
 /**
  * getUserRole
@@ -872,6 +838,12 @@ export const getUserRole = (userId) => {
   const result = axios.get(HOST + USER_ROUTE + path);
   return result;
 };
+// getUserRole 사용 예제
+// const {
+//   isLoading: userRoleIsLoading,
+//   error: userRoleError,
+//   data: userRole,
+// } = useQuery(["userRole", userId], () => getUserRole(userId));
 
 // policy
 
@@ -886,57 +858,56 @@ export const getUserRole = (userId) => {
  * available: boolean
  * }[]>} 정책 배열을 반환하는 프로미스 객체
  */
-export const getPolicies = (userId) => {
+export const getPolicies = () => {
   const path = ``;
-  const result = axios.get(HOST + POLICY_ROUTE + path);
-  return result;
-};
-
-/**
- * PostCreate
- * @param {string} plName 정책명
- * @param {string} pfName 플랫폼명
- * @param {boolean} plus 코인값 부호
- * @param {number} coin 코인값
- * @param {boolean} available 정책 활성화 여부
- * @returns {Promise<{
- * plId: number
- * }[]>} 정책 식별자를 반환하는 프로미스 객체
- */
-export const PostCreate = (plName, pfName, plus, coin, available) => {
-  const path = `/create`;
-  const result = axios.post(HOST + POLICY_ROUTE + path, {
-    plName,
-    pfName,
-    plus,
-    coin,
-    available,
+  // const result = axios.get(HOST + POLICY_ROUTE + path);
+  const result = new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      resolve(dummyPolicy);
+    }, 500);
   });
-
   return result;
 };
+// getPolicies 사용 예제
+// const {
+//   isLoading: policiesIsLoading,
+//   error: policiesError,
+//   data: policies,
+// } = useQuery(["policies"], getPolicies);
 
 /**
- * PostModify
- * @param {number} plId 정책 식별자
- * @param {string} plName 정책명
- * @param {string} pfName 플랫폼명
- * @param {boolean} plus 코인값 부호
- * @param {number} coin 코인값
- * @param {boolean} available 정책 활성화 여부
+ * 정책 생성 및 수정 요청 (postPolicyRequest)
+ * @param {number?} plId 정책명
+ * @param {number} pfId 플랫폼명
+ * @param {string} rqName 요청 정책명
+ * @param {number} rqPoint 요청 코인값
+ * @param {string} rqReason 요청 사유
+ * @param {boolean} rqPlus 요청 코인값 부호
+ * @param {string} rqType 요청 타입 CREATE|UPDATE|DEACTIVATE|ACTIVATE|DELETE
  * @returns {Promise<{
- * plId: number
- * }[]>} 정책 식별자를 반환하는 프로미스 객체
+ * rqId: number
+ * }[]>} 요청 식별자를 반환하는 프로미스 객체
  */
-export const PostModify = (plId, plName, pfName, plus, coin, available) => {
-  const path = `/modify`;
+
+export const postPolicyRequest = (
+  plId,
+  pfId,
+  rqName,
+  rqPoint,
+  rqReason,
+  rqPlus,
+  rqType
+) => {
+  const path = `/request?plId=${plId}`;
+  if (rqType === "CREATE" || plId === null) path = `/request`;
   const result = axios.post(HOST + POLICY_ROUTE + path, {
     plId,
-    plName,
-    pfName,
-    plus,
-    coin,
-    available,
+    pfId,
+    rqName,
+    rqPoint,
+    rqReason,
+    rqPlus,
+    rqType,
   });
 
   return result;
@@ -960,6 +931,12 @@ export const getStaticsByMonth = () => {
   const result = axios.get(HOST + STATICS_ROUTE + path);
   return result;
 };
+// getStaticsByMonth 사용 예제
+// const {
+//   isLoading: statisticIsLoading,
+//   error: statisticError,
+//   data: statistic,
+// } = useQuery(["statistic"], getStaticsByMonth);
 
 // platform
 
@@ -976,6 +953,53 @@ export const getStaticsByMonth = () => {
  */
 export const getPlatforms = () => {
   const path = ``;
-  const result = axios.get(HOST + PLATFORM_ROUTE + path);
+  // const result = axios.get(HOST + PLATFORM_ROUTE + path);
+  const result = new Promise(function (resolve, reject) {
+    setTimeout(() => {
+      resolve(dummyPlatforms);
+    }, 500);
+  });
+
   return result;
 };
+// getPlatforms 사용 예제
+// const {
+//   isLoading: platformsIsLoading,
+//   error: platformsError,
+//   data: platforms,
+// } = useQuery(["platforms"], getPlatforms);
+
+// 하드 코딩된 데이터
+
+export const FNQS = [
+  {
+    fnqId: 0,
+    question: "Q. 킹고코인에 사용기한이 있나요?",
+    answer:
+      "A. 킹고코인은 매년 초기화됩니다. 따라서 보유 중인 코인이 사라지기 전에 적절하게 사용하는 것이 권장됩니다.",
+  },
+  {
+    fnqId: 1,
+    question: "Q. 킹고코인을 어디에 사용할 수 있나요?",
+    answer:
+      "A. 킹고코인은 AWS, GPU 개인사용 크레딧, IT 기기대여, 세미나실 사용 등에 사용될 수 있으며, 코리아챌린지와 글로벌챌린지를 비롯한 소프트웨어학과내 각종 행사에 있어서 선발 기준에 적용될 수 있습니다.",
+  },
+  {
+    fnqId: 2,
+    question: "Q. 타과생도 킹고코인을 사용할 수 있나요?",
+    answer:
+      "A. 현재 킹고코인은 소프트웨어학과 원전공생들을 대상으로 하고 있습니다.",
+  },
+  {
+    faq_id: 3,
+    question: "Q. 코인 내역에 오류가 발생한 것 같은데 어떻게 해야하나요?",
+    answer:
+      "A. 홈페이지 아래 이메일로 코인 내역의 스크린샷과 함께 문의 메일을 작성해주시면 확인 후 처리해드리도록 하겠습니다.",
+  },
+  {
+    faq_id: 4,
+    question: "Q. 휴학생도 킹고코인을 사용할 수 있나요?",
+    answer:
+      "A. 성균관대학교 소프트웨어학과 원전공생이라면 학년, 휴학유무와 관계없이 킹고코인을 획득하거나 사용하실 수 있습니다. 다만 혜택에 있어서 휴학유무에 따라 각종 행사 내 선발 기준에 제한이 있을 수 있습니다.",
+  },
+];
