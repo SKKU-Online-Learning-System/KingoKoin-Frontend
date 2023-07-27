@@ -18,18 +18,18 @@ const UserCoinHistory = ({ details }) => {
     { field: "pf_name", headerName: "제공처", flex: 1.2 },
     { field: "pl_name", headerName: "내용", flex: 1.5 },
     {
-      field: "point_plus",
+      field: "coin_plus",
       headerName: "획득한 코인",
       flex: 1,
-      valueGetter: (params) => (params.row.plus ? params.row.point : ""),
+      valueGetter: (params) => (params.row.plus ? params.row.coin : ""),
     },
     {
-      field: "point_minus",
+      field: "coin_minus",
       headerName: "사용한 코인",
       flex: 1,
-      valueGetter: (params) => (params.row.plus ? "" : params.row.point),
+      valueGetter: (params) => (params.row.plus ? "" : params.row.coin),
     },
-    { field: "point_total", headerName: "보유한 코인", flex: 1 },
+    { field: "coin_total", headerName: "보유한 코인", flex: 1 },
   ];
 
   return (
