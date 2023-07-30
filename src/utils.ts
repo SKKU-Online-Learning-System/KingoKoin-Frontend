@@ -9,7 +9,23 @@ export function getCookie(name: string) {
   return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
-export function setCookie(name: string, value: string, options: any) {
+export interface ICookieOptions {
+  path?: string | undefined;
+  domain?: string | undefined;
+  expires?: Date | string | undefined;
+  "max-age"?: number | undefined;
+  secure?: boolean | undefined;
+  samesite?: true | false | "lax" | "strict" | "none" | undefined;
+  httpOnly?: boolean | undefined;
+  priority?: "low" | "medium" | "high" | undefined;
+  encode?(value: string): string;
+}
+
+export function setCookie(
+  name: string,
+  value: string,
+  options: ICookieOptions
+) {
   options = {
     path: "/",
     // 필요한 경우, 옵션 기본값을 설정할 수도 있습니다.
@@ -23,13 +39,12 @@ export function setCookie(name: string, value: string, options: any) {
   let updatedCookie =
     encodeURIComponent(name) + "=" + encodeURIComponent(value);
 
-  for (let optionKey in options) {
+  Object.entries(options).forEach(([optionKey, optionValue]) => {
     updatedCookie += "; " + optionKey;
-    let optionValue = options[optionKey];
     if (optionValue !== true) {
       updatedCookie += "=" + optionValue;
     }
-  }
+  });
 
   document.cookie = updatedCookie;
 }
