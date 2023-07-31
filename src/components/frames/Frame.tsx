@@ -13,8 +13,8 @@ const Frame = ({ children }: FrameProps) => {
       <Header />
       <div className="flex bg-primary pt-16">
         <Sidebar />
-        <main className="flex flex-col items-center bg-surface rounded-tl-lg flex-grow">
-          <div className="w-[1152px] min-h-screen py-8">
+        <main className="flex items-center py-16 justify-center bg-surface rounded-tl-lg flex-grow">
+          <div className="flex flex-col gap-6 w-[1152px] min-h-screen">
             <Outlet />
           </div>
         </main>

@@ -104,7 +104,7 @@ export default function BasicTabs() {
               <SiteLink
                 platform={it}
                 key={it.pfName}
-                className="flex justify-center items-center gap-6 w-[270px] py-4 text-onBackground bg-background rounded-lg border-solid border-[1px] border-primary hover:shadow-lg hover:scale-[1.03] transition-all"
+                className="flex justify-center items-center gap-4 w-[270px] py-4 text-onBackground bg-background rounded-lg border-solid border-[1px] border-primary hover:shadow-lg hover:scale-[1.03] transition-all"
               />
             ))}
           </div>

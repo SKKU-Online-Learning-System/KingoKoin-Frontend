@@ -19,6 +19,8 @@ module.exports = {
         onBackground: "#000000",
         lightGray: "#dddddd",
         darkGray: "#777777",
+        error: "#b63d51",
+        onError: "#f2f2f2",
       },
       fontFamily: {
         gugi: ["Gugi", "cursive"],

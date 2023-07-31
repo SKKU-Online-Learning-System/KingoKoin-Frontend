@@ -10,7 +10,7 @@ interface IPlatform {
 
 interface SiteLinkProps {
   platform: IPlatform;
-  className: string;
+  className?: string;
 }
 
 const SiteLink = ({ platform, className }: SiteLinkProps) => {

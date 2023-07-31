@@ -1,9 +1,10 @@
-import { useQuery } from "react-query";
-import { getCoinDetail } from "../../api";
 import { Card, CardContent, CardHeader } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import { useQuery } from "react-query";
+import { getCoinDetail } from "../../api";
+import { dayjsToFormat, stampToDayjs } from "../../utils";
 import CustomPagination from "../CustomPagination";
-import { stampToDayjs, dayjsToFormat } from "../../utils";
+import Status from "../feedback/Status";
 
 interface UserCoinDetailCardProps {
   userId: number;
@@ -17,9 +18,11 @@ const UserCoinDetailCard = ({ userId, pageSize }: UserCoinDetailCardProps) => {
     data: userCoinDetail,
   } = useQuery(["userCoinDetail", userId], () => getCoinDetail(userId));
 
-  if (userCoinDetailIsLoading) return <div>"loading.."</div>;
-  if (userCoinDetailError) return <div>"error.."</div>;
-  if (!userCoinDetail) return <div>"no data.."</div>;
+  const render =
+    !userCoinDetailIsLoading &&
+    !userCoinDetailError &&
+    userCoinDetail &&
+    userCoinDetail.length > 0;
 
   const columns: GridColDef[] = [
     {
@@ -53,25 +56,34 @@ const UserCoinDetailCard = ({ userId, pageSize }: UserCoinDetailCardProps) => {
       <CardHeader
         title="코인 내역"
         titleTypographyProps={{ variant: "display" }}
-        subheader={`${userCoinDetail.length}건`}
+        subheader={`${userCoinDetail ? userCoinDetail.length : 0}건`}
         subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
       />
       <CardContent>
-        <DataGrid
-          rows={userCoinDetail}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: pageSize,
-              },
-            },
-          }}
-          pageSizeOptions={[pageSize]}
-          slots={{
-            pagination: CustomPagination,
-          }}
+        <Status
+          isLoading={userCoinDetailIsLoading}
+          error={userCoinDetailError}
+          isData={userCoinDetail && userCoinDetail.length > 0}
+          className="h-[300px]"
         />
+        {render && (
+          <DataGrid
+            className="h-[300px]"
+            rows={userCoinDetail}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: {
+                  pageSize: pageSize,
+                },
+              },
+            }}
+            pageSizeOptions={[pageSize]}
+            slots={{
+              pagination: CustomPagination,
+            }}
+          />
+        )}
       </CardContent>
     </Card>
   );

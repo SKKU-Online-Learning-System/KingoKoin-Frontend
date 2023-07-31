@@ -363,7 +363,7 @@ interface IStaticsByMonth {
   smId: number;
   year: number;
   month: number;
-  coinTotal: number;
+  pointTotal: number;
   createdDate: string;
   modifiedDate: string;
 }
@@ -371,7 +371,11 @@ interface IStaticsByMonth {
 export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
   const path = `/month`;
   const response = await axios.get(STATICS_ROUTE + path);
-  return response.data;
+  const result = response.data.map((it: IStaticsByMonth) => ({
+    ...it,
+    id: it.smId,
+  }));
+  return result;
 };
 // getStaticsByMonth 사용 예제
 // const {
