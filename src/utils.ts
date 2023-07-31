@@ -1,3 +1,6 @@
+import dayjs from "dayjs";
+import "dayjs/locale/ko";
+
 export function getCookie(name: string) {
   let matches = document.cookie.match(
     new RegExp(
@@ -63,3 +66,12 @@ export function deleteAllCookies() {
   }
   console.log("all cookies deleted !");
 }
+
+dayjs.locale("ko");
+export const stampToDayjs = (stamp: string) => dayjs(stamp);
+
+export const dayjsToFormat = (dayjs: dayjs.Dayjs) =>
+  dayjs.format("YYYY.MM.DD(ddd)");
+
+export const dayjsToStamp = (dayjs: dayjs.Dayjs) =>
+  dayjs.format("YYYY-MM-DDTHH:mm:ss");
