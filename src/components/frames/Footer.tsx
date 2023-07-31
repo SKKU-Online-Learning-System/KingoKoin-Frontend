@@ -1,14 +1,14 @@
-import SKKU_LOGO from "../assets/main_logo_eng.png";
+import SKKU_LOGO from "../../assets/main_logo_eng.png";
 
 function Footer() {
+  // TODO:이메일, 무료수집거부, 개인정보처리방침
+
   return (
-    <div className="bg-onSurface text-surface p-4">
+    <div className="w-screen max-w-full bg-onSurface text-surface p-4">
       <div className="flex justify-between">
         <div className="flex items-center gap-4 p-4">
-          <img src={SKKU_LOGO} alt="SKKU logo" className="h-12" />
-          <span className="text-logo" style={{ whiteSpace: "nowrap" }}>
-            킹고코인
-          </span>
+          <img src={SKKU_LOGO} alt="SKKU logo" className="h-8" />
+          <span className="text-logo">킹고코인</span>
         </div>
         <div className="flex justify-end text-body">
           <a

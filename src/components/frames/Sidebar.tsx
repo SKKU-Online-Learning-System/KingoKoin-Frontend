@@ -8,7 +8,7 @@ import {
 import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
-  // 권한에 따라 보여줄 메뉴 수정
+  // TODO: 권한에 따라 보여줄 메뉴 수정
 
   const menuItem = [
     {
@@ -40,12 +40,7 @@ const Sidebar = () => {
 
   return (
     <div className="w-[200px] flex flex-col p-8 pr-0 gap-8 text-center">
-      <span
-        className="text-logo text-onPrimary"
-        style={{ whiteSpace: "nowrap" }}
-      >
-        킹고코인
-      </span>
+      <span className="text-logo text-onPrimary">킹고코인</span>
       <div className="flex flex-col gap-4">
         {menuItem.map((item, index) => (
           <NavLink
@@ -53,10 +48,10 @@ const Sidebar = () => {
             key={index}
             className={({ isActive, isPending }) =>
               isPending
-                ? "flex gap-1 p-4 w-full items-center rounded-l-lg bg-onPrimary text-primary transition-all"
+                ? "flex gap-1 p-4 w-full items-center rounded-l-lg bg-surface text-onSurface transition-all"
                 : isActive
-                ? "flex gap-1 p-4 w-full items-center rounded-l-lg bg-onPrimary text-primary transition-all"
-                : "flex gap-1 p-4 w-full items-center rounded-l-lg text-onPrimary hover:bg-onPrimary hover:text-primary transition-all"
+                ? "flex gap-1 p-4 w-full items-center rounded-l-lg bg-surface text-onSurface transition-all"
+                : "flex gap-1 p-4 w-full items-center rounded-l-lg text-surface hover:bg-surface hover:text-onSurface transition-all"
             }
           >
             <div className="icon">{item.icon}</div>
