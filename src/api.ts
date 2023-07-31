@@ -109,8 +109,7 @@ interface ICoinDetail {
   title: string;
   adId: number;
   adGroup: string;
-  _pfName: string;
-  _provider: string;
+  provider: string;
   createdDate: string;
   modifiedDate: string;
 }
@@ -118,32 +117,10 @@ interface ICoinDetail {
 export const getCoinDetail = async (userId: number): Promise<ICoinDetail[]> => {
   const path = `/${userId}/detail`;
   const response = await axios.get(COIN_ROUTE + path);
-  response.data.push({
-    dtId: 1,
-    coinId: 1,
-    pointTotal: 12,
-    plus: true,
-    point: 1,
-
-    plId: 1,
-    plName: "string",
-    title: "string",
-
-    adId: 1,
-    adGroup: "string",
-    _pfName: "string",
-    _provider: "string",
-
-    createdDate: "string",
-    modifiedDate: "string",
-  });
 
   const result = response.data.map((it: ICoinDetail) => ({
     ...it,
     id: it.dtId,
-    createdDate: new Date(it.createdDate).toLocaleDateString("ko-KR", {
-      timeZone: "UTC",
-    }),
   }));
 
   return result;
@@ -172,8 +149,7 @@ export const getCoinDetailByAdminId = async (
       title: "string",
       adId: 1,
       adGroup: "string",
-      _pfName: "string",
-      _provider: "string",
+      provider: "string",
       createdDate: "string",
       modifiedDate: "string",
     },
