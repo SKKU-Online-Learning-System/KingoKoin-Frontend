@@ -1,6 +1,7 @@
 import axios from "axios";
 import SKKU_EMBLEM from "./assets/skku_emblem_kor.png";
 import SOSD_LOGO from "./assets/sosd_logo.svg";
+import { deleteCookie, getCookie } from "./utils";
 
 // TODO: api 연결시 에러 핸들링
 //
@@ -67,7 +68,7 @@ export const FAQS = [
 axios.defaults.baseURL = HOST;
 // TODO: CORS 설정 맞추기
 // axios.defaults.withCredentials = true;
-// axios.defaults.headers.Authorization = `Bearer ${getCookie("accessToken")}`; // getDevToken으로 이동
+// axios.defaults.headers.Authorization = `Bearer ${getCookie(JWT_COOKIE)}`; // getDevToken으로 이동
 
 // TODO: 조정에 따라 api 코드 변경
 // 더미 데이터 추가 - response.data.push(...) 삭제
@@ -420,5 +421,9 @@ export const getJWTClaims = async (
 }> => {
   const path = `/token/claims?token=${accessToken}`;
   const response = await axios.get(DEV_ROUTE + path);
+  // const dummy = {
+  //   userId: 1,
+  //   role: "ROLE_ADMIN",
+  // };
   return response.data;
 };

@@ -1,7 +1,5 @@
-import Frame from "../components/Frame";
-
 const Main = () => {
-  return <Frame />;
+  return <div>main</div>;
 };
 
 export default Main;
