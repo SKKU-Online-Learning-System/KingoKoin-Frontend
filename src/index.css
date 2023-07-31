@@ -180,6 +180,10 @@ p {
   @apply font-noto-sans-kr text-xs;
 }
 
+caption {
+  @apply font-noto-sans-kr text-xs;
+}
+
 /* scrollbar */
 
 ::-webkit-scrollbar {
