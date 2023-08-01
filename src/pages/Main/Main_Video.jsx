@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../assets/main_logo_eng.png";
-import banner from "../../assets/banner.jpg";
+import banner from "../../assets/video.mp4";
 import main from "../../assets/main.jpg";
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -173,8 +173,10 @@ function Main() {
             <Logo></Logo>
             <div className="bg-lightGray h-[0.5px]"></div>
             <div className="relative flex justify-center mb-8">
-              <img src={banner} className="w-full"></img>
-              <p className="absolute select-none h-full w-full flex justify-center items-center bottom-0 right-0 bg-gradient-to-t from-black opacity-80 to-transparent text-right text-white font-bold text-[60px] p-4">K I N G O C O I N</p>
+                <video muted autoPlay loop  className="w-full">
+                    <source src={banner} type="video/mp4"/>
+                </video>
+              <p className="absolute select-none h-full w-full flex justify-center items-center bottom-0 right-0 bg-gradient-to-t from-black opacity-80 to-transparent p-4"></p>
             </div>
                 <Container fixed>
                 <ThemeProvider theme={theme}>

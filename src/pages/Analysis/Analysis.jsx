@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useQuery } from 'react-query';
 import Loader from "../../components/Loader";
-import { fetchStatics } from "../../api.jsx";
+import { fetchgetStaticsByMonth, fetchgetStaticsByDay, fetchgetStaticsPlusByMonth, fetchgetStaticsMinusByMonth } from "../../api.jsx";
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import HighchartsMore from 'highcharts/highcharts-more';
@@ -11,105 +11,203 @@ import {
   CardContent,
   CardHeader,
   Grid,
-  Button,
   Switch,
 } from "@mui/material";
 
-function Analysis() {
 
-  HighchartsMore(Highcharts);
-  solidGauge(Highcharts);
+HighchartsMore(Highcharts);
+solidGauge(Highcharts);
+
+const SolidGaugeGraph= ( {title, data} ) => {
   
-  const {
-    isLoading: staticsIsLoading,
-    error: staticsError,
-    data: statics,
-  } = useQuery("statics", fetchStatics);
-
-  const toggleGraph = () => {
-    setShowMonthlyGraph((prevShowMonthlyGraph) => !prevShowMonthlyGraph);
-  };
-
-  const [showMonthlyGraph, setShowMonthlyGraph] = useState(true);
-
-  useEffect(() => {
-    const options = showMonthlyGraph ? optionsMonthly : optionsTransaction;
-  
-    Highcharts.chart('monthly-graph-container', options);
-    Highcharts.chart('koin-plus-graph-container', showMonthlyGraph ? optionsKoinPlusByMonth : optionsTransactionPlusByMonth);
-    Highcharts.chart('koin-minus-graph-container', showMonthlyGraph ? optionsKoinMinusByMonth : optionsTransactionMinusByMonth);
-  }, [showMonthlyGraph]);
-  
-  if (staticsIsLoading) return <Loader />;
-  if (staticsError) return <div>error</div>;
-  
-const optionsMonthly = {
-  chart: {
-    type: 'line'
-  },
-  credits: {
-    enabled: false
-  },
-  title: {
-    text: ''
-  },
-  xAxis: { 
-    categories: statics.map((it, index) => statics[statics.length - 1 - index].month) 
-  },
-  yAxis: {
-    title: {
-      text: ''
-    }
-  },
-  colors: ['#2B6653'], 
-  legend: {
-    enabled: false 
-  },
-  series: [{
-    name: '코인 보유량',
-    data: statics.map((it, index) => statics[statics.length - 1 - index].pointTotal) 
-  }]
-};
-
-const optionsTransaction = {
-  chart: {
-    type: 'line'
-  },
-  credits: {
-    enabled: false
-  },
-  title: {
-    text: ''
-  },
-  xAxis: {
-    categories: statics.map((it, index) => statics[statics.length - 1 - index].month) 
-  },
-  yAxis: {
-    title: {
-      text: ''
-    },
-  },
-  colors: ['#2B6653'], 
-  legend: {
-    enabled: false
-  },
-  series: [{
-    name: "트랜젝션 수",
-    data: statics.map((it, index) => statics[statics.length - 1 - index].transactionTotal) 
-  }]
-};
-
-const optionsKoinPlusByMonth = {
+  const options = {
     chart: {
-      type: 'bar',
-      height: 200,
-      width: 550 
+      type: 'solidgauge',
+      plotBorderWidth: 0,
+      plotShadow: false
     },
     credits: {
       enabled: false
     },
     title: {
       text: ''
+    },
+    pane: {
+      center: ['50%', '38%'],
+      size: '90%',
+      startAngle: -90,
+      endAngle: 90,
+      background: {
+        borderWidth: 0, 
+        backgroundColor: '#EEE',
+        innerRadius: '60%',
+        outerRadius: '100%',
+        shape: 'arc',
+        borderRadius: 10,
+      }
+    },
+    tooltip: {
+      enabled: false
+    },
+    yAxis: {
+      min: 0,
+      max: 200,
+      stops: [
+        [0.1, '#62b4a0'], 
+        [0.3, '#3b937c'], 
+        [0.6, '#2B6653'] 
+      ],
+      lineWidth: 0,
+      tickWidth: 0,
+      minorTickInterval: null,
+      tickAmount: 2,
+      title: {
+        y: -70
+      },
+      labels: {
+        y: 16
+      }
+    },
+    plotOptions: {
+      solidgauge: {
+        dataLabels: {
+          y: 5,
+          borderWidth: 0,
+          useHTML: true
+        }
+      }
+    },
+    series: [{
+      borderRadius: 10,
+      name: 'Speed',
+      data: data,
+      dataLabels: {
+        format: '<div class="text-center"><span class="text-3xl text-black">{y} 개</span></div>',
+        verticalAlign: 'top', 
+        y: -50 
+      },
+      tooltip: {
+        valueSuffix: ''
+      }
+    }]
+  };
+
+  return (
+    <Card className='w-[368px] h-[300px]'>
+      <CardHeader
+        title= {title}
+        titleTypographyProps={{ variant: 'display' }}
+      />
+      <CardContent>            
+        <HighchartsReact highcharts={Highcharts} options={options} />
+      </CardContent>
+    </Card>          
+  );
+
+};
+
+const LineGraph = ( { showMonthlyGraph } ) => {
+  
+  const {
+    isLoading: staticsByMonthIsLoading,
+    error: staticsByMonthError,
+    data: staticsByMonth,
+  } = useQuery("staticsByMonth", fetchgetStaticsByMonth);
+  
+  if (staticsByMonthIsLoading) return <div/>;
+  if (staticsByMonthError) return <div>error</div>;
+
+  const options = {
+    chart: {
+      type: 'line',
+    },
+    credits: {
+      enabled: false
+    },
+    title: {
+      text: ''
+    },
+    xAxis: {
+      categories: staticsByMonth.map(item => item.month).reverse() 
+    },
+    yAxis: {
+      title: {
+        text: ''
+      }
+    },
+    colors: ['#2B6653'],
+    legend: {
+      enabled: false
+    },
+    series: [
+      {
+        name: showMonthlyGraph ? '코인 보유량' : '트랜잭션 수',
+        data: showMonthlyGraph
+        ? staticsByMonth
+            .map(item => item.pointTotal) 
+            .reverse() 
+        : staticsByMonth
+            .map(item => item.transactionTotal) 
+            .reverse()
+      }
+    ],    
+  };
+
+  return (
+    <Card>
+      <CardHeader
+        title={showMonthlyGraph ? `월별 코인 보유량 그래프` : '월별 트랜잭션 수 그래프'}
+        titleTypographyProps={{ variant: 'display' }}
+      />
+      <CardContent>
+        <div className='flex items-center w-full'>
+          <HighchartsReact highcharts={Highcharts} containerProps={{style: {width: '100%'}}}  options={options} />
+        </div>
+      </CardContent>
+    </Card>    
+  );
+
+};
+
+
+const BarGraph = ({ showMonthlyGraph, isPlusGraph }) => {
+  const fetchFunction = isPlusGraph ? fetchgetStaticsPlusByMonth : fetchgetStaticsMinusByMonth;
+  const title = isPlusGraph ? showMonthlyGraph ? `전월 코인 획득량` : '전월 획득 트랜잭션 수' : showMonthlyGraph ? `전월 코인 사용량` : '전월 사용 트랜잭션 수'
+
+  const queryKey = isPlusGraph ? "dataPlus" : "dataMinus";
+
+  const {
+    isLoading,
+    error,
+    data,
+  } = useQuery(queryKey, fetchFunction);
+
+  if (isLoading) return <div>Loading</div>;
+  if (error) return <div>Error</div>;
+
+  const processedData = data.map((item) => ({
+    name: item.pfName,
+    y: isPlusGraph
+      ? showMonthlyGraph
+        ? item.pointPlus
+        : item.transactionPlus
+      : showMonthlyGraph
+      ? item.pointMinus
+      : item.transactionMinus,
+    drilldown: item.pfName,
+  }));
+
+  const options = {
+    chart: {
+      type: 'bar',
+      height: 200,
+      width: 550,
+    },
+    credits: {
+      enabled: false,
+    },
+    title: {
+      text: '',
     },
     xAxis: {
       type: 'category',
@@ -119,488 +217,83 @@ const optionsKoinPlusByMonth = {
         text: '',
       },
       labels: {
-        enabled: false 
+        enabled: false,
       },
       gridLineWidth: 0,
     },
     legend: {
-      enabled: false
+      enabled: false,
     },
     tooltip: {
-      enabled: false 
+      enabled: false,
     },
     plotOptions: {
       series: {
         borderWidth: 0,
         dataLabels: {
           enabled: true,
-          format: '{point.y}'
+          format: '{point.y}',
         },
-      }
+      },
     },
-    colors: ["#2B6653", "#3b937c", "#62b4a0", "#b7ded5"], 
-    series: [{
-      name: 'Categories',
-      colorByPoint: true,
-      data: [{
-        name: '온라인 명륜당',
-        y: 50,
-        drilldown: '온라인 명륜당'
-      }, {
-        name: 'IT 특강',
-        y: 37,
-        drilldown: 'IT 특강'
-      }, {
-        name: '오픈소스 플랫폼',
-        y: 73,
-        drilldown: '오픈소스 플랫폼'
-      }, {
-        name: '관리자 수동 부여',
-        y: 14,
-        drilldown: '관리자 수동 부여'
-      }]
-    }],
+    colors: ['#2B6653', '#3b937c', '#62b4a0', '#b7ded5'],
+    series: [
+      {
+        name: 'Categories',
+        colorByPoint: true,
+        data: processedData,
+      },
+    ],
   };
 
+  return (
+    <Card className='w-[564px] h-[300px]'>
+      <CardHeader
+        title={title}
+        titleTypographyProps={{ variant: 'display' }}
+      />
+      <CardContent>
+        <div className='flex items-center'>
+          <HighchartsReact highcharts={Highcharts} options={options} />
+        </div>
+      </CardContent>
+    </Card>            
+  );
 
-  const optionsTransactionPlusByMonth = {
-    chart: {
-      type: 'bar',
-      height: 200,
-      width: 550 
-    },
-    credits: {
-      enabled: false
-    },
-    title: {
-      text: ''
-    },
-    xAxis: {
-      type: 'category'
-    },
-    yAxis: {
-      title: {
-        text: '',
-      },
-      labels: {
-        enabled: false 
-      },
-      gridLineWidth: 0,
-    },
-    legend: {
-      enabled: false
-    },
-    tooltip: {
-      enabled: false 
-    },
-    plotOptions: {
-      series: {
-        borderWidth: 0,
-        dataLabels: {
-          enabled: true,
-          format: '{point.y}'
-        }
-      }
-    },
-    colors: ["#2B6653", "#3b937c", "#62b4a0", "#b7ded5"], 
-    series: [{
-      name: 'Categories',
-      colorByPoint: true,
-      data: [{
-        name: '온라인 명륜당',
-        y: 9,
-        drilldown: '온라인 명륜당'
-      }, {
-        name: 'IT 특강',
-        y: 15,
-        drilldown: 'IT 특강'
-      }, {
-        name: '오픈소스 플랫폼',
-        y: 11,
-        drilldown: '오픈소스 플랫폼'
-      }, {
-        name: '관리자 수동 부여',
-        y: 3,
-        drilldown: '관리자 수동 부여'
-      }]
-    }],
+};
+
+function Analysis() {
+
+  const toggleGraph = () => {
+    setShowMonthlyGraph((prevShowMonthlyGraph) => !prevShowMonthlyGraph);
   };
 
+  const [showMonthlyGraph, setShowMonthlyGraph] = useState(true);
+
+  const {
+    isLoading: staticsByDayIsLoading,
+    error: staticsByDayError,
+    data: staticsByDay,
+  } = useQuery("staticsByDay", fetchgetStaticsByDay);
   
-const optionsKoinMinusByMonth = {
-  chart: {
-    type: 'bar',
-    height: 200,
-    width: 550 
-  },
-  credits: {
-    enabled: false
-  },
-  title: {
-    text: ''
-  },
-  xAxis: {
-    type: 'category'
-  },
-  yAxis: {
-    title: {
-      text: '',
-    },
-    labels: {
-      enabled: false 
-    },
-    gridLineWidth: 0,
-  },
-  legend: {
-    enabled: false
-  },
-  tooltip: {
-    enabled: false 
-  },
-  plotOptions: {
-    series: {
-      borderWidth: 0,
-      dataLabels: {
-        enabled: true,
-        format: '{point.y}'
-      },
-      
-    }
-  },
-  colors: ["#2B6653", "#3b937c", "#62b4a0"], 
-  series: [{
-    name: 'AWS',
-    colorByPoint: true,
-    data: [{
-      name: 'AWS ',
-      y: 34,
-      drilldown: 'AWS'
-    }, {
-      name: '세미나실 이용',
-      y: 72,
-      drilldown: '세미나실 이용'
-    }, {
-      name: '장비 대여',
-      y: 33,
-      drilldown: '장비 대여'
-    }]
-  }],
-};
-
-
-const optionsTransactionMinusByMonth = {
-  chart: {
-    type: 'bar',
-    height: 200,
-    width: 550 
-  },
-  credits: {
-    enabled: false
-  },
-  title: {
-    text: ''
-  },
-  xAxis: {
-    type: 'category'
-  },
-  yAxis: {
-    title: {
-      text: '',
-    },
-    labels: {
-      enabled: false 
-    },
-    gridLineWidth: 0,
-  },
-  legend: {
-    enabled: false
-  },
-  tooltip: {
-    enabled: false 
-  },
-  plotOptions: {
-    series: {
-      borderWidth: 0,
-      dataLabels: {
-        enabled: true,
-        format: '{point.y}'
-      }
-    }
-  },
-  colors: ["#2B6653", "#3b937c", "#62b4a0"], 
-  series: [{
-    name: 'Categories',
-    colorByPoint: true,
-    data: [{
-      name: 'AWS ',
-      y: 25,
-      drilldown: 'AWS'
-    }, {
-      name: '세미나실 이용',
-      y: 17,
-      drilldown: '세미나실 이용'
-    }, {
-      name: '장비 대여',
-      y: 30,
-      drilldown: '장비 대여'
-    }]
-  }],
-};
-
-
-  const optionsAverageTotalByDay = {
-    chart: {
-      type: 'solidgauge',
-      plotBorderWidth: 0,
-      plotShadow: false
-    },
-    credits: {
-      enabled: false
-    },
-    title: {
-      text: ''
-    },
-    pane: {
-      center: ['26%', '38%'],
-      size: '70%',
-      startAngle: -90,
-      endAngle: 90,
-      background: {
-        borderWidth: 0, 
-        backgroundColor: '#EEE',
-        innerRadius: '60%',
-        outerRadius: '100%',
-        shape: 'arc',
-        borderRadius: 10
-      }
-    },
-    tooltip: {
-      enabled: false
-    },
-    yAxis: {
-      min: 0,
-      max: 200,
-      stops: [
-        [0.1, '#62b4a0'], 
-        [0.3, '#3b937c'], 
-        [0.6, '#2B6653'] 
-      ],
-      lineWidth: 0,
-      tickWidth: 0,
-      minorTickInterval: null,
-      tickAmount: 2,
-      title: {
-        y: -70
-      },
-      labels: {
-        y: 16
-      }
-    },
-    plotOptions: {
-      solidgauge: {
-        dataLabels: {
-          y: 5,
-          borderWidth: 0,
-          useHTML: true
-        }
-      }
-    },
-    series: [{
-      borderRadius: 10,
-      name: 'Speed',
-      data: [60],
-      dataLabels: {
-        format: '<div class="text-center"><span class="text-3xl text-black">{y} 개</span></div>',
-        verticalAlign: 'top', 
-        y: -50 
-      },
-      tooltip: {
-        valueSuffix: ''
-      }
-    }]
-  };
-
-  const optionsAveragePlusByDay = {
-    chart: {
-      type: 'solidgauge',
-      plotBorderWidth: 0,
-      plotShadow: false
-    },
-    credits: {
-      enabled: false
-    },
-    title: {
-      text: ''
-    },
-    pane: {
-      center: ['26%', '38%'],
-      size: '70%',
-      startAngle: -90,
-      endAngle: 90,
-      background: {
-        borderWidth: 0, 
-        backgroundColor: '#EEE',
-        innerRadius: '60%',
-        outerRadius: '100%',
-        shape: 'arc',
-        borderRadius: 10
-      }
-    },
-    tooltip: {
-      enabled: false
-    },
-    yAxis: {
-      min: 0,
-      max: 200,
-      stops: [
-        [0.1, '#62b4a0'], 
-        [0.3, '#3b937c'], 
-        [0.6, '#2B6653'] 
-      ],
-      lineWidth: 0,
-      tickWidth: 0,
-      minorTickInterval: null,
-      tickAmount: 2,
-      title: {
-        y: -70
-      },
-      labels: {
-        y: 16
-      }
-    },
-    plotOptions: {
-      solidgauge: {
-        dataLabels: {
-          y: 5,
-          borderWidth: 0,
-          useHTML: true
-        }
-      }
-    },
-    series: [{
-      borderRadius: 10,
-      name: 'Speed',
-      data: [110],
-      dataLabels: {
-        format: '<div class="text-center"><span class="text-3xl text-black">{y} 개</span></div>',
-        verticalAlign: 'top', 
-        y: -50 
-      },
-      tooltip: {
-        valueSuffix: ''
-      }
-    }]
-  };
-
-  const optionsAverageMinusByDay = {
-    chart: {
-      type: 'solidgauge',
-      plotBorderWidth: 0,
-      plotShadow: false
-    },
-    credits: {
-      enabled: false
-    },
-    title: {
-      text: ''
-    },
-    pane: {
-      center: ['26%', '38%'],
-      size: '70%',
-      startAngle: -90,
-      endAngle: 90,
-      background: {
-        borderWidth: 0, 
-        backgroundColor: '#EEE',
-        innerRadius: '60%',
-        outerRadius: '100%',
-        shape: 'arc',
-        borderRadius: 10
-      }
-    },
-    tooltip: {
-      enabled: false
-    },
-    yAxis: {
-      min: 0,
-      max: 200,
-      stops: [
-        [0.1, '#62b4a0'], 
-        [0.3, '#3b937c'], 
-        [0.6, '#2B6653'] 
-      ],
-      lineWidth: 0,
-      tickWidth: 0,
-      minorTickInterval: null,
-      tickAmount: 2,
-      title: {
-        y: -70
-      },
-      labels: {
-        y: 16
-      }
-    },
-    plotOptions: {
-      solidgauge: {
-        dataLabels: {
-          y: 5,
-          borderWidth: 0,
-          useHTML: true
-        }
-      }
-    },
-    series: [{
-      borderRadius: 10,
-      name: 'Speed',
-      data: [50],
-      dataLabels: {
-        format: '<div class="text-center"><span class="text-3xl text-black">{y} 개</span></div>',
-        verticalAlign: 'top', 
-        y: -50 
-      },
-      tooltip: {
-        valueSuffix: ''
-      }
-    }]
-  };
-
+  if (staticsByDayIsLoading) return <Loader />;
+  if (staticsByDayError) return <div>error</div>;
 
   return (
     <div className='flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto'>
       <div className='flex gap-6 w-full'>
-        <Card className='w-[368px] h-[300px]'>
-          <CardHeader
-            title='오늘의 평균 코인 보유량'
-            titleTypographyProps={{ variant: 'display' }}
-          />
-          <CardContent>
-            <div className='flex items-center'>
-              <HighchartsReact highcharts={Highcharts} options={optionsAverageTotalByDay} />
-            </div>
-          </CardContent>
-        </Card>
-        <Card className='w-[368px] h-[300px]'>
-          <CardHeader
-            title='오늘의 평균 코인 획득량'
-            titleTypographyProps={{ variant: 'display' }}
-          />
-          <CardContent>
-            <div className='flex items-center'>
-              <HighchartsReact highcharts={Highcharts} options={optionsAveragePlusByDay} />
-            </div>
-          </CardContent>
-        </Card>
-        <Card className='w-[368px] h-[300px]'>
-          <CardHeader
-            title='오늘의 평균 코인 사용량'
-            titleTypographyProps={{ variant: 'display' }}
-          />
-          <CardContent>
-            <div className='flex items-center'>
-              <HighchartsReact highcharts={Highcharts} options={optionsAverageMinusByDay} />
-            </div>
-          </CardContent>
-        </Card>
+        <SolidGaugeGraph
+          title={'오늘의 평균 코인 보유량'}
+          data={[staticsByDay[0].pointTotal]}
+        />
+        <SolidGaugeGraph
+          title={'오늘의 평균 코인 획득량'}
+          data={[staticsByDay[0].pointPlus]}
+        />
+        <SolidGaugeGraph
+          title={'오늘의 평균 코인 사용량'}
+          data={[staticsByDay[0].pointMinus]}
+        />          
       </div>
       <div className='flex-col'>
       <Switch
@@ -609,49 +302,27 @@ const optionsTransactionMinusByMonth = {
         color='primary'
         inputProps={{ 'aria-label': 'Show Monthly Graph' }}
       />
-    </div>
-    <div className='flexw-full'>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Card>
-            <CardHeader
-              title={showMonthlyGraph ? '월별 코인 보유량 그래프' : '트랜젝션 추이 그래프'}
-              titleTypographyProps={{ variant: 'display' }}
-            />
-            <CardContent>
-              <div id='monthly-graph-container' />
-            </CardContent>
-          </Card>
-
-          <div className='flex gap-6 mt-12 items-center'>
-            <Card className='w-[564px] h-[300px]'>
-              <CardHeader
-                title={showMonthlyGraph ? '전월 코인 획득량' : '전월 획득 트랜젝션 수'}
-                titleTypographyProps={{ variant: 'display' }}
+      </div>
+      <div className='flex w-full'>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <LineGraph showMonthlyGraph={showMonthlyGraph} />
+            <div className='flex gap-6 mt-12 items-center'>
+              <BarGraph
+                showMonthlyGraph={showMonthlyGraph}
+                isPlusGraph={true}
               />
-              <CardContent>
-                <div className='flex items-center'>
-                  <div id='koin-plus-graph-container' />
-                </div>
-              </CardContent>
-            </Card>
-            <Card className='w-[564px] h-[300px]'>
-              <CardHeader
-                title={showMonthlyGraph ? '전월 코인 사용량' : '전월 사용 트랜젝션 수'}
-                titleTypographyProps={{ variant: 'display' }}
+              <BarGraph
+                showMonthlyGraph={showMonthlyGraph}
+                isPlusGraph={false}
               />
-              <CardContent>
-                <div className='flex items-center'>
-                  <div id='koin-minus-graph-container' />
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+            </div>
+          </Grid>
         </Grid>
-      </Grid>
+      </div>
     </div>
-  </div>
   );
-}
+
+};
 
 export default Analysis;
