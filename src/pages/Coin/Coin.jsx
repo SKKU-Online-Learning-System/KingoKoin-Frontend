@@ -1,48 +1,49 @@
-import React, { useState } from "react";
-import * as xlsx from "xlsx";
-import dayjs from "dayjs";
 import {
+  Button,
   Card,
-  CardHeader,
+  CardActions,
   CardContent,
+  CardHeader,
+  Grow,
+  InputLabel,
   MenuItem,
   TextField,
-  Button,
   Typography,
-  InputLabel,
-  CardActions,
-  Grow,
 } from "@mui/material";
-import { MdOutlineUploadFile } from "react-icons/md";
-import { fetchPolicies } from "../../api";
-import ConfirmDialog from "../../components/ConfirmDialog";
-import { useQuery } from "react-query";
-import Loader from "../../components/Loader";
 import { DataGrid } from "@mui/x-data-grid";
-import { fetchCoinDetails } from "../../api";
-import CustomPagination from "../../components/CustomPagination";
 import { DatePicker } from "@mui/x-date-pickers";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import dayjs from "dayjs";
+import React, { useState } from "react";
+import { MdOutlineUploadFile } from "react-icons/md";
+import { useQuery } from "react-query";
+import * as xlsx from "xlsx";
+import { getCoinDetailByAdminId, getPolicies } from "../../api";
+import ConfirmDialog from "../../components/ConfirmDialog";
+import CustomPagination from "../../components/CustomPagination";
+import Error from "../../components/Error";
+import Loader from "../../components/Loader";
 
 const ExcelCard = () => {
   const PAGE_SIZE = 100;
 
-  const [coinDetail, setCoinDetail] = useState({
-    stId: "",
+  const [form, setForm] = useState({
+    stId: 0,
     stName: "",
     title: "",
-    pfName: "",
-    plus: true,
     point: 0,
-    createdDate: dayjs(),
+    adId: 0,
+    plId: 0,
+    plus: true,
+    gainedDate: dayjs(),
   });
 
   const {
     isLoading: policiesIsLoading,
     error: policiesError,
     data: policies,
-  } = useQuery("Policies", fetchPolicies);
+  } = useQuery(["policies"], getPolicies);
 
   const [isManual, setIsMenual] = useState(false);
   const [open, setOpen] = useState(false);
@@ -52,6 +53,10 @@ const ExcelCard = () => {
 
   if (policiesIsLoading) return <Loader />;
   if (policiesError) return <div>{policiesError.message}</div>;
+
+  const handleConfirm = (e) => {
+    setOpen(false);
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -67,8 +72,8 @@ const ExcelCard = () => {
       const worksheet = workbook.Sheets[sheetName];
       const json = xlsx.utils.sheet_to_json(worksheet);
 
-      setExcelIsLoading(false);
       setExcel(json);
+      setExcelIsLoading(false);
     };
   };
 
@@ -82,10 +87,8 @@ const ExcelCard = () => {
     <>
       <ConfirmDialog
         open={open}
-        handleConfirm={(e) => {
-          setOpen(false);
-        }}
-        handleCancel={(e) => {
+        handleConfirm={handleConfirm}
+        handleCancel={() => {
           setOpen(false);
         }}
       >
@@ -135,7 +138,6 @@ const ExcelCard = () => {
                 },
               }}
               pageSizeOptions={[PAGE_SIZE]}
-              loading={excelIsLoading}
               rowHeight={32}
               columnHeaderHeight={32}
               hideFooter
@@ -149,9 +151,9 @@ const ExcelCard = () => {
               defaultValue={policies[0]}
               label="정책"
               onChange={(e) => {
-                setCoinDetail({ ...coinDetail, ...e.target.value });
-                console.log(coinDetail);
-                if (e.target.value.plId === 99999) setIsMenual(true);
+                setForm({ ...form, ...e.target.value });
+                if (e.target.value.plId === 99999)
+                  setIsMenual(true); // TODO: 직접입력 코드 반영
                 else setIsMenual(false);
               }}
               className="flex-[2]"
@@ -175,16 +177,16 @@ const ExcelCard = () => {
             className="w-full pr-4"
             disabled
             label="제공처"
-            value={coinDetail.pfName}
+            value={form.pfName}
             size="small"
           />
           <div className="flex gap-2 w-full pr-4">
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
                 className="w-full flex-[2]"
-                value={coinDetail.createdDate}
+                value={form.gainedDate}
                 onChange={(value) => {
-                  setCoinDetail({ ...coinDetail, createdDate: value });
+                  setForm({ ...form, gainedDate: value });
                 }}
                 slotProps={{ textField: { size: "small" } }}
               />
@@ -194,10 +196,10 @@ const ExcelCard = () => {
                 className="flex-1"
                 label="코인값"
                 type="number"
-                value={coinDetail.plus ? coinDetail.point : -coinDetail.point}
+                value={form.point}
                 onChange={(e) => {
-                  setCoinDetail({
-                    ...coinDetail,
+                  setForm({
+                    ...form,
                     plus: e.target.value >= 0,
                     point: Math.abs(e.target.value),
                   });
@@ -221,21 +223,21 @@ const ExcelCard = () => {
 };
 
 const GiveCoinCard = () => {
-  const [coinDetail, setCoinDetail] = useState({
+  const [form, setForm] = useState({
     stId: "",
     stName: "",
     title: "",
     pfName: "",
     plus: true,
     point: 0,
-    createdDate: dayjs(),
+    gainedDate: dayjs(),
   });
 
   const {
     isLoading: policiesIsLoading,
     error: policiesError,
     data: policies,
-  } = useQuery("Policies", fetchPolicies);
+  } = useQuery("Policies", getPolicies);
 
   const [isManual, setIsMenual] = useState(false);
   const [open, setOpen] = useState(false);
@@ -254,9 +256,7 @@ const GiveCoinCard = () => {
           setOpen(false);
         }}
       >
-        {`${coinDetail.stId} 학번의 ${coinDetail.stName} 학생에게 ${
-          coinDetail.plus ? coinDetail.point : -coinDetail.point
-        }코인을 부여하시겠습니까?`}
+        {`${form.stId} 학번의 ${form.stName} 학생에게 ${form.point}코인을 부여하시겠습니까?`}
       </ConfirmDialog>
       <CardHeader
         title={"학생코인부여"}
@@ -268,9 +268,9 @@ const GiveCoinCard = () => {
             <TextField
               className="flex-[3]"
               label="학번"
-              value={coinDetail.stId}
+              value={form.stId}
               onChange={(e) => {
-                setCoinDetail({ ...coinDetail, stId: e.target.value });
+                setForm({ ...form, stId: e.target.value });
               }}
               size="small"
               helperText="형식에 올바른 학번을 입력해주세요."
@@ -278,9 +278,9 @@ const GiveCoinCard = () => {
             <TextField
               className="flex-[2]"
               label="이름"
-              value={coinDetail.stName}
+              value={form.stName}
               onChange={(e) => {
-                setCoinDetail({ ...coinDetail, stName: e.target.value });
+                setForm({ ...form, stName: e.target.value });
               }}
               size="small"
             />
@@ -290,8 +290,8 @@ const GiveCoinCard = () => {
             defaultValue={policies[0]}
             label="정책"
             onChange={(e) => {
-              setCoinDetail({ ...coinDetail, ...e.target.value });
-              console.log(coinDetail);
+              setForm({ ...form, ...e.target.value });
+              console.log(form);
               if (e.target.value.plId === 99999) setIsMenual(true);
               else setIsMenual(false);
             }}
@@ -311,17 +311,12 @@ const GiveCoinCard = () => {
               size="small"
             />
           </Grow>
-          <TextField
-            disabled
-            label="제공처"
-            value={coinDetail.pfName}
-            size="small"
-          />
+          <TextField disabled label="제공처" value={form.pfName} size="small" />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
-              value={coinDetail.createdDate}
+              value={form.gainedDate}
               onChange={(value) => {
-                setCoinDetail({ ...coinDetail, createdDate: value });
+                setForm({ ...form, gainedDate: value });
               }}
               slotProps={{ textField: { size: "small" } }}
             />
@@ -331,10 +326,10 @@ const GiveCoinCard = () => {
               className="flex-1"
               label="코인값"
               type="number"
-              value={coinDetail.plus ? coinDetail.point : -coinDetail.point}
+              value={form.point}
               onChange={(e) => {
-                setCoinDetail({
-                  ...coinDetail,
+                setForm({
+                  ...form,
                   plus: e.target.value >= 0,
                   point: Math.abs(e.target.value),
                 });
@@ -356,10 +351,20 @@ const GiveCoinCard = () => {
   );
 };
 
-const UserPointHistory = ({ details }) => {
+const AdCoinDetailCard = ({ adId }) => {
+  const {
+    isLoading: adCoinDetailIsLoading,
+    error: adCoinDetailError,
+    data: adCoinDetail,
+  } = useQuery(["adCoinDetail"], () => getCoinDetailByAdminId(adId));
+
+  if (adCoinDetailIsLoading) return <Loader />;
+  if (adCoinDetailError) return <Error />;
+  console.log(adCoinDetail);
+
   const PAGE_SIZE = 4;
 
-  const rows = details.map((it) => ({
+  const rows = adCoinDetail.map((it) => ({
     ...it,
     id: it.dt_id,
     modified_date: new Date(it.modified_date).toLocaleDateString("ko-KR", {
@@ -390,7 +395,7 @@ const UserPointHistory = ({ details }) => {
       <CardHeader
         title="부여한 코인 내역"
         titleTypographyProps={{ variant: "display" }}
-        subheader={`${details.length}건`}
+        subheader={`${adCoinDetail.length}건`}
         subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
       />
       <CardContent>
@@ -415,22 +420,13 @@ const UserPointHistory = ({ details }) => {
 };
 
 const Coin = () => {
-  const {
-    isLoading: detailsIsLoading,
-    error: detailsError,
-    data: details,
-  } = useQuery("coinDetails", fetchCoinDetails);
-
-  if (detailsIsLoading) return <Loader />;
-  if (detailsError) return <div>{detailsError.message}</div>;
-
   return (
     <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
       <section className="flex gap-6">
         <GiveCoinCard />
         <ExcelCard />
       </section>
-      <UserPointHistory details={details} />
+      <AdCoinDetailCard adId={1} />
     </div>
   );
 };

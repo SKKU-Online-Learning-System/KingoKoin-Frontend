@@ -23,16 +23,29 @@ import { DataGrid } from "@mui/x-data-grid";
 import React, { useCallback, useEffect, useState } from "react";
 import { MdAdd, MdOutlineArrowForward } from "react-icons/md";
 import { useQuery } from "react-query";
-import { fetchPolicies, fetchProposedPolicies } from "../../api";
+import {
+  getCoin,
+  getCoinDetail,
+  getCoinDetailByAdminId,
+  getDevToken,
+  getJWTClaims,
+  getPolicies,
+  getStaticsByMonth,
+  getUserDetail,
+  getUsersBySearch,
+  postManualCoin,
+  postPolicyRequest,
+  PLATFORMS,
+  FAQS,
+} from "../../api";
 import CustomPagination from "../../components/CustomPagination";
 import Loader from "../../components/Loader";
 import ConfirmDialog from "../../components/ConfirmDialog";
-import { FLATFORMS } from "../../utils";
 
 // policy detail type
 const POLICY_UPDATE = "수정";
 const POLICY_CREATE = "생성";
-const PROPOSED_READ = "대기조회";
+const POLICY_REQUEST_READ = "대기조회";
 const ACTIVE = "활성화";
 const INACTIVE = "비활성화";
 
@@ -40,6 +53,7 @@ const PolicyCreateCard = () => {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = () => {
+    // TODO : call postPolicyRequest
     setOpen(false);
   };
 
@@ -54,7 +68,7 @@ const PolicyCreateCard = () => {
   const [platform, setPlatform] = useState([]);
 
   return (
-    <Card className="relative w-[466px] h-full">
+    <>
       <ConfirmDialog
         open={open}
         handleConfirm={handleConfirm}
@@ -64,85 +78,89 @@ const PolicyCreateCard = () => {
       >
         정말로 생성하시겠습니까?
       </ConfirmDialog>
-      <CardHeader
-        title={
-          <TextField
-            label="정책명"
-            variant="standard"
-            className="w-full"
-            value={value.createName}
-            onChange={(e) => {
-              setValue({
-                ...value,
-                createName: e.currentTarget.value,
-              });
-            }}
+      <Card className="relative w-[466px] h-full">
+        <>
+          <CardHeader
+            title={
+              <TextField
+                label="정책명"
+                variant="standard"
+                className="w-full"
+                value={value.createName}
+                onChange={(e) => {
+                  setValue({
+                    ...value,
+                    createName: e.currentTarget.value,
+                  });
+                }}
+              />
+            }
+            titleTypographyProps={{ variant: "title-m" }}
+            subheader={
+              <FormControl className="w-full mt-4">
+                <InputLabel>제공처</InputLabel>
+                <Select
+                  value={platform}
+                  onChange={(e) => {
+                    setPlatform(
+                      typeof e.target.value === "string"
+                        ? e.target.value.split(",")
+                        : e.target.value
+                    );
+                  }}
+                  input={<Input label="제공처" />}
+                  renderValue={(selected) =>
+                    selected.map((value) => <Chip key={value} label={value} />)
+                  }
+                >
+                  {PLATFORMS.map((it) => (
+                    <MenuItem key={it.pfName} value={it.pfName}>
+                      {it.pfName}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            }
+            subheaderTypographyProps={{ variant: "label-l" }}
           />
-        }
-        titleTypographyProps={{ variant: "title-m" }}
-        subheader={
-          <FormControl className="w-full mt-4">
-            <InputLabel>제공처</InputLabel>
-            <Select
-              value={platform}
+          <Divider />
+          <CardContent className="flex flex-col gap-4">
+            <TextField
+              label="코인값"
+              variant="standard"
+              type="number"
+              className="w-16"
+              value={value.createPlus ? value.createPoint : -value.createPoint}
               onChange={(e) => {
-                setPlatform(
-                  typeof e.target.value === "string"
-                    ? e.target.value.split(",")
-                    : e.target.value
-                );
+                setValue({
+                  ...value,
+                  createPlus: e.currentTarget.value >= 0,
+                  createPoint: Math.abs(e.currentTarget.value),
+                });
               }}
-              input={<Input label="제공처" />}
-              renderValue={(selected) =>
-                selected.map((value) => <Chip key={value} label={value} />)
-              }
+            />
+            <TextField
+              required
+              multiline
+              rows={5}
+              label="설명"
+              placeholder="설명을 작성해주세요."
+              className="w-full"
+            />
+          </CardContent>
+          <CardActions className="absolute bottom-0 p-4">
+            <Button
+              variant="contained"
+              onClick={() => {
+                setOpen(true);
+              }}
             >
-              {FLATFORMS.map((pfName) => (
-                <MenuItem key={pfName} value={pfName}>
-                  {pfName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        }
-        subheaderTypographyProps={{ variant: "label-l" }}
-      />
-      <Divider />
-      <CardContent className="flex flex-col gap-4">
-        <TextField
-          label="코인값"
-          variant="standard"
-          type="number"
-          className="w-16"
-          value={value.createPlus ? value.createPoint : -value.createPoint}
-          onChange={(e) => {
-            setValue({
-              ...value,
-              createPlus: e.currentTarget.value >= 0,
-              createPoint: Math.abs(e.currentTarget.value),
-            });
-          }}
-        />
-        <TextField
-          required
-          multiline
-          rows={5}
-          label="설명"
-          placeholder="설명을 작성해주세요."
-          className="w-full"
-        />
-      </CardContent>
-      <CardActions className="absolute bottom-0 p-4">
-        <Button
-          variant="contained"
-          onClick={() => {
-            setOpen(true);
-          }}
-        >
-          생성
-        </Button>
-      </CardActions>
-    </Card>
+              생성
+            </Button>
+          </CardActions>
+        </>
+      </Card>
+    </>
   );
 };
 
@@ -243,7 +261,7 @@ const PolicyUpdateCard = ({ row }) => {
               size="small"
               className="mt-2"
             />
-            <Typography variant="label-l">{value.created_date}</Typography>
+            <Typography variant="label-l">{value.createdDate}</Typography>
           </div>
         }
         subheaderTypographyProps={{ variant: "label-l" }}
@@ -323,7 +341,7 @@ const PolicyAvailable = (params) => {
   );
 };
 
-const PolicyPlaceholderCard = ({ handleRowClick }) => {
+const PolicyPlaceholderCard = () => {
   return (
     <div className="flex flex-col gap-4 items-center justify-center w-[466px] min-h-full border-dashed border-primary border-2 text-primary">
       <Typography variant="title-l">목록에서 정책을 선택하세요.</Typography>
@@ -337,7 +355,7 @@ const PoliciesCard = ({ handleRowClick }) => {
     isLoading: policiesIsLoading,
     error: policiesError,
     data: policies,
-  } = useQuery("Policies", fetchPolicies);
+  } = useQuery("Policies", getPolicies);
 
   if (policiesIsLoading) return <Loader />;
   if (policiesError) return <div>{policiesError.message}</div>;
@@ -345,7 +363,7 @@ const PoliciesCard = ({ handleRowClick }) => {
   const rows = policies.map((it) => ({
     ...it,
     id: it.plId,
-    created_date: new Date(it.created_date).toLocaleDateString("ko-KR", {
+    createdDate: new Date(it.createdDate).toLocaleDateString("ko-KR", {
       timeZone: "UTC",
     }),
   }));
@@ -414,97 +432,6 @@ const PoliciesCard = ({ handleRowClick }) => {
   );
 };
 
-const ProposedPolicyType = (params) => {
-  const CREATE = "생성";
-  const UPDATE = "수정";
-  const ACTIVATE = "활성화";
-  const DEACTIVATE = "비활성화";
-
-  const switchType = useCallback((type) => {
-    switch (type) {
-      case "CREATE":
-        return CREATE;
-      case "UPDATE":
-        return UPDATE;
-      case "ACTIVATE":
-        return ACTIVATE;
-      case "DEACTIVATE":
-        return DEACTIVATE;
-      default:
-        return "오류";
-    }
-  }, []);
-
-  return <Chip color="primary" size="small" label={switchType(params.value)} />;
-};
-
-const ProposedPoliciesCard = ({ handleRowClick }) => {
-  const PAGE_SIZE = 4;
-
-  const {
-    isLoading: proposedPoliciesIsLoading,
-    error: proposedPoliciesError,
-    data: proposedPolicies,
-  } = useQuery("proposedPolicies", fetchProposedPolicies);
-
-  if (proposedPoliciesIsLoading) return <Loader />;
-  if (proposedPoliciesError) return <div>{proposedPoliciesError.message}</div>;
-
-  const rows = proposedPolicies.map((it) => ({
-    ...it,
-    id: it.plId,
-    date: new Date(it.date).toLocaleDateString("ko-KR", {
-      timeZone: "UTC",
-    }),
-  }));
-
-  const columns = [
-    { field: "name", headerName: "정책명", flex: 2 },
-    { field: "plId", headerName: "정책코드", flex: 1 },
-    { field: "pfName", headerName: "제공처", flex: 1.5 },
-    {
-      field: "request_type",
-      headerName: "구분",
-      flex: 1,
-      renderCell: ProposedPolicyType,
-    },
-    { field: "create_user_name", headerName: "신청자", flex: 1 },
-    { field: "date", headerName: "신청날짜", flex: 1 },
-  ];
-
-  return (
-    <Card className="flex-1 h-full">
-      <CardHeader
-        title="승인대기 정책 조회"
-        titleTypographyProps={{ variant: "display" }}
-        subheader={`${proposedPolicies.length}건`}
-        subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
-      />
-      <CardContent>
-        <DataGrid
-          className="h-[318px]"
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: {
-                pageSize: PAGE_SIZE,
-              },
-            },
-          }}
-          onRowClick={(params) => {
-            handleRowClick(PROPOSED_READ, params);
-          }}
-          pageSizeOptions={[PAGE_SIZE]}
-          slots={{
-            pagination: CustomPagination,
-          }}
-        />
-      </CardContent>
-    </Card>
-  );
-};
-
 const Policies = () => {
   const [detail, setDetail] = useState({});
   const [detailShow, setDetailShow] = useState(false);
@@ -531,7 +458,7 @@ const Policies = () => {
         return <PolicyUpdateCard row={detail.row} />;
       case POLICY_CREATE:
         return <PolicyCreateCard row={detail.row} />;
-      case PROPOSED_READ:
+      case POLICY_REQUEST_READ:
         return <ProposedPolicyReadCard row={detail.row} />;
       default:
         return <PolicyCreateCard row={detail.row} />;
@@ -541,6 +468,7 @@ const Policies = () => {
   return (
     <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
       <section className="flex gap-6">
+        <PoliciesCard handleRowClick={handleRowClick} />
         {detailShow ? (
           <Fade in={fade}>
             <div className="min-h-full">{handleDetailType(detail.type)}</div>
@@ -548,7 +476,6 @@ const Policies = () => {
         ) : (
           <PolicyPlaceholderCard handleRowClick={handleRowClick} />
         )}
-        <PoliciesCard handleRowClick={handleRowClick} />
       </section>
     </div>
   );

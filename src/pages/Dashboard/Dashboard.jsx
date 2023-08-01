@@ -1,53 +1,48 @@
 import React from "react";
 import { useQuery } from "react-query";
-import { BiChevronDown } from "react-icons/bi";
 import {
-  dummyPlatforms,
-  fetchFaqs,
-  fetchCoin,
-  fetchCoinDetails,
+  getCoin,
+  getCoinDetail,
+  getCoinDetailByAdminId,
+  getDevToken,
+  getJWTClaims,
+  getPolicies,
+  getStaticsByMonth,
+  getUserDetail,
+  getUsersBySearch,
+  postManualCoin,
+  postPolicyRequest,
+  PLATFORMS,
+  FAQS,
 } from "../../api";
 import Counter from "./Counter";
 import Loader from "../../components/Loader";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Accordion,
-  AccordionSummary,
-  Typography,
-  AccordionDetails,
-} from "@mui/material";
+import { Card, CardContent, CardHeader } from "@mui/material";
 import SiteLink from "../../components/SiteLink";
-import UserCoinHistory from "../../components/UserCoinHistory";
+import UserCoinHistory from "../../components/UserCoinDetail";
 import UserCoinGraph from "../../components/UserCoinGraph";
+import Error from "../../components/Error";
 
 function Dashboard(props) {
-  const {
-    isLoading: faqsIsLoading,
-    error: faqsError,
-    data: faqs,
-  } = useQuery("Faqs", fetchFaqs);
-
-  const links = dummyPlatforms;
+  const userId = 1;
 
   const {
-    isLoading: coinIsLoading,
-    error: coinError,
-    data: coin,
-  } = useQuery("Coin", fetchCoin);
+    isLoading: userCoinIsLoading,
+    error: userCoinError,
+    data: userCoin,
+  } = useQuery(["userCoin"], () => getCoin(userId));
 
   const {
-    isLoading: detailsIsLoading,
-    error: detailsError,
-    data: details,
-  } = useQuery("CoinDetails", fetchCoinDetails);
+    isLoading: userDetailIsLoading,
+    error: userDetailError,
+    data: userDetail,
+  } = useQuery(["userDetail", userId], () => getUserDetail(userId));
 
-  const isLoading = faqsIsLoading || coinIsLoading || detailsIsLoading;
-  const error = faqsError || coinError || detailsError;
+  const isLoading = userCoinIsLoading || userDetailIsLoading;
+  const error = userCoinError || userDetailError;
 
   if (isLoading) return <Loader />;
-  if (error) return <div>An error has occurred: {error.message}</div>;
+  if (error) return <Error />;
 
   return (
     <div className="flex flex-col gap-6 justify-center py-16 w-[1152px] mx-auto">
@@ -61,16 +56,20 @@ function Dashboard(props) {
               />
               <CardContent>
                 <div className="flex items-end">
-                  <Counter start={0} end={coin.point_total} duration={1000} />
+                  <Counter
+                    start={0}
+                    end={userCoin.pointTotal}
+                    duration={1000}
+                  />
                   <div
                     className={
-                      details[0].plus
+                      userDetail[0].plus
                         ? "flex text-primary"
                         : "flex text-red-600"
                     }
                   >
-                    {details[0].point}
-                    {details[0].plus ? "▲" : "▼"}
+                    {userDetail[0].point}
+                    {userDetail[0].plus ? "▲" : "▼"}
                   </div>
                 </div>
               </CardContent>
@@ -82,16 +81,16 @@ function Dashboard(props) {
               />
               <CardContent>
                 <div className="flex items-end">
-                  <Counter start={0} end={coin.point_plus} duration={1000} />
+                  <Counter start={0} end={userCoin.pointPlus} duration={1000} />
                   <div
                     className={
-                      details[0].plus
+                      userDetail[0].plus
                         ? "flex text-primary"
                         : "flex text-red-600"
                     }
                   >
-                    {details[0].point}
-                    {details[0].plus ? "▲" : "▼"}
+                    {userDetail[0].point}
+                    {userDetail[0].plus ? "▲" : "▼"}
                   </div>
                 </div>
               </CardContent>
@@ -103,22 +102,26 @@ function Dashboard(props) {
               />
               <CardContent>
                 <div className="flex items-end">
-                  <Counter start={0} end={coin.point_minus} duration={1000} />
+                  <Counter
+                    start={0}
+                    end={userCoin.pointMinus}
+                    duration={1000}
+                  />
                   <div
                     className={
-                      details[0].plus
+                      userDetail[0].plus
                         ? "flex text-red-600"
                         : "flex text-primary"
                     }
                   >
-                    {details[0].point}
-                    {details[0].plus ? "▼" : "▲"}
+                    {userDetail[0].point}
+                    {userDetail[0].plus ? "▼" : "▲"}
                   </div>
                 </div>
               </CardContent>
             </Card>
           </div>
-          <UserCoinGraph details={details} />
+          <UserCoinGraph details={userDetail} />
         </div>
         <Card className="bg-transparent shadow-none w-full">
           <CardHeader
@@ -127,17 +130,17 @@ function Dashboard(props) {
           />
           <CardContent>
             <div className="flex flex-wrap gap-3 w-full">
-              {links.map((it) => (
-                <SiteLink pfInfo={it} key={it.pf_name} />
+              {PLATFORMS.map((it) => (
+                <SiteLink pfInfo={it} key={it.pfName} />
               ))}
             </div>
           </CardContent>
         </Card>
       </section>
       <section className="flex flex-col gap-4">
-        <UserCoinHistory details={details} />
+        <UserCoinHistory details={userDetail} />
       </section>
-      <section className="flex flex-col gap-4">
+      {/* <section className="flex flex-col gap-4">
         <Card className="bg-transparent shadow-none w-full">
           <CardHeader
             title="자주 묻는 질문"
@@ -158,7 +161,7 @@ function Dashboard(props) {
             ))}
           </CardContent>
         </Card>
-      </section>
+      </section> */}
     </div>
   );
 }

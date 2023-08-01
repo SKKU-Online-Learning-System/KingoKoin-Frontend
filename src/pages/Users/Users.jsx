@@ -10,15 +10,31 @@ import {
   DataGrid,
   GridToolbarQuickFilter,
   GridLogicOperator,
+  getGridStringOperators,
 } from "@mui/x-data-grid";
 import React, { useState, useEffect, useCallback } from "react";
 import CustomPagination from "../../components/CustomPagination";
 
 import { useQuery } from "react-query";
-import { fetchCoinDetails, fetchUsers } from "../../api";
+import {
+  getCoin,
+  getCoinDetail,
+  getCoinDetailByAdminId,
+  getDevToken,
+  getJWTClaims,
+  getPolicies,
+  getStaticsByMonth,
+  getUserDetail,
+  getUsersBySearch,
+  postManualCoin,
+  postPolicyRequest,
+  PLATFORMS,
+  FAQS,
+} from "../../api";
 import Loader from "../../components/Loader";
-import UserCoinHistory from "../../components/UserCoinHistory";
+import UserCoinHistory from "../../components/UserCoinDetail";
 import UserCoinGraph from "../../components/UserCoinGraph";
+import Error from "../../components/Error";
 
 function QuickSearchToolbar() {
   return (
@@ -48,12 +64,19 @@ const UsersCard = ({ handleRowClick }) => {
     page: 0,
   });
 
+  const [search, setSearch] = useState({
+    page: 0,
+    size: 10,
+    column: null,
+    search: null,
+  });
+
   const {
     isLoading: usersIsLoading,
     error: usersError,
     data: users,
-  } = useQuery(["users", paginationModel.page], () =>
-    fetchUsers(paginationModel, queryOptions)
+  } = useQuery(["users"], () =>
+    getUsersBySearch(search.page, search.size, search.column, search.search)
   );
 
   // pagination
@@ -68,6 +91,7 @@ const UsersCard = ({ handleRowClick }) => {
   // filter
   const onFilterChange = useCallback(
     (filterModel) => {
+      console.log(filterModel);
       setQueryOptions({ ...queryOptions, filterModel: { ...filterModel } });
     },
     [queryOptions]
@@ -76,6 +100,7 @@ const UsersCard = ({ handleRowClick }) => {
   // sort
   const handleSortModelChange = useCallback(
     (sortModel) => {
+      console.log(sortModel);
       setQueryOptions({ ...queryOptions, sortModel: [...sortModel] });
     },
     [queryOptions]
@@ -84,30 +109,44 @@ const UsersCard = ({ handleRowClick }) => {
   if (usersIsLoading) return <Loader className="w-[662px] h-[495px]" />;
   if (usersError) return <div>{usersError.message}</div>;
 
-  console.log(users);
-
   const rows = users.data.map((it) => ({
     ...it,
-    id: it.user_id,
+    id: it.userId,
   }));
 
+  const stringOperators = getGridStringOperators().filter((op) =>
+    ["contains"].includes(op.value)
+  );
+
   const columns = [
-    { field: "st_name", headerName: "이름", flex: 1, sortable: false },
-    { field: "st_id", headerName: "학번", flex: 1, sortable: false },
-    { field: "dept", headerName: "학과", flex: 2, sortable: false },
     {
-      field: "point_total",
+      field: "stName",
+      headerName: "이름",
+      flex: 1,
+      sortable: false,
+      filterOperators: stringOperators,
+    },
+    {
+      field: "stId",
+      headerName: "학번",
+      flex: 1,
+      sortable: false,
+      filterOperators: stringOperators,
+    },
+    {
+      field: "dept",
+      headerName: "학과",
+      flex: 2,
+      sortable: false,
+      filterOperators: stringOperators,
+    },
+    {
+      field: "pointTotal",
       headerName: "보유코인",
       flex: 1,
       filterable: false,
+      filterOperators: stringOperators,
     },
-    // 1차 개발에서 보류된 내용
-    // {
-    //   field: "user_authority",
-    //   headerName: "권한",
-    //   flex: 1,
-    //   renderCell: UserAuthority,
-    // },
   ];
 
   return (
@@ -170,13 +209,15 @@ function Users() {
 
   // selectedRow를 이용하여 데이터 불러오기
   const {
-    isLoading: detailsIsLoading,
-    error: detailsError,
-    data: details,
-  } = useQuery("CoinDetails", () => fetchCoinDetails(selectedRow.user_id));
+    isLoading: userCoinDetailIsLoading,
+    error: userCoinDetailError,
+    data: userCoinDetail,
+  } = useQuery(["userCoinDetail", selectedRow.userId], () =>
+    getCoinDetail(selectedRow.userId)
+  );
 
-  if (detailsIsLoading) return <Loader />;
-  if (detailsError) return <div>{detailsError.message}</div>;
+  if (userCoinDetailIsLoading) return <Loader />;
+  if (userCoinDetailError) return <Error />;
 
   const handleRowClick = (params) => {
     setSelectedRow(params.row);
@@ -198,7 +239,7 @@ function Users() {
           {detailShow ? (
             <Fade in={fade}>
               <div className="flex-1 min-h-full">
-                <UserCoinGraph details={details} />
+                <UserCoinGraph userId={selectedRow.userId} />
               </div>
             </Fade>
           ) : (
@@ -211,7 +252,7 @@ function Users() {
         {detailShow ? (
           <Fade in={fade}>
             <div>
-              <UserCoinHistory details={details} />
+              <UserCoinHistory userId={selectedRow.userId} />
             </div>
           </Fade>
         ) : (

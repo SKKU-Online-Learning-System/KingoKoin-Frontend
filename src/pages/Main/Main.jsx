@@ -1,34 +1,36 @@
-import React, { useState } from "react";
+import { TabContext, TabPanel } from "@mui/lab";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Tab,
-  Accordion,
   Tabs,
   Typography,
-  AccordionSummary,
-  AccordionDetails,
 } from "@mui/material";
-import { TabContext, TabPanel } from "@mui/lab";
-import { fetchFaqs, dummyPlatforms } from "../../api.jsx";
-
+import React, { useState } from "react";
 import { BiChevronDown } from "react-icons/bi";
-import { useQuery } from "react-query";
-import Loader from "../../components/Loader";
+import {
+  getCoin,
+  getCoinDetail,
+  getCoinDetailByAdminId,
+  getDevToken,
+  getJWTClaims,
+  getPolicies,
+  getStaticsByMonth,
+  getUserDetail,
+  getUsersBySearch,
+  postManualCoin,
+  postPolicyRequest,
+  PLATFORMS,
+  FAQS,
+} from "../../api";
+import Footer from "../../components/Footer";
 import Header from "../../components/Header";
 import SiteLink from "../../components/SiteLink";
-import Footer from "../../components/Footer";
 
 function Faqs() {
-  const {
-    isLoading: faqIsLoading,
-    error: faqError,
-    data: faq,
-  } = useQuery("faq", fetchFaqs);
-
   const [expanded, setExpanded] = useState(null);
-
-  if (faqIsLoading) return <Loader />;
-  if (faqError) return <div>{faqError.message}</div>;
 
   const handleChange = (panel) => (event, newExpanded) => {
     setExpanded(newExpanded ? panel : false);
@@ -36,8 +38,8 @@ function Faqs() {
 
   return (
     <div>
-      {faq.map((it, index) => (
-        <div key={it.faq_id} className="flex flex-col gap-4 ">
+      {FAQS.map((it, index) => (
+        <div key={it.faqId} className="flex flex-col gap-4 ">
           <div className="w-full justify-between items-center mb-4">
             <Accordion
               disableGutters
@@ -50,10 +52,10 @@ function Faqs() {
                 className="flex flex-row-reverse gap-2 rounded-lg mx-2"
                 expandIcon={<BiChevronDown className="w-6 h-6" />}
               >
-                <Typography variant="title-l">Q. {it.question}</Typography>
+                <Typography variant="title-l">{it.question}</Typography>
               </AccordionSummary>
               <AccordionDetails className="px-12">
-                <Typography variant="label-l">A. {it.answer}</Typography>
+                <Typography variant="label-l">{it.answer}</Typography>
               </AccordionDetails>
             </Accordion>
           </div>
@@ -144,8 +146,8 @@ function Main() {
                 <hr className="bg-primary w-8 h-1 ml-10"></hr>
                 <div className="text-title-l p-8">
                   <div className="flex flex-wrap gap-3">
-                    {dummyPlatforms.map((it) => (
-                      <SiteLink pfInfo={it} key={it.pf_name} />
+                    {PLATFORMS.map((it) => (
+                      <SiteLink pfInfo={it} key={it.pfName} />
                     ))}
                   </div>
                 </div>

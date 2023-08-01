@@ -2,7 +2,7 @@ import ConfirmDialog from "./ConfirmDialog";
 import { useState } from "react";
 import { Button } from "@mui/material";
 
-const SiteLink = ({ pfInfo, ...props }) => {
+const SiteLink = ({ platform }) => {
   const [open, setOpen] = useState(false);
 
   const handleConfirm = (url) => {
@@ -16,30 +16,30 @@ const SiteLink = ({ pfInfo, ...props }) => {
       <ConfirmDialog
         open={open}
         handleConfirm={() => {
-          handleConfirm(pfInfo.pf_link);
+          handleConfirm(platform.pfLink);
         }}
         handleCancel={() => {
           setOpen(false);
         }}
-      >{`${pfInfo.pf_name}으로 이동하시겠습니까?`}</ConfirmDialog>
+      >{`${platform.pfName}으로 이동하시겠습니까?`}</ConfirmDialog>
       <Button
-        key={pfInfo.pf_name}
+        key={platform.pfName}
         onClick={() => {
           setOpen(true);
         }}
         className="flex justify-center items-center gap-1 w-[258px] h-[156px] bg-background rounded-lg border-solid border-2 border-primaryhover:shadow-lg hover:scale-[1.03] transition-all"
       >
-        {pfInfo.pf_logo ? (
+        {platform.pfLogo ? (
           <>
             <img
               className="w-8 h-8"
-              src={pfInfo.pf_logo}
-              alt={pfInfo.pf_name + " 링크"}
+              src={platform.pfLogo}
+              alt={platform.pfName + " 링크"}
             />
-            <div className="text-label-l">{pfInfo.pf_name}</div>
+            <div className="text-label-l">{platform.pfName}</div>
           </>
         ) : (
-          <div className="text-title-m font-gugi">{pfInfo.pf_name}</div>
+          <div className="text-title-m font-gugi">{platform.pfName}</div>
         )}
       </Button>
     </>

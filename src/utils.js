@@ -1,8 +1,52 @@
-export const FLATFORMS = ["온라인 명륜당", "SOSD", "소프트웨어학과", ""]; // 범위에서 벗어난 값을 처리하기 위해 빈 문자열이 필요하다.
-export const FAQS = [
-  { id: 0, question: "q1", answer: "a1" },
-  { id: 1, question: "q2", answer: "a2" },
-  { id: 2, question: "q3", answer: "a3" },
-  { id: 3, question: "q4", answer: "a4" },
-  { id: 4, question: "q5", answer: "a5" },
-];
+export function getCookie(name) {
+  let matches = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" +
+        name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+        "=([^;]*)"
+    )
+  );
+  return matches ? decodeURIComponent(matches[1]) : undefined;
+}
+
+export function setCookie(name, value, options = {}) {
+  options = {
+    path: "/",
+    // 필요한 경우, 옵션 기본값을 설정할 수도 있습니다.
+    ...options,
+  };
+
+  if (options.expires instanceof Date) {
+    options.expires = options.expires.toUTCString();
+  }
+
+  let updatedCookie =
+    encodeURIComponent(name) + "=" + encodeURIComponent(value);
+
+  for (let optionKey in options) {
+    updatedCookie += "; " + optionKey;
+    let optionValue = options[optionKey];
+    if (optionValue !== true) {
+      updatedCookie += "=" + optionValue;
+    }
+  }
+
+  document.cookie = updatedCookie;
+}
+
+export function deleteCookie(name) {
+  setCookie(name, "", {
+    "max-age": -1,
+  });
+}
+
+export function deleteAllCookies() {
+  var cookies = document.cookie.split(";");
+  for (var i = 0; i < cookies.length; i++) {
+    var cookie = cookies[i];
+    var eqPos = cookie.indexOf("=");
+    var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+    deleteCookie(name.trim());
+  }
+  console.log("all cookies deleted !");
+}
