@@ -4,7 +4,7 @@ import UserChartCard from "../components/cards/chart/UserChartCard";
 import { PLATFORMS, getCoin } from "../common/api";
 import { Card, CardContent, CardHeader } from "@mui/material";
 import SiteLink from "../components/SiteLink";
-import UserCoinDetailCard from "../components/cards/detail/UserCoinDetailCard";
+import UserCoinDetailCard from "../components/cards/table/UserCoinDetailCard";
 
 const Dashboard = () => {
   // TODO: userId를 로그인 인증으로 받아오기

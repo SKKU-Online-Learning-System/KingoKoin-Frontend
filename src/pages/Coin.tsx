@@ -1,17 +1,6 @@
-import {
-  getDevToken,
-  getJWTClaims,
-  getPolicies,
-  getCoinDetail,
-  postManualCoin,
-  getUsersBySearch,
-  getUserDetail,
-  getCoin,
-  testApi,
-} from "../common/api";
-import AdminCoinDetailCard from "../components/cards/detail/AdminCoinDetailCard";
 import CoinGrantCard from "../components/cards/grant/CoinGrantCard";
 import ExcelCoinGrantCard from "../components/cards/grant/ExcelCoinGrantCard";
+import AdminCoinDetailCard from "../components/cards/table/AdminCoinDetailCard";
 
 const Coin = () => {
   // TODO: adId 받아오기

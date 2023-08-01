@@ -1,9 +1,9 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
+import dayjs from "dayjs";
 import SKKU_EMBLEM from "../assets/skku_emblem_kor.png";
 import SOSD_LOGO from "../assets/sosd_logo.svg";
-import { dayjsToStamp, getCookie } from "./utils";
-import dayjs from "dayjs";
 import { POLICY_REQUEST_TYPE } from "./apiManager";
+import { dayjsToStamp, getCookie } from "./utils";
 
 const HOST = "https://kingocoin.cs.skku.edu";
 const COIN_ROUTE = "/api/coin";
@@ -261,7 +261,7 @@ export const postManualCoin = async ({
 
 /* User */
 
-interface ISearchOptions {
+export interface ISearchOptions {
   order?: "asc" | "desc";
   page: number;
   pageSize: number;
@@ -279,13 +279,14 @@ interface IUser {
   role: string;
 }
 
+// TODO: data.length 되돌리기
 export const getUsersBySearch = async ({
   order = "desc",
   page,
   pageSize,
   column,
   search,
-}: ISearchOptions): Promise<IUser[]> => {
+}: ISearchOptions): Promise<{ data: IUser[]; length: number }> => {
   let path = `/?order=${order}&page=${page}&size=${pageSize}&column=${column}&search=${search}`;
 
   // (column == undefined || search == undefined): 모든 유저 검색
@@ -293,14 +294,18 @@ export const getUsersBySearch = async ({
     path = `/?order=${order}&page=${page}&size=${pageSize}`;
 
   const response = await client.get(USER_ROUTE + path);
-  return response.data;
+  const result = {
+    data: response.data.map((it: IUser) => ({ ...it, id: it.userId })),
+    length: response.data.length,
+  };
+  return result;
 };
 // getUsersBySearch 사용 예제
 // const {
 //   isLoading: usersIsLoading,
 //   error: usersError,
 //   data: users,
-// } = useQuery(["users"], () => getUsersBySearch(page, size, column, search));
+// } = useQuery(["users"], () => getUsersBySearch(searchOptions));
 
 interface IUserDetail {
   stId: number;
