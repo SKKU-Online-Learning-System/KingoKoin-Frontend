@@ -1,9 +1,9 @@
 import { Card, CardContent, CardHeader } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useQuery } from "react-query";
-import { getStaticsByMonth } from "../../api";
-import CustomPagination from "../CustomPagination";
-import Status from "../feedback/Status";
+import { getStaticsByMonth } from "../../../common/api";
+import CustomPagination from "../../CustomPagination";
+import Status from "../../feedback/Status";
 
 interface UserChartProps {
   userId: number;

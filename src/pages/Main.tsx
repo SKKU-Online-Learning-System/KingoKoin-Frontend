@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
-import { FAQS, PLATFORMS } from "../api";
+import { FAQS, PLATFORMS } from "../common/api";
 import Header from "../components/frames/Header";
 import Footer from "../components/frames/Footer";
 import SiteLink from "../components/SiteLink";

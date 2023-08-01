@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useQuery } from "react-query";
-import { getJWTClaims } from "../api";
-import { deleteCookie, getCookie } from "../utils";
+import { getJWTClaims } from "../common/api";
+import { deleteCookie, getCookie } from "../common/utils";
 
 const JWT_COOKIE = "accessToken";
 

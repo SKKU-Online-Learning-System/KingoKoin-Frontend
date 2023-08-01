@@ -1,10 +1,10 @@
 import { useQuery } from "react-query";
 import CounterCard from "../components/Counter";
-import UserChartCard from "../components/cards/UserChartCard";
-import { PLATFORMS, getCoin } from "../api";
+import UserChartCard from "../components/cards/chart/UserChartCard";
+import { PLATFORMS, getCoin } from "../common/api";
 import { Card, CardContent, CardHeader } from "@mui/material";
 import SiteLink from "../components/SiteLink";
-import UserCoinDetailCard from "../components/cards/UserCoinDetailCard";
+import UserCoinDetailCard from "../components/cards/detail/UserCoinDetailCard";
 
 const Dashboard = () => {
   // TODO: userId를 로그인 인증으로 받아오기

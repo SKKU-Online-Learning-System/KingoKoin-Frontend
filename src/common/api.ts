@@ -1,23 +1,9 @@
-import axios from "axios";
-import SKKU_EMBLEM from "./assets/skku_emblem_kor.png";
-import SOSD_LOGO from "./assets/sosd_logo.svg";
-import { deleteCookie, getCookie } from "./utils";
-
-// TODO: api 연결시 에러 핸들링
-//
-// try {
-//   if (await result.status === 200) {
-//     return result
-//   } else {
-//     throw new Error("API 호출 오류");
-//   }
-// } catch (error) {
-//   console.error("API 호출 오류:", error);
-//   throw error;
-// }
-
-// 07.27(목) api 문서 구현 코드
-// 변수명 앞의 언더바 _ 는 이후 추가해야할 변수를 의미한다.
+import axios, { AxiosError, AxiosResponse } from "axios";
+import SKKU_EMBLEM from "../assets/skku_emblem_kor.png";
+import SOSD_LOGO from "../assets/sosd_logo.svg";
+import { dayjsToStamp, getCookie } from "./utils";
+import dayjs from "dayjs";
+import { POLICY_REQUEST_TYPE } from "./apiManager";
 
 const HOST = "https://kingocoin.cs.skku.edu";
 const COIN_ROUTE = "/api/coin";
@@ -25,6 +11,8 @@ const USER_ROUTE = "/api/user";
 const POLICY_ROUTE = "/api/policy";
 const STATICS_ROUTE = "/api/statics";
 const DEV_ROUTE = "/api/dev";
+
+const JWT_COOKIE = "accessToken";
 
 export const PLATFORMS = [
   {
@@ -65,14 +53,103 @@ export const FAQS = [
   },
 ];
 
-axios.defaults.baseURL = HOST;
-// TODO: CORS 설정 맞추기
-// axios.defaults.withCredentials = true;
-// axios.defaults.headers.Authorization = `Bearer ${getCookie(JWT_COOKIE)}`; // getDevToken으로 이동
+const handleAxiosSuccess = (response: AxiosResponse) => {
+  return response;
+};
 
-// TODO: 조정에 따라 api 코드 변경
-// 더미 데이터 추가 - response.data.push(...) 삭제
-// api 호출 오류 해결 - dummy 삭제
+const handleAxiosError = (error: AxiosError) => {
+  if (error.response) {
+    console.log("Server Error:", error.response.data);
+  } else if (error.request) {
+    console.log("No response received:", error.request);
+  } else {
+    console.log("Error:", error.message);
+  }
+  return Promise.reject(error);
+};
+
+const client = axios.create({
+  baseURL: HOST,
+});
+axios.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
+
+const clientWithToken = axios.create({
+  baseURL: HOST,
+  withCredentials: true,
+  headers: { Authorization: `bearer ${getCookie(JWT_COOKIE)}` },
+});
+clientWithToken.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
+
+// TODO: testApi 삭제
+export const testApi = () => {
+  console.log("getCoin");
+  console.log(getCoin(1));
+  console.log("----------------");
+  console.log("getCoinDetail");
+  console.log(getCoinDetail(1));
+  console.log("----------------");
+  console.log("getCoinDetailByAdId");
+  console.log(getCoinDetailByAdId(1));
+  console.log("----------------");
+  console.log("postManualCoin");
+  console.log(
+    postManualCoin({
+      stId: 123,
+      stName: "123",
+      plId: 123,
+      title: "123",
+      plus: false,
+      point: -123,
+      adId: 123,
+      gainedDate: dayjsToStamp(dayjs()),
+    })
+  );
+  console.log("----------------");
+  console.log("getUsersBySearch");
+  console.log(getUsersBySearch({ page: 0, pageSize: 10 }));
+  console.log(
+    getUsersBySearch({
+      page: 0,
+      pageSize: 10,
+      column: "stId",
+      search: "123456",
+    })
+  );
+  console.log(
+    getUsersBySearch({
+      page: 0,
+      pageSize: 10,
+      column: "stId",
+      search: "20",
+    })
+  );
+  console.log("----------------");
+  console.log("getUserDetail");
+  console.log(getUserDetail(1));
+  console.log("----------------");
+  console.log("getPolicies");
+  console.log(getPolicies("me"));
+  console.log("----------------");
+  console.log("postPolicyRequest");
+  console.log(
+    postPolicyRequest({
+      plId: 123,
+      pfId: 123,
+      rqName: "123",
+      rqPlus: true,
+      rqPoint: 123,
+      rqReason: "123",
+      rqType: POLICY_REQUEST_TYPE.UPDATE,
+    })
+  );
+  console.log("----------------");
+  console.log("getStaticsByMonth");
+  console.log(getStaticsByMonth());
+  console.log("----------------");
+  console.log("getJWTClaims");
+  console.log(getJWTClaims(getCookie(JWT_COOKIE)!));
+  console.log("----------------");
+};
 
 /* Coin */
 
@@ -88,7 +165,7 @@ interface ICoin {
 
 export const getCoin = async (userId: number): Promise<ICoin> => {
   const path = `/${userId}`;
-  const response = await axios.get(COIN_ROUTE + path);
+  const response = await client.get(COIN_ROUTE + path);
   return response.data;
 };
 // getCoin 사용 예제
@@ -116,7 +193,7 @@ interface ICoinDetail {
 
 export const getCoinDetail = async (userId: number): Promise<ICoinDetail[]> => {
   const path = `/${userId}/detail`;
-  const response = await axios.get(COIN_ROUTE + path);
+  const response = await client.get(COIN_ROUTE + path);
 
   const result = response.data.map((it: ICoinDetail) => ({
     ...it,
@@ -132,49 +209,43 @@ export const getCoinDetail = async (userId: number): Promise<ICoinDetail[]> => {
 //   data: userCoinDetail,
 // } = useQuery(["userCoinDetail", userId], () => getCoinDetail(userId));
 
-export const getCoinDetailByAdminId = async (
+export const getCoinDetailByAdId = async (
   adId: number
 ): Promise<ICoinDetail[]> => {
   const path = `/admin/${adId}`;
-  // const response = await axios.get(COIN_ROUTE + path);
-  const dummy = [
-    {
-      dtId: 1,
-      coinId: 1,
-      pointTotal: 12,
-      plus: true,
-      point: 1,
-      plId: 1,
-      plName: "string",
-      title: "string",
-      adId: 1,
-      adGroup: "string",
-      provider: "string",
-      createdDate: "string",
-      modifiedDate: "string",
-    },
-  ];
-  return dummy;
+  const response = await client.get(COIN_ROUTE + path);
+  return response.data;
 };
-// getCoinDetailByAdminId 사용 예제
+// getCoinDetailByAdId 사용 예제
 // const {
 //   isLoading: adCoinDetailIsLoading,
 //   error: adCoinDetailError,
 //   data: adCoinDetail,
-// } = useQuery(["adCoinDetail"], () => getCoinDetailByAdminId(adId));
+// } = useQuery(["adCoinDetail"], () => getCoinDetailByAdId(adId));
 
-export const postManualCoin = async (
-  stId: number,
-  stName: string,
-  plId: number,
-  title: string,
-  plus: number,
-  point: number,
-  adId: number,
-  gainedDate: string
-): Promise<{ dtId: number }> => {
+interface IGrantedCoin {
+  stId: number;
+  stName: string;
+  plId: number;
+  title: string;
+  plus: boolean;
+  point: number;
+  adId: number;
+  gainedDate: string;
+}
+
+export const postManualCoin = async ({
+  stId,
+  stName,
+  plId,
+  title,
+  plus,
+  point,
+  adId,
+  gainedDate,
+}: IGrantedCoin): Promise<{ dtId: number }> => {
   const path = `/point/manual`;
-  const response = await axios.post(COIN_ROUTE + path, {
+  const response = await client.post(COIN_ROUTE + path, {
     stId,
     stName,
     title,
@@ -191,10 +262,11 @@ export const postManualCoin = async (
 /* User */
 
 interface ISearchOptions {
+  order?: "asc" | "desc";
   page: number;
-  size: number;
-  column: string | null;
-  search: string | null;
+  pageSize: number;
+  column?: string;
+  search?: string;
 }
 
 interface IUser {
@@ -208,29 +280,20 @@ interface IUser {
 }
 
 export const getUsersBySearch = async ({
+  order = "desc",
   page,
-  size,
+  pageSize,
   column,
   search,
 }: ISearchOptions): Promise<IUser[]> => {
-  let path = `/?page=${page}&size=${size}&column=${column}&search=${search}`;
+  let path = `/?order=${order}&page=${page}&size=${pageSize}&column=${column}&search=${search}`;
 
-  // (column == null || search == null): 모든 유저 검색
-  if (!column || !search) path = `/?page=${page}&size=${size}`;
+  // (column == undefined || search == undefined): 모든 유저 검색
+  if (!column || !search)
+    path = `/?order=${order}&page=${page}&size=${pageSize}`;
 
-  // const response = await axios.get(USER_ROUTE + path);
-  const dummy = [
-    {
-      userId: 1,
-      stId: 2020312123,
-      stName: "학생1",
-      dept: "SOSC",
-      pointTotal: 10,
-      pointPlus: 10,
-      role: "admin",
-    },
-  ];
-  return dummy;
+  const response = await client.get(USER_ROUTE + path);
+  return response.data;
 };
 // getUsersBySearch 사용 예제
 // const {
@@ -249,14 +312,7 @@ interface IUserDetail {
 
 export const getUserDetail = async (userId: number): Promise<IUserDetail> => {
   const path = `/detail/${userId}`;
-  const response = await axios.get(USER_ROUTE + path);
-  response.data.push({
-    stId: 1,
-    stName: "string",
-    stDegree: "string",
-    stStatus: "string",
-    stDept: "string",
-  });
+  const response = await client.get(USER_ROUTE + path);
   return response.data;
 };
 // getUserDetail 사용 예제
@@ -269,68 +325,58 @@ export const getUserDetail = async (userId: number): Promise<IUserDetail> => {
 interface Policy {
   plId: number;
   plName: string;
+  plCode: string;
   pfName: string;
   plus: boolean;
   point: number;
   available: boolean;
 }
 
-export const getPolicies = async (
-  only: string | null // 전체조회,  null | "me"
-): Promise<Policy[]> => {
-  const path = ``;
-  // const response = await axios.get(POLICY_ROUTE + path);
-  const dummy = [
-    {
-      plId: 1,
-      plName: "name1",
-      plCode: "P110102",
-      pfName: "플랫폼1",
-      plus: true,
-      point: 1,
-      available: true,
-    },
-    {
-      plId: 1,
-      plName: "name1",
-      plCode: "P110102",
-      pfName: "플랫폼2",
-      plus: true,
-      point: 1,
-      available: true,
-    },
-  ];
-  return dummy;
+// TODO: dummy 삭제
+export const getPolicies = async (only?: "me"): Promise<Policy[]> => {
+  let path = ``;
+  if (only) path = `/?only=${only}`;
+  // const response = await clientWithToken.get(POLICY_ROUTE + path);
+  const response = {
+    data: [
+      {
+        plId: 123,
+        plName: "123",
+        plCode: "123",
+        pfName: "123",
+        plus: true,
+        point: 123,
+        available: true,
+      },
+      {
+        plId: 2,
+        plName: "2",
+        plCode: "2",
+        pfName: "2",
+        plus: false,
+        point: -2,
+        available: false,
+      },
+    ],
+  };
+
+  return response.data;
 };
 // getPolicies 사용 예제
 // const {
 //   isLoading: policiesIsLoading,
 //   error: policiesError,
 //   data: policies,
-// } = useQuery(["policies"], getPolicies);
-
-/**
- * 정책 생성 및 수정 요청 (postPolicyRequest)
- * @param {number?} plId 정책명
- * @param {number} pfId 플랫폼명
- * @param {string} rqName 요청 정책명
- * @param {number} rqPoint 요청 코인값
- * @param {string} rqReason 요청 사유
- * @param {boolean} rqPlus 요청 코인값 부호
- * @param {string} rqType 요청 타입 CREATE|UPDATE|DEACTIVATE|ACTIVATE|DELETE
- * @returns {Promise<{
- * rqId: number
- * }[]>} 요청 식별자를 반환하는 프로미스 객체
- */
+// } = useQuery(["policies"], () => getPolicies(null));
 
 interface IPolicyRequest {
-  plId: number | null;
+  plId: number;
   pfId: number;
   rqName: string;
   rqPlus: boolean;
   rqPoint: number;
   rqReason: string;
-  rqType: string;
+  rqType: POLICY_REQUEST_TYPE;
 }
 
 export const postPolicyRequest = async ({
@@ -344,7 +390,7 @@ export const postPolicyRequest = async ({
 }: IPolicyRequest): Promise<{ rqId: number }> => {
   let path = `/request?plId=${plId}`;
   if (rqType === "CREATE" || plId === null) path = `/request`;
-  const result = await axios.post(POLICY_ROUTE + path, {
+  const result = await clientWithToken.post(POLICY_ROUTE + path, {
     plId,
     pfId,
     rqName,
@@ -370,7 +416,7 @@ interface IStaticsByMonth {
 
 export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
   const path = `/month`;
-  const response = await axios.get(STATICS_ROUTE + path);
+  const response = await client.get(STATICS_ROUTE + path);
   const result = response.data.map((it: IStaticsByMonth) => ({
     ...it,
     id: it.smId,
@@ -388,7 +434,7 @@ export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
 
 export const getDevToken = async () => {
   const path = `/token?key=ssa-dev-key-v1`;
-  const result = await axios.get(DEV_ROUTE + path);
+  const result = await client.get(DEV_ROUTE + path);
   const accessToken = result.data;
   document.cookie = `accessToken=${accessToken}`;
 };
@@ -400,7 +446,7 @@ export const getJWTClaims = async (
   role: string;
 }> => {
   const path = `/token/claims?token=${accessToken}`;
-  const response = await axios.get(DEV_ROUTE + path);
+  const response = await client.get(DEV_ROUTE + path);
   // const dummy = {
   //   userId: 1,
   //   role: "ROLE_ADMIN",
