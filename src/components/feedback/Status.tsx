@@ -18,7 +18,7 @@ const Status = ({ isLoading, error, isData, className }: StatusProps) => {
         <div className={className}>
           {isLoading && <Loader />}
           {error instanceof Error && <UnknownError error={error} />}
-          {!isLoading && !isData && <NoData />}
+          {!isLoading && !error && !isData && <NoData />}
         </div>
       )}
     </>

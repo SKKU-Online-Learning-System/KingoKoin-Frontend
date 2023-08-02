@@ -62,8 +62,8 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
       <ConfirmDialog
         open={open}
         handleConfirm={() => {
-          setOpen(false);
           postManualCoin(formToGrantedCoin(form));
+          setOpen(false);
         }}
         handleCancel={() => {
           setOpen(false);

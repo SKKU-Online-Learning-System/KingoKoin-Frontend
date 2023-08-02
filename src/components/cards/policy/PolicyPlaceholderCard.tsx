@@ -1,10 +1,10 @@
 import { Typography } from "@mui/material";
 
-interface PolicyPlaceholderCard {
+interface PolicyPlaceholderCardProps {
   className: string;
 }
 
-const PolicyPlaceholderCard = ({ className }: PolicyPlaceholderCard) => {
+const PolicyPlaceholderCard = ({ className }: PolicyPlaceholderCardProps) => {
   return (
     <div className={className}>
       <div className="flex flex-col gap-4 items-center justify-center w-full h-full border-dashed border-primary border-2 text-primary">

@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import "dayjs/locale/ko";
 
 export function getCookie(name: string) {
@@ -70,10 +70,9 @@ export function deleteAllCookies() {
 dayjs.locale("ko");
 export const stampToDayjs = (stamp: string) => dayjs(stamp);
 
-export const dayjsToFormat = (dayjs: dayjs.Dayjs) =>
-  dayjs.format("YYYY.MM.DD (ddd)");
+export const dayjsToFormat = (dayjs: Dayjs) => dayjs.format("YYYY.MM.DD (ddd)");
 
-export const dayjsToStamp = (dayjs: dayjs.Dayjs) =>
+export const dayjsToStamp = (dayjs: Dayjs) =>
   dayjs.format("YYYY-MM-DDTHH:mm:ss");
 
 export const validateStid = (stId: string) => {

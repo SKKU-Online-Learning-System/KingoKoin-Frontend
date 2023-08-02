@@ -1,9 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import dayjs from "dayjs";
 import SKKU_EMBLEM from "../assets/skku_emblem_kor.png";
 import SOSD_LOGO from "../assets/sosd_logo.svg";
 import { POLICY_REQUEST_TYPE } from "./apiManager";
-import { dayjsToStamp, getCookie } from "./utils";
+import { getCookie } from "./utils";
 
 const HOST = "https://kingocoin.cs.skku.edu";
 const COIN_ROUTE = "/api/coin";
@@ -84,77 +83,6 @@ const clientWithToken = axios.create({
 });
 clientWithToken.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
 
-// TODO: testApi 삭제
-export const testApi = () => {
-  console.log("getCoin");
-  console.log(getCoin(1));
-  console.log("----------------");
-  console.log("getCoinDetail");
-  console.log(getCoinDetail(1));
-  console.log("----------------");
-  console.log("getCoinDetailByAdId");
-  console.log(getCoinDetailByAdId(1));
-  console.log("----------------");
-  console.log("postManualCoin");
-  console.log(
-    postManualCoin({
-      stId: 123,
-      stName: "123",
-      plId: 123,
-      title: "123",
-      plus: false,
-      point: -123,
-      adId: 123,
-      gainedDate: dayjsToStamp(dayjs()),
-    })
-  );
-  console.log("----------------");
-  console.log("getUsersBySearch");
-  console.log(getUsersBySearch({ page: 0, pageSize: 10 }));
-  console.log(
-    getUsersBySearch({
-      page: 0,
-      pageSize: 10,
-      column: "stId",
-      search: "123456",
-    })
-  );
-  console.log(
-    getUsersBySearch({
-      page: 0,
-      pageSize: 10,
-      column: "stId",
-      search: "20",
-    })
-  );
-  console.log("----------------");
-  console.log("getUserDetail");
-  console.log(getUserDetail(1));
-  console.log("----------------");
-  console.log("getPolicies");
-  console.log(getPolicies("me"));
-  console.log("----------------");
-  console.log("postPolicyRequest");
-  console.log(
-    postPolicyRequest({
-      plId: 123,
-      pfId: 123,
-      rqName: "123",
-      rqPlus: true,
-      rqPoint: 123,
-      rqReason: "123",
-      rqType: POLICY_REQUEST_TYPE.UPDATE,
-    })
-  );
-  console.log("----------------");
-  console.log("getStaticsByMonth");
-  console.log(getStaticsByMonth());
-  console.log("----------------");
-  console.log("getJWTClaims");
-  console.log(getJWTClaims(getCookie(JWT_COOKIE)!));
-  console.log("----------------");
-};
-
 /* Coin */
 
 interface ICoin {
@@ -170,10 +98,6 @@ interface ICoin {
 export const getCoin = async (userId: number): Promise<ICoin> => {
   const path = `/${userId}`;
   const response = await client.get(COIN_ROUTE + path);
-  console.log("getCoin...");
-  console.log(`userId: ${userId}`);
-  console.log(response.data);
-  console.log("----------------");
   return response.data;
 };
 // getCoin 사용 예제
@@ -207,11 +131,6 @@ export const getCoinDetail = async (userId: number): Promise<ICoinDetail[]> => {
     ...it,
     id: it.dtId,
   }));
-
-  console.log("getCoinDetail...");
-  console.log(`userId: ${userId}`);
-  console.log(result);
-  console.log("----------------");
   return result;
 };
 // getCoinDetail 사용 예제
@@ -224,12 +143,8 @@ export const getCoinDetail = async (userId: number): Promise<ICoinDetail[]> => {
 export const getCoinDetailByAdId = async (
   adId: number
 ): Promise<ICoinDetail[]> => {
-  const path = `/admin/${adId}`;
-  const response = await client.get(COIN_ROUTE + path);
-  console.log("getCoinDetailByAdId...");
-  console.log(`adId: ${adId}`);
-  console.log(response.data);
-  console.log("----------------");
+  const path = `/admin/detail`;
+  const response = await clientWithToken.get(COIN_ROUTE + path);
   return response.data;
 };
 // getCoinDetailByAdId 사용 예제
@@ -246,7 +161,6 @@ interface IGrantedCoin {
   title: string;
   plus: boolean;
   point: number;
-  adId: number;
   gainedDate: string;
 }
 
@@ -257,35 +171,19 @@ export const postManualCoin = async ({
   title,
   plus,
   point,
-  adId,
   gainedDate,
 }: IGrantedCoin): Promise<{ dtId: number }> => {
   const path = `/point/manual`;
-  const response = await client.post(COIN_ROUTE + path, {
+  const response = await clientWithToken.post(COIN_ROUTE + path, {
     stId,
     stName,
     title,
     point,
-    adId,
     plId,
     plus,
     gainedDate,
   });
 
-  console.log("postManualCoin...");
-  console.log(`manualCoin: }`);
-  console.log({
-    stId,
-    stName,
-    plId,
-    title,
-    plus,
-    point,
-    adId,
-    gainedDate,
-  });
-  console.log(response.data);
-  console.log("----------------");
   return response.data;
 };
 
@@ -324,15 +222,6 @@ export const getUsersBySearch = async ({
     data: response.data.map((it: IUser) => ({ ...it, id: it.userId })),
     length: response.data.length,
   };
-  console.log("postManualCoin...");
-  console.log("option:");
-  console.log({
-    order,
-    column,
-    search,
-  });
-  console.log(response);
-  console.log("----------------");
   return result;
 };
 // getUsersBySearch 사용 예제
@@ -353,10 +242,6 @@ interface IUserDetail {
 export const getUserDetail = async (userId: number): Promise<IUserDetail> => {
   const path = `/detail/${userId}`;
   const response = await client.get(USER_ROUTE + path);
-  console.log("getUserDetail...");
-  console.log(`userId: ${userId}`);
-  console.log(response.data);
-  console.log("----------------");
   return response.data;
 };
 // getUserDetail 사용 예제
@@ -376,18 +261,14 @@ interface Policy {
   available: boolean;
 }
 
-// TODO: dummy 삭제
 export const getPolicies = async (only?: "me"): Promise<Policy[]> => {
-  let path = ``;
+  let path = `/`;
   if (only) path = `/?only=${only}`;
   const response = await clientWithToken.get(POLICY_ROUTE + path);
-  const result = response.data.map((it: Policy) => ({ ...it, id: it.plId }));
-
-  console.log("getPolicies...");
-  console.log(`only: ${only}`);
-  console.log(result);
-  console.log("----------------");
-
+  const result = response.data.map((it: Policy) => ({
+    ...it,
+    id: it.plId,
+  }));
   return result;
 };
 // getPolicies 사용 예제
@@ -398,7 +279,7 @@ export const getPolicies = async (only?: "me"): Promise<Policy[]> => {
 // } = useQuery(["policies"], () => getPolicies());
 
 interface IPolicyRequest {
-  plId: number;
+  plId?: number;
   pfId: number;
   rqName: string;
   rqPlus: boolean;
@@ -417,7 +298,7 @@ export const postPolicyRequest = async ({
   rqType,
 }: IPolicyRequest): Promise<{ rqId: number }> => {
   let path = `/request?plId=${plId}`;
-  if (rqType === "CREATE" || plId === null) path = `/request`;
+  if (rqType === "CREATE" || !plId) path = `/request`;
   const result = await clientWithToken.post(POLICY_ROUTE + path, {
     plId,
     pfId,
@@ -427,20 +308,6 @@ export const postPolicyRequest = async ({
     rqPlus,
     rqType,
   });
-
-  console.log("postPolicyRequest...");
-  console.log("policyRequest: ");
-  console.log({
-    plId,
-    pfId,
-    rqName,
-    rqPlus,
-    rqPoint,
-    rqReason,
-    rqType,
-  });
-  console.log(result);
-  console.log("----------------");
 
   return result.data;
 };
@@ -463,9 +330,6 @@ export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
     ...it,
     id: it.smId,
   }));
-  console.log("getStaticsByMonth...");
-  console.log(result);
-  console.log("----------------");
   return result;
 };
 // getStaticsByMonth 사용 예제
@@ -492,8 +356,5 @@ export const getJWTClaims = async (
 }> => {
   const path = `/token/claims?token=${accessToken}`;
   const response = await client.get(DEV_ROUTE + path);
-  console.log("getJWTClaims...");
-  console.log(response.data);
-  console.log("----------------");
   return response.data;
 };

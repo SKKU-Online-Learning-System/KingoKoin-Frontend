@@ -21,7 +21,7 @@ import * as xlsx from "xlsx";
 import { getPolicies, postManualCoin } from "../../../common/api";
 import ConfirmDialog from "../../ConfirmDialog";
 import Status from "../../feedback/Status";
-import { PL_ID_MANUAL } from "../../../common/apiManager";
+import { PL_ID_MANUAL, formToGrantedCoin } from "../../../common/apiManager";
 
 interface ExcelUploaderProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -110,7 +110,7 @@ const ExcelCoinGrantCard = ({
   const [excel, setExcel] = useState<IExcelRow[]>([]);
 
   interface IExcelRow {
-    학번: number;
+    학번: string;
     이름: string;
   }
 
@@ -143,6 +143,15 @@ const ExcelCoinGrantCard = ({
       <ConfirmDialog
         open={open}
         handleConfirm={() => {
+          excel.forEach((it) =>
+            postManualCoin(
+              formToGrantedCoin({
+                ...form,
+                stName: it.이름,
+                stId: it.학번,
+              })
+            )
+          );
           setOpen(false);
         }}
         handleCancel={() => {
