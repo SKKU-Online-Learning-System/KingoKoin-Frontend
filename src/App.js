@@ -10,7 +10,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "./App.css";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Koin from "./pages/Koin/Koin";
-import Main from "./pages/Main/Main";
+import Main from "./pages/Main/Main_Video";
 import Login from "./pages/Login/Login";
 import NotFound from "./pages/NotFound/NotFound";
 import Policies from "./pages/Policies/Policies";

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import logo from "../../assets/main_logo_eng.png";
-import banner from "../../assets/video.mp4";
-import main from "../../assets/main.jpg";
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -174,7 +172,7 @@ function Main() {
             <div className="bg-lightGray h-[0.5px]"></div>
             <div className="relative flex justify-center mb-8">
                 <video muted autoPlay loop  className="w-full">
-                    <source src={banner} type="video/mp4"/>
+                    <source src="https://svr.skku.edu/sw/main_video.mp4" type="video/mp4"/>
                 </video>
               <p className="absolute select-none h-full w-full flex justify-center items-center bottom-0 right-0 bg-gradient-to-t from-black opacity-80 to-transparent p-4"></p>
             </div>
