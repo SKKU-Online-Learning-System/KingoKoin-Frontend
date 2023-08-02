@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import logo from "../../assets/main_logo_eng.png";
 import banner from "../../assets/banner.jpg";
-import main from "../../assets/main.jpg";
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';

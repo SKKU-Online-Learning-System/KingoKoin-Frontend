@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import logo from "../../assets/main_logo_eng.png";
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
@@ -37,6 +37,24 @@ function Main() {
       },
     });
   
+    const [scroll, setScroll] = useState(false);
+
+    useEffect(() => {
+        window.addEventListener('scroll', handleScroll);
+        return () => {
+          window.removeEventListener('scroll', handleScroll); 
+        };
+      }, []);
+
+    const handleScroll = () => {
+        if(window.scrollY < 50){
+          setScroll(true);
+        }else{
+          setScroll(false);
+        }
+
+    };
+      
     const { isLoading: faqIsLoading, error: faqError, data: faq} = useQuery("faq", fetchFaqs);
 
     if(faqIsLoading) return <Loader/>;
@@ -121,20 +139,26 @@ function Main() {
       );
     }
     
-        
-    function Logo() {
-        return (
-        <div className="flex justify-between items-center bg-background px-8 py-8 pt-6 pb-6">
+    function Header() {
+      return (
+        <div className="bg-opacity-0 z-10">
+          <div className="flex items-center justify-end bg-primary h-[40px] p-1">
+            <a href="/login" className="pr-8 m-2 text-onPrimary font-noto-sans-kr font-bold">KINGO ID LOGIN</a>
+          </div>
+          <div className="flex justify-between items-center px-8 py-8 pt-6 pb-6">
             <div className="flex items-center gap-4">
-            <img src={logo} alt="SKKU logo" className="h-12" />
-            <span className=" text-lightGray text-logo">|</span>
-            <span className="text-logo" style={{ whiteSpace: "nowrap" }}>
+              <img src={logo} alt="SKKU logo" className="h-12" />
+              <span className=" text-lightGray text-logo">|</span>
+              <span className="text-logo" style={{ whiteSpace: "nowrap" }}>
                 킹고코인
-            </span>
+              </span>
             </div>
+          </div>
+          <div className="bg-lightGray h-[0.5px]"></div>
         </div>
-        );
+      );
     }
+    
     
   
     function Footer() {
@@ -160,23 +184,36 @@ function Main() {
             </div>
         );
     }
-  
-    
-    return (
-    <div className="bg-surface">
-        <div className="min-h-screen">
+
+    function Video() {
+      return(
+        <div className="relative flex justify-center mb-8">
+          <video muted autoPlay loop  className="w-full">
+            <source src={banner} type="video/mp4"/>
+          </video>
+          <div className="w-full absolute z-10">
             <div className="flex items-center justify-end bg-primary h-[40px] p-1">
-                <a href="/login" className="pr-8 m-2 text-onPrimary font-noto-sans-kr font-bold">KINGO ID LOGIN</a>
+              <a href="/login" className="pr-8 m-2 text-onPrimary font-noto-sans-kr font-bold">KINGO ID LOGIN</a>
             </div>
-            <Logo></Logo>
-            <div className="bg-lightGray h-[0.5px]"></div>
-            <div className="relative flex justify-center mb-8">
-                <video muted autoPlay loop  className="w-full">
-                    <source src="https://svr.skku.edu/sw/main_video.mp4" type="video/mp4"/>
-                </video>
-              <p className="absolute select-none h-full w-full flex justify-center items-center bottom-0 right-0 bg-gradient-to-t from-black opacity-80 to-transparent p-4"></p>
-            </div>
-                <Container fixed>
+            <div className="flex justify-between items-center px-8 py-8 pt-6 pb-6 bg-gradient-to-t from-transparent to-black opacity-80">
+              <div className="flex items-center gap-4">
+                <img src={logo} alt="SKKU logo" className="h-12" />
+                <span className=" text-lightGray text-logo">|</span>
+                <span className="text-logo text-white" style={{ whiteSpace: "nowrap" }}>
+                  킹고코인
+                </span>
+              </div>
+            </div>            
+          </div>
+          <p className="absolute select-none h-full w-full flex justify-center items-center bottom-0 right-0 bg-gradient-to-t from-black opacity-80 to-transparent p-4"></p>
+        </div>
+      );
+    }
+    function MainContent() {
+      return(
+        <div className="bg-surface">
+          <div className="min-h-screen">            
+            <Container fixed>
                 <ThemeProvider theme={theme}>
                     <TabContext value={value}>
                     <Box sx={{ width: '100%', boxShadow: '0px 8px 10px rgba(0, 0, 0, 0.1)' }}>
@@ -250,6 +287,15 @@ function Main() {
         
         <Footer></Footer>
     </div>
+
+      );
+    }
+  
+    
+    return (
+      <div className="bg-surface">
+        <div className="min-h-screen">{scroll ? <Video /> : <MainContent />}</div>
+      </div>
     );
 }
   export default Main;
