@@ -43,11 +43,10 @@ const UserChartCard = ({ userId, pageSize, className }: UserChartProps) => {
           isLoading={statisticIsLoading}
           error={statisticError}
           isData={statistic && statistic.length > 0}
-          className="h-[160px]"
+          className="h-[162.4px]"
         />
         {render && (
           <DataGrid
-            className="h-[160px]"
             rows={statistic}
             columns={columns}
             initialState={{

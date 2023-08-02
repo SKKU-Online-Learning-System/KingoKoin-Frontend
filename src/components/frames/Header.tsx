@@ -1,12 +1,35 @@
 import { useMatch } from "react-router-dom";
 import SKKU_LOGO from "../../assets/main_logo_eng.png";
 import { Logout } from "@mui/icons-material";
+import { IAuth, IUserDetail, getUserDetail } from "../../common/api";
+import { logout } from "../../common/apiManager";
+import { useQuery } from "react-query";
 
-function Header() {
-  // TODO: 로그인 상태 확인 및 정보를 state로 전달받아 표시
-  // TODO: null 값일 경우 로그인을 표시한다.
-  // TODO: main 화면일 경우 보여주지 않는다.
+interface HeaderProps {
+  login?: IAuth;
+}
+
+function Header({ login }: HeaderProps) {
   const match = useMatch("main");
+
+  // login 상태가 아닐 경우 빈 객체 반환
+  const {
+    isLoading: userDetailIsLoading,
+    error: userDetailError,
+    data: userDetail,
+  } = useQuery(["userDetail", login?.userId], () =>
+    login
+      ? getUserDetail(login.userId)
+      : new Promise<IUserDetail>((resolve, reject) =>
+          resolve({
+            stId: 0,
+            stName: "",
+            stDegree: "",
+            stStatus: "",
+            stDept: "",
+          })
+        )
+  );
 
   return (
     <div className="flex justify-between items-center w-screen max-w-full bg-background px-16 py-8">
@@ -18,13 +41,13 @@ function Header() {
         </span>
       </div>
       <div className="flex items-center gap-4 text-label-l text-onSurface">
-        {!match && (
+        {!match && userDetail && (
           <>
-            <span>소프트웨어학과</span>
+            <span>{userDetail.stName}</span>
             <span>|</span>
-            <span>율전이</span>
+            <span>{userDetail.stStatus}</span>
             <span>|</span>
-            <Logout className="w-6 h-6" />
+            <Logout className="w-4 h-4 hover:cursor-pointer" onClick={logout} />
           </>
         )}
       </div>

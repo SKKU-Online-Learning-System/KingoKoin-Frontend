@@ -1,18 +1,19 @@
-import { useState } from "react";
+import { ExpandMore } from "@mui/icons-material";
 import {
-  Tabs,
-  Tab,
   Accordion,
-  AccordionSummary,
   AccordionDetails,
+  AccordionSummary,
+  Tab,
+  Tabs,
   Typography,
 } from "@mui/material";
-import { ExpandMore } from "@mui/icons-material";
+import { useState } from "react";
+import banner from "../assets/banner.jpg";
 import { FAQS, PLATFORMS, getDevToken } from "../common/api";
-import Header from "../components/frames/Header";
-import Footer from "../components/frames/Footer";
-import SiteLink from "../components/SiteLink";
 import { PROD_HOST } from "../common/apiManager";
+import SiteLink from "../components/SiteLink";
+import Footer from "../components/frames/Footer";
+import Header from "../components/frames/Header";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -55,16 +56,29 @@ function Main() {
         </a>
       </div>
       <Header />
+      <div className="relative flex justify-center mb-8">
+        <img
+          src={banner}
+          className="w-full"
+          alt="성균관대학교 삼성정보학술관 전경 사진"
+        />
+        <p className="absolute select-none h-full w-full flex justify-center items-center bottom-0 right-0 bg-gradient-to-t from-black opacity-80 to-transparent text-right text-white font-bold text-[60px] p-4">
+          K I N G O C O I N
+        </p>
+      </div>
       <div className="w-[1152px] py-8 min-h-screen">
         <Tabs
           value={value}
           onChange={handleChange}
           variant="fullWidth"
-          className="h-16"
+          className="h-16 shadow-md"
         >
-          <Tab label="킹고코인이란?" className="h-16 text-title-l" />
-          <Tab label="자주 물어보는 질문" className="h-16 text-title-l" />
-          <Tab label="관련 사이트" className="h-16 text-title-l" />
+          <Tab label="킹고코인이란?" className="h-16 text-title-l shadow-sm" />
+          <Tab
+            label="자주 물어보는 질문"
+            className="h-16 text-title-l shadow-sm"
+          />
+          <Tab label="관련 사이트" className="h-16 text-title-l shadow-sm" />
         </Tabs>
         <TabPanel value={value} index={0} label="킹고코인이란?">
           킹고코인은 성균관대에 학생들의 비교과 활동에 대한 인센티브로서

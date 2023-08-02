@@ -230,7 +230,7 @@ export const getUsersBySearch = async ({
 //   data: users,
 // } = useQuery(["users"], () => getUsersBySearch(searchOptions));
 
-interface IUserDetail {
+export interface IUserDetail {
   stId: number;
   stName: string;
   stDegree: string;
@@ -348,12 +348,12 @@ export const getDevToken = async () => {
   refreshClientToken();
 };
 
-export const getJWTClaims = async (
-  accessToken: string
-): Promise<{
+export interface IAuth {
   userId: number;
   role: USER_ROLE;
-}> => {
+}
+
+export const getJWTClaims = async (accessToken: string): Promise<IAuth> => {
   const path = `/token/claims?token=${accessToken}`;
   const response = await client.get(ROUTE.DEV + path);
   return response.data;

@@ -70,9 +70,11 @@ const PolicySearchCard = ({
             isLoading={policiesIsLoading}
             error={policiesError}
             isData={policies && policies.length > 0}
+            className="h-[318.4px]"
           />
           {render && (
             <DataGrid
+              className="h-[318.4px]"
               rows={policies}
               columns={columns}
               initialState={{

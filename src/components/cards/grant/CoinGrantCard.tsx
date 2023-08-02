@@ -3,7 +3,7 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Grow,
+  Collapse,
   MenuItem,
   TextField,
 } from "@mui/material";
@@ -120,6 +120,7 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                     pfName:
                       findPolicyByPlId(e.target.value)?.pfName ||
                       "제공처를 찾지 못했습니다.",
+                    point: findPolicyByPlId(e.target.value)?.point || 0,
                   });
                   if (e.target.value == PL_ID_MANUAL) setIsMenual(true);
                   else setIsMenual(false);
@@ -138,13 +139,14 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                 value={form.pfName}
                 size="small"
               />
-              <Grow in={isManual} mountOnEnter unmountOnExit>
+              <Collapse in={isManual} mountOnEnter unmountOnExit>
                 <TextField
+                  className="w-full"
                   placeholder="제목을 입력해주세요."
                   label="제목"
                   size="small"
                 />
-              </Grow>
+              </Collapse>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
                   value={form.gainedDate}

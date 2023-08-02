@@ -13,6 +13,7 @@ const router = createBrowserRouter([
   {
     path: "/main",
     element: <Main />,
+    errorElement: <NotFound />,
   },
   {
     path: "/main",
@@ -41,6 +42,7 @@ const router = createBrowserRouter([
         ],
       },
     ],
+    errorElement: <NotFound />,
   },
   {
     path: "/main/*",

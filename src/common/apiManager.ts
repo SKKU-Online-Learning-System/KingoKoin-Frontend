@@ -53,16 +53,6 @@ export const formToGrantedCoin = ({
   adId,
   gainedDate,
 }: IGrantedCoinForm) => {
-  console.log("formToGrantedCoin input: ");
-  console.log({
-    stId,
-    stName,
-    plId,
-    title,
-    point,
-    adId,
-    gainedDate,
-  });
   const result = {
     stId: parseInt(stId),
     stName,
@@ -73,8 +63,6 @@ export const formToGrantedCoin = ({
     adId,
     gainedDate: dayjsToStamp(gainedDate),
   };
-  console.log("formToGrantedCoin result: ");
-  console.log(result);
   return result;
 };
 
@@ -100,17 +88,6 @@ export const formToPolicyRequest = ({
   rqReason,
   rqType,
 }: IPolicyRequestForm) => {
-  console.log("formToPolicyRequest input: ");
-  console.log({
-    plId,
-    pfId,
-    pfName,
-    rqName,
-    rqPlus,
-    rqPoint,
-    rqReason,
-    rqType,
-  });
   const result = {
     plId: parseInt(plId),
     pfId: pfId,
@@ -120,8 +97,6 @@ export const formToPolicyRequest = ({
     rqReason,
     rqType,
   };
-  console.log("formToPolicyRequest result: ");
-  console.log(result);
   return result;
 };
 
@@ -184,7 +159,7 @@ export const logout = () => {
   window.location.replace(PROD_HOST + "logout");
 };
 
-export const isLogin = async () => {
+export const check = async () => {
   const accessToken = getCookie(JWT_COOKIE.ACCESS_TOKEN);
   if (!accessToken) return undefined;
 
@@ -208,6 +183,8 @@ export const setAccessCookie = (token: string) => {
   setCookie(JWT_COOKIE.ACCESS_TOKEN, token, {
     "max-age": 60 * 60,
     path: "/main",
+    secure: true,
+    samesite: "strict",
   });
 };
 
@@ -215,5 +192,7 @@ export const setRefreshCookie = (token: string) => {
   setCookie(JWT_COOKIE.REFRESH_TOKEN, token, {
     "max-age": 60 * 60 * 24 * 14,
     path: "/main",
+    secure: true,
+    samesite: "strict",
   });
 };

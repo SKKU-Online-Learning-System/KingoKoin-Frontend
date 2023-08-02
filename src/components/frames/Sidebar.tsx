@@ -6,37 +6,46 @@ import {
   ShowChartOutlined,
 } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
+import { USER_ROLE } from "../../common/apiManager";
+import { IAuth } from "../../common/api";
 
-const Sidebar = () => {
-  // TODO: 권한에 따라 보여줄 메뉴 수정
+interface SidebarProps {
+  login?: IAuth;
+}
 
-  const menuItem = [
-    {
-      path: "/main/dashboard",
-      name: "대시보드",
-      icon: <DashboardOutlined />,
-    },
-    {
-      path: "/main/admin/users",
-      name: "사용자 조회",
-      icon: <PersonOutlineOutlined />,
-    },
-    {
-      path: "/main/admin/coin",
-      name: "코인 부여",
-      icon: <MonetizationOnOutlined />,
-    },
-    {
-      path: "/main/admin/analysis",
-      name: "코인 분석",
-      icon: <ShowChartOutlined />,
-    },
-    {
-      path: "/main/admin/policies",
-      name: "정책 관리",
-      icon: <PolicyOutlined />,
-    },
-  ];
+const Sidebar = ({ login }: SidebarProps) => {
+  const isAdmin = login?.role === USER_ROLE.ADMIN;
+
+  const menuItem = isAdmin
+    ? [
+        {
+          path: "/main/admin/users",
+          name: "사용자 조회",
+          icon: <PersonOutlineOutlined />,
+        },
+        {
+          path: "/main/admin/coin",
+          name: "코인 부여",
+          icon: <MonetizationOnOutlined />,
+        },
+        {
+          path: "/main/admin/policies",
+          name: "정책 관리",
+          icon: <PolicyOutlined />,
+        },
+        {
+          path: "/main/admin/analysis",
+          name: "코인 분석",
+          icon: <ShowChartOutlined />,
+        },
+      ]
+    : [
+        {
+          path: "/main/dashboard",
+          name: "대시보드",
+          icon: <DashboardOutlined />,
+        },
+      ];
 
   return (
     <div className="w-[200px] flex flex-col p-8 pr-0 gap-8 text-center">

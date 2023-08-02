@@ -25,7 +25,6 @@ const UserSearchCard = ({
   handleRowClick,
   className,
 }: UserSearchCardProps) => {
-  // TODO: animation 추가
   const [searchOptions, setSearchOptions] = useState<ISearchOptions>({
     order: "desc",
     column: undefined,
@@ -127,10 +126,11 @@ const UserSearchCard = ({
             isLoading={usersIsLoading}
             error={usersError}
             isData={users && users.data.length > 0}
+            className="h-[318.4px]"
           />
           {render && (
             <DataGrid
-              className="h-[370px]"
+              className="h-[318.4px]"
               rows={users.data}
               columns={columns}
               initialState={{

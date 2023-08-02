@@ -64,11 +64,11 @@ const UserCoinDetailCard = ({ userId, pageSize }: UserCoinDetailCardProps) => {
           isLoading={userCoinDetailIsLoading}
           error={userCoinDetailError}
           isData={userCoinDetail && userCoinDetail.length > 0}
-          className="h-[300px]"
+          className="h-[318.4px]"
         />
         {render && (
           <DataGrid
-            className="h-[300px]"
+            className="h-[318.4px]"
             rows={userCoinDetail}
             columns={columns}
             initialState={{

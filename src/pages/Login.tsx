@@ -2,11 +2,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   JWT_COOKIE,
   USER_ROLE,
+  check,
   setAccessCookie,
   setRefreshCookie,
 } from "../common/apiManager";
-import useAuth from "../hooks/useLogin";
-import { getDevToken } from "../common/api";
+import { useQuery } from "react-query";
 
 const Login = () => {
   /* Auth */
@@ -18,14 +18,12 @@ const Login = () => {
   if (accessTokenParam) setAccessCookie(accessTokenParam);
   if (refreshTokenParam) setRefreshCookie(refreshTokenParam);
 
-  getDevToken();
-
   // 권한에 따라 리다이렉션
   const {
     isLoading: loginIsLoading,
     error: loginError,
-    data: isLogin,
-  } = useAuth();
+    data: login,
+  } = useQuery("login", check);
 
   const navigate = useNavigate();
 
@@ -42,7 +40,7 @@ const Login = () => {
     }
   };
 
-  if (!loginIsLoading && isLogin) redirectionByRole(isLogin.role);
+  if (!loginIsLoading && login) redirectionByRole(login.role);
 
   return <div>login</div>;
 };

@@ -4,7 +4,7 @@ import {
   Card,
   CardContent,
   CardHeader,
-  Grow,
+  Collapse,
   InputLabel,
   MenuItem,
   TextField,
@@ -25,7 +25,7 @@ import Status from "../../feedback/Status";
 
 interface ExcelUploaderProps {
   handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  className: string;
+  className?: string;
 }
 
 const ExcelUploader = ({ handleFileChange, className }: ExcelUploaderProps) => {
@@ -160,43 +160,45 @@ const ExcelCoinGrantCard = ({
       >
         {`${excel.length}명의 학생에게 ${form.point}코인을 부여하시겠습니까?`}
       </ConfirmDialog>
-      <Card className="w-[662px]">
+      <Card className="flex flex-col w-[662px]">
         <CardHeader
           title={"엑셀로 코인부여"}
           titleTypographyProps={{ variant: "display" }}
         />
-        <CardContent>
+        <CardContent className="flex flex-col flex-1">
           <Status
             isLoading={policiesIsLoading}
             error={policiesError}
             isData={policies && policies.length > 0}
-            className="h-[332px]"
+            className="flex-1"
           />
-          <div className="flex flex-col h-[332px]">
-            {render && excelIsLoading && (
-              <ExcelUploader
-                handleFileChange={handleFileChange}
-                className="h-[170px]"
-              />
-            )}
-            {render && !excelIsLoading && (
-              <DataGrid
-                className="overflow-y-scroll"
-                rows={excel}
-                columns={columns}
-                initialState={{
-                  pagination: {
-                    paginationModel: {
-                      pageSize: maxRow,
+          <div className="flex flex-col">
+            <div className="h-[170.4px]">
+              {render && excelIsLoading && (
+                <ExcelUploader
+                  handleFileChange={handleFileChange}
+                  className="h-full"
+                />
+              )}
+              {render && !excelIsLoading && (
+                <DataGrid
+                  className="overflow-y-scroll"
+                  rows={excel}
+                  columns={columns}
+                  initialState={{
+                    pagination: {
+                      paginationModel: {
+                        pageSize: maxRow,
+                      },
                     },
-                  },
-                }}
-                pageSizeOptions={[maxRow]}
-                rowHeight={rowHeight}
-                columnHeaderHeight={rowHeight}
-                hideFooter
-              />
-            )}
+                  }}
+                  pageSizeOptions={[maxRow]}
+                  rowHeight={rowHeight}
+                  columnHeaderHeight={rowHeight}
+                  hideFooter
+                />
+              )}
+            </div>
             <hr />
             {render && (
               <div className="flex flex-col gap-3">
@@ -233,13 +235,14 @@ const ExcelCoinGrantCard = ({
                     size="small"
                   />
                 </div>
-                <Grow in={isManual} mountOnEnter unmountOnExit>
+                <Collapse in={isManual} mountOnEnter unmountOnExit>
                   <TextField
+                    className="w-full"
                     placeholder="제목을 입력해주세요."
                     label="제목"
                     size="small"
                   />
-                </Grow>
+                </Collapse>
                 <div className="flex gap-2">
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DatePicker

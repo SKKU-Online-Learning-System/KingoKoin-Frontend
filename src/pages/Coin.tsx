@@ -1,4 +1,3 @@
-import { getDevToken } from "../common/api";
 import CoinGrantCard from "../components/cards/grant/CoinGrantCard";
 import ExcelCoinGrantCard from "../components/cards/grant/ExcelCoinGrantCard";
 import AdminCoinDetailCard from "../components/cards/table/AdminCoinDetailCard";

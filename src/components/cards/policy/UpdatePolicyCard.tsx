@@ -87,7 +87,7 @@ const UpdatePolicyCard = ({
         정말로 수정하시겠습니까?
       </ConfirmDialog>
       <div className={className}>
-        <Card className="relative w-full h-full">
+        <Card className="relative flex flex-col w-full h-full">
           <CardHeader
             title={form.rqName}
             titleTypographyProps={{ variant: "title-m" }}
@@ -102,7 +102,7 @@ const UpdatePolicyCard = ({
             subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
           />
           <Divider />
-          <CardContent>
+          <CardContent className="flex-1">
             <Status
               isLoading={policyIsLoading}
               error={policyError}
