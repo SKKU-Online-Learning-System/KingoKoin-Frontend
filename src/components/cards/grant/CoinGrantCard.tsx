@@ -15,9 +15,13 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { getPolicies, postManualCoin } from "../../../common/api";
 import ConfirmDialog from "../../ConfirmDialog";
-import { IForm, formToGrantedCoin, validateStid } from "../../../common/utils";
+import { validateStid } from "../../../common/utils";
 import Status from "../../feedback/Status";
-import { PL_ID_MANUAL } from "../../../common/apiManager";
+import {
+  IGrantedCoinForm,
+  formToGrantedCoin,
+  PL_ID_MANUAL,
+} from "../../../common/apiManager";
 
 interface CoinGrantCardProps {
   adId: number;
@@ -26,7 +30,7 @@ interface CoinGrantCardProps {
 const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
   // TODO: gainedDate를 비롯한 다른 속성값들의 Validation
 
-  const [form, setForm] = useState<IForm>({
+  const [form, setForm] = useState<IGrantedCoinForm>({
     stId: "",
     stName: "",
     plId: "",

@@ -1,7 +1,6 @@
 import {
   Button,
   Card,
-  CardActions,
   CardContent,
   CardHeader,
   Grow,
@@ -19,7 +18,6 @@ import React, { useState } from "react";
 import { UploadFile } from "@mui/icons-material";
 import { useQuery } from "react-query";
 import * as xlsx from "xlsx";
-import { IForm, formToGrantedCoin } from "../../../common/utils";
 import { getPolicies, postManualCoin } from "../../../common/api";
 import ConfirmDialog from "../../ConfirmDialog";
 import Status from "../../feedback/Status";
@@ -65,7 +63,7 @@ interface ExcelCoinGrantCardProps {
   rowHeight?: number;
 }
 
-interface IFormExcel {
+interface IExcelForm {
   plId: string;
   pfName: string;
   title: string;
@@ -83,7 +81,7 @@ const ExcelCoinGrantCard = ({
   // TODO: 파일 업로드 예외처리
   // TODO: 중복되는 부여 삭제
 
-  const [form, setForm] = useState<IFormExcel>({
+  const [form, setForm] = useState<IExcelForm>({
     plId: "",
     pfName: "",
     title: "",

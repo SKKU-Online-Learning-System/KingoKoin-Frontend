@@ -1,4 +1,4 @@
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import "dayjs/locale/ko";
 
 export function getCookie(name: string) {
@@ -83,36 +83,4 @@ export const validateStid = (stId: string) => {
   const dept = parseInt(stId.slice(4, 6));
   if (dept !== 31 && dept !== 71 && dept !== 72 && dept !== 73) return false;
   return true;
-};
-
-export interface IForm {
-  stId: string;
-  stName: string;
-  plId: string;
-  pfName: string;
-  title: string;
-  point: number;
-  adId: number;
-  gainedDate: Dayjs;
-}
-
-export const formToGrantedCoin = ({
-  stId,
-  stName,
-  plId,
-  title,
-  point,
-  adId,
-  gainedDate,
-}: IForm) => {
-  return {
-    stId: parseInt(stId),
-    stName,
-    plId: parseInt(plId),
-    title,
-    plus: point >= 0,
-    point,
-    adId,
-    gainedDate: dayjsToStamp(gainedDate),
-  };
 };

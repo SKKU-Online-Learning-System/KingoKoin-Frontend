@@ -16,22 +16,26 @@ const JWT_COOKIE = "accessToken";
 
 export const PLATFORMS = [
   {
+    pfId: 1,
     pfName: "온라인명륜당",
     pfLogo: null,
     pfLink: "https://mrdang.cs.skku.edu",
   },
   {
+    pfId: 2,
     pfName: "학과 행사 참석",
     pfLogo: SKKU_EMBLEM,
     pfLink:
       "https://sw.skku.edu/sw/notice.do?mode=list&srCategoryId1=1587&srSearchKey=&srSearchVal=",
   },
   {
+    pfId: 3,
     pfName: "오픈소스플랫폼",
     pfLogo: SOSD_LOGO,
     pfLink: "https://sosd.skku.edu",
   },
   {
+    pfId: 4,
     pfName: "킹고인과의 만남",
     pfLogo: SKKU_EMBLEM,
     pfLink:
@@ -365,14 +369,16 @@ export const getPolicies = async (only?: "me"): Promise<Policy[]> => {
     ],
   };
 
-  return response.data;
+  const result = response.data.map((it) => ({ ...it, id: it.plId }));
+
+  return result;
 };
 // getPolicies 사용 예제
 // const {
 //   isLoading: policiesIsLoading,
 //   error: policiesError,
 //   data: policies,
-// } = useQuery(["policies"], () => getPolicies(null));
+// } = useQuery(["policies"], () => getPolicies());
 
 interface IPolicyRequest {
   plId: number;

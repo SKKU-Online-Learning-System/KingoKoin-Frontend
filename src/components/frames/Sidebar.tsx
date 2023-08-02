@@ -18,7 +18,7 @@ const Sidebar = () => {
     },
     {
       path: "/main/admin/users",
-      name: "사용자 관리",
+      name: "사용자 조회",
       icon: <PersonOutlineOutlined />,
     },
     {

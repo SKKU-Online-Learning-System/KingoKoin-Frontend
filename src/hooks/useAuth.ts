@@ -3,15 +3,15 @@ import { useQuery } from "react-query";
 import { getJWTClaims } from "../common/api";
 import { deleteCookie, getCookie } from "../common/utils";
 
-const JWT_COOKIE = "accessToken";
+export const JWT_COOKIE = "accessToken";
 
-const useLogin = () => {
+const useAuth = () => {
   const cookie = getCookie(JWT_COOKIE);
 
   const {
     isLoading,
     error,
-    data: login,
+    data: auth,
   } = useQuery("auth", () => {
     getJWTClaims(cookie!);
   });
@@ -21,7 +21,10 @@ const useLogin = () => {
     window.location.reload(); // 새로고침
   }, []);
 
-  return { isLoading, error, login, logout };
+  return { isLoading, error, auth, logout };
 };
+// useAuth 사용 예제
 
-export default useLogin;
+const { isLoading: authIsLoading, error: authError, auth, logout } = useAuth();
+
+export default useAuth;

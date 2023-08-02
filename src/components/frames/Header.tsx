@@ -3,9 +3,9 @@ import SKKU_LOGO from "../../assets/main_logo_eng.png";
 import { Logout } from "@mui/icons-material";
 
 function Header() {
-  // 로그인 상태 확인 및 정보를 state로 전달받아 표시
-  // null 값일 경우 로그인을 표시한다.
-  // main 화면일 경우 보여주지 않는다.
+  // TODO: 로그인 상태 확인 및 정보를 state로 전달받아 표시
+  // TODO: null 값일 경우 로그인을 표시한다.
+  // TODO: main 화면일 경우 보여주지 않는다.
   const match = useMatch("main");
 
   return (
