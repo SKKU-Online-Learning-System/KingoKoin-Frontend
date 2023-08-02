@@ -17,7 +17,6 @@ import Policies from "./pages/Policies/Policies";
 import Users from "./pages/Users/Users";
 import Analysis from "./pages/Analysis/Analysis";
 
-
 import Sidebar from "./components/Sidebar";
 import Top1 from "./components/Top1";
 import Top2 from "./components/Top2";
@@ -85,7 +84,6 @@ function App() {
       },
     },
   });
-
 
   return (
     <ThemeProvider theme={lightTheme}>
