@@ -40,7 +40,17 @@ export const formToGrantedCoin = ({
   adId,
   gainedDate,
 }: IGrantedCoinForm) => {
-  return {
+  console.log("formToGrantedCoin input: ");
+  console.log({
+    stId,
+    stName,
+    plId,
+    title,
+    point,
+    adId,
+    gainedDate,
+  });
+  const result = {
     stId: parseInt(stId),
     stName,
     plId: parseInt(plId),
@@ -50,6 +60,9 @@ export const formToGrantedCoin = ({
     adId,
     gainedDate: dayjsToStamp(gainedDate),
   };
+  console.log("formToGrantedCoin result: ");
+  console.log(result);
+  return result;
 };
 
 export interface IPolicyRequestForm {
@@ -74,7 +87,18 @@ export const formToPolicyRequest = ({
   rqReason,
   rqType,
 }: IPolicyRequestForm) => {
-  return {
+  console.log("formToPolicyRequest input: ");
+  console.log({
+    plId,
+    pfId,
+    pfName,
+    rqName,
+    rqPlus,
+    rqPoint,
+    rqReason,
+    rqType,
+  });
+  const result = {
     plId: parseInt(plId),
     pfId: pfId,
     rqName,
@@ -83,6 +107,9 @@ export const formToPolicyRequest = ({
     rqReason,
     rqType,
   };
+  console.log("formToPolicyRequest result: ");
+  console.log(result);
+  return result;
 };
 
 export const getPlatformByPfId = (pfId: number) =>

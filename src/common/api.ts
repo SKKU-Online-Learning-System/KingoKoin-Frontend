@@ -170,6 +170,10 @@ interface ICoin {
 export const getCoin = async (userId: number): Promise<ICoin> => {
   const path = `/${userId}`;
   const response = await client.get(COIN_ROUTE + path);
+  console.log("getCoin...");
+  console.log(`userId: ${userId}`);
+  console.log(response.data);
+  console.log("----------------");
   return response.data;
 };
 // getCoin 사용 예제
@@ -204,6 +208,10 @@ export const getCoinDetail = async (userId: number): Promise<ICoinDetail[]> => {
     id: it.dtId,
   }));
 
+  console.log("getCoinDetail...");
+  console.log(`userId: ${userId}`);
+  console.log(result);
+  console.log("----------------");
   return result;
 };
 // getCoinDetail 사용 예제
@@ -218,6 +226,10 @@ export const getCoinDetailByAdId = async (
 ): Promise<ICoinDetail[]> => {
   const path = `/admin/${adId}`;
   const response = await client.get(COIN_ROUTE + path);
+  console.log("getCoinDetailByAdId...");
+  console.log(`adId: ${adId}`);
+  console.log(response.data);
+  console.log("----------------");
   return response.data;
 };
 // getCoinDetailByAdId 사용 예제
@@ -260,6 +272,20 @@ export const postManualCoin = async ({
     gainedDate,
   });
 
+  console.log("postManualCoin...");
+  console.log(`manualCoin: }`);
+  console.log({
+    stId,
+    stName,
+    plId,
+    title,
+    plus,
+    point,
+    adId,
+    gainedDate,
+  });
+  console.log(response.data);
+  console.log("----------------");
   return response.data;
 };
 
@@ -283,25 +309,30 @@ interface IUser {
   role: string;
 }
 
-// TODO: data.length 되돌리기
 export const getUsersBySearch = async ({
   order = "desc",
-  page,
-  pageSize,
   column,
   search,
 }: ISearchOptions): Promise<{ data: IUser[]; length: number }> => {
-  let path = `/?order=${order}&page=${page}&size=${pageSize}&column=${column}&search=${search}`;
+  let path = `/?order=${order}&column=${column}&search=${search}`;
 
   // (column == undefined || search == undefined): 모든 유저 검색
-  if (!column || !search)
-    path = `/?order=${order}&page=${page}&size=${pageSize}`;
+  if (!column || !search) path = `/?order=${order}`;
 
   const response = await client.get(USER_ROUTE + path);
   const result = {
     data: response.data.map((it: IUser) => ({ ...it, id: it.userId })),
     length: response.data.length,
   };
+  console.log("postManualCoin...");
+  console.log("option:");
+  console.log({
+    order,
+    column,
+    search,
+  });
+  console.log(response);
+  console.log("----------------");
   return result;
 };
 // getUsersBySearch 사용 예제
@@ -322,6 +353,10 @@ interface IUserDetail {
 export const getUserDetail = async (userId: number): Promise<IUserDetail> => {
   const path = `/detail/${userId}`;
   const response = await client.get(USER_ROUTE + path);
+  console.log("getUserDetail...");
+  console.log(`userId: ${userId}`);
+  console.log(response.data);
+  console.log("----------------");
   return response.data;
 };
 // getUserDetail 사용 예제
@@ -345,31 +380,13 @@ interface Policy {
 export const getPolicies = async (only?: "me"): Promise<Policy[]> => {
   let path = ``;
   if (only) path = `/?only=${only}`;
-  // const response = await clientWithToken.get(POLICY_ROUTE + path);
-  const response = {
-    data: [
-      {
-        plId: 123,
-        plName: "123",
-        plCode: "123",
-        pfName: "123",
-        plus: true,
-        point: 123,
-        available: true,
-      },
-      {
-        plId: 2,
-        plName: "2",
-        plCode: "2",
-        pfName: "2",
-        plus: false,
-        point: -2,
-        available: false,
-      },
-    ],
-  };
+  const response = await clientWithToken.get(POLICY_ROUTE + path);
+  const result = response.data.map((it: Policy) => ({ ...it, id: it.plId }));
 
-  const result = response.data.map((it) => ({ ...it, id: it.plId }));
+  console.log("getPolicies...");
+  console.log(`only: ${only}`);
+  console.log(result);
+  console.log("----------------");
 
   return result;
 };
@@ -411,6 +428,20 @@ export const postPolicyRequest = async ({
     rqType,
   });
 
+  console.log("postPolicyRequest...");
+  console.log("policyRequest: ");
+  console.log({
+    plId,
+    pfId,
+    rqName,
+    rqPlus,
+    rqPoint,
+    rqReason,
+    rqType,
+  });
+  console.log(result);
+  console.log("----------------");
+
   return result.data;
 };
 
@@ -432,6 +463,9 @@ export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
     ...it,
     id: it.smId,
   }));
+  console.log("getStaticsByMonth...");
+  console.log(result);
+  console.log("----------------");
   return result;
 };
 // getStaticsByMonth 사용 예제
@@ -458,9 +492,8 @@ export const getJWTClaims = async (
 }> => {
   const path = `/token/claims?token=${accessToken}`;
   const response = await client.get(DEV_ROUTE + path);
-  // const dummy = {
-  //   userId: 1,
-  //   role: "ROLE_ADMIN",
-  // };
+  console.log("getJWTClaims...");
+  console.log(response.data);
+  console.log("----------------");
   return response.data;
 };
