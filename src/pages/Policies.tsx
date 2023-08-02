@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { POLICY_REQUEST_TYPE } from "../common/apiManager";
 import CreatePolicyCard from "../components/cards/policy/CreatePolicyCard";
+import PolicyPlaceholderCard from "../components/cards/policy/PolicyPlaceholderCard";
 import UpdatePolicyCard from "../components/cards/policy/UpdatePolicyCard";
 import PolicySearchCard from "../components/cards/table/PolicySearchCard";
-import PolicyPlaceholderCard from "../components/cards/policy/PolicyPlaceholderCard";
 
 interface IPolicyCard {
   type: POLICY_REQUEST_TYPE;

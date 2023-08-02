@@ -1,19 +1,18 @@
-import Frame from "./components/frames/Frame";
-import Main from "./pages/Main";
-import Dashboard from "./pages/Dashboard";
-import Users from "./pages/Users";
-import Coin from "./pages/Coin";
-import Policies from "./pages/Policies";
-import Analysis from "./pages/Analysis";
-import NotFound from "./pages/NotFound";
-
 import { createBrowserRouter, Outlet } from "react-router-dom";
+import Frame from "./components/frames/Frame";
+import Analysis from "./pages/Analysis";
+import Coin from "./pages/Coin";
+import Dashboard from "./pages/Dashboard";
+import Main from "./pages/Main";
+import NotFound from "./pages/NotFound";
+import Policies from "./pages/Policies";
+import Users from "./pages/Users";
+import Login from "./pages/Login";
 
 const router = createBrowserRouter([
   {
     path: "/main",
     element: <Main />,
-    errorElement: <NotFound />,
   },
   {
     path: "/main",
@@ -22,6 +21,10 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Dashboard />,
+      },
+      {
+        path: "login",
+        element: <Login />,
       },
       {
         path: "admin",
@@ -38,6 +41,10 @@ const router = createBrowserRouter([
         ],
       },
     ],
+  },
+  {
+    path: "/main/*",
+    element: <NotFound />,
     errorElement: <NotFound />,
   },
 ]);

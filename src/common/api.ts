@@ -1,17 +1,22 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
 import SKKU_EMBLEM from "../assets/skku_emblem_kor.png";
 import SOSD_LOGO from "../assets/sosd_logo.svg";
-import { POLICY_REQUEST_TYPE } from "./apiManager";
-import { getCookie } from "./utils";
+import {
+  POLICY_REQUEST_TYPE,
+  USER_ROLE,
+  client,
+  clientWithToken,
+  refreshClientToken,
+  setAccessCookie,
+} from "./apiManager";
 
-const HOST = "https://kingocoin.cs.skku.edu";
-const COIN_ROUTE = "/api/coin";
-const USER_ROUTE = "/api/user";
-const POLICY_ROUTE = "/api/policy";
-const STATICS_ROUTE = "/api/statics";
-const DEV_ROUTE = "/api/dev";
-
-const JWT_COOKIE = "accessToken";
+enum ROUTE {
+  COIN = "/api/coin",
+  USER = "/api/user",
+  POLICY = "/api/policy",
+  STATICS = "/api/statics",
+  DEV = "/api/dev",
+  AUTH = "/api/auth",
+}
 
 export const PLATFORMS = [
   {
@@ -46,42 +51,34 @@ export const FAQS = [
   {
     faqId: 0,
     question: "Q. 킹고코인에 사용기한이 있나요?",
-    answer: "A. 킹고코인은 매년 초기화됩니다.",
+    answer:
+      "A. 킹고코인은 매년 초기화됩니다. 따라서 보유 중인 코인이 사라지기 전에 적절하게 사용하는 것이 권장됩니다.",
   },
   {
     faqId: 1,
+    question: "Q. 킹고코인을 어디에 사용할 수 있나요?",
+    answer:
+      "A. 킹고코인은 AWS, GPU 개인사용 크레딧, IT 기기대여, 세미나실 사용 등에 사용될 수 있으며, 코리아챌린지와 글로벌챌린지를 비롯한 소프트웨어학과내 각종 행사에 있어서 선발 기준에 적용될 수 있습니다.",
+  },
+  {
+    faqId: 2,
+    question: "Q. 타과생도 킹고코인을 사용할 수 있나요?",
+    answer:
+      "A. 현재 킹고코인은 소프트웨어학과 원전공생들을 대상으로 하고 있습니다.",
+  },
+  {
+    faqId: 3,
+    question: "Q. 코인 내역에 오류가 발생한 것 같은데 어떻게 해야하나요?",
+    answer:
+      "A. 홈페이지 아래 이메일로 코인 내역의 스크린샷과 함께 문의 메일을 작성해주시면 확인 후 조치해드리도록 하겠습니다.",
+  },
+  {
+    faqId: 4,
     question: "Q. 휴학생도 킹고코인을 사용할 수 있나요?",
     answer:
-      "A. 킹고코인 포인트는 AWS, GPU 개인사용 크레딧, IT 기기대여, 세미나실 사용 등에 사용될 수 있으며, 코리아챌린지와 글로벌챌린지를 비롯한 각종 학과내 행사에 있어서 선발 기준에 적용될 수 있습니다.",
+      "A. 성균관대학교 소프트웨어학과 원전공생이라면 학년, 휴학유무와 관계없이 킹고코인을 획득하거나 사용하실 수 있습니다. 다만 혜택에 있어서 휴학유무에 따라 각종 행사 내 선발 기준에 제한이 있을 수 있습니다.",
   },
 ];
-
-const handleAxiosSuccess = (response: AxiosResponse) => {
-  return response;
-};
-
-const handleAxiosError = (error: AxiosError) => {
-  if (error.response) {
-    console.log("Server Error:", error.response.data);
-  } else if (error.request) {
-    console.log("No response received:", error.request);
-  } else {
-    console.log("Error:", error.message);
-  }
-  return Promise.reject(error);
-};
-
-const client = axios.create({
-  baseURL: HOST,
-});
-axios.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
-
-const clientWithToken = axios.create({
-  baseURL: HOST,
-  withCredentials: true,
-  headers: { Authorization: `bearer ${getCookie(JWT_COOKIE)}` },
-});
-clientWithToken.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
 
 /* Coin */
 
@@ -97,7 +94,7 @@ interface ICoin {
 
 export const getCoin = async (userId: number): Promise<ICoin> => {
   const path = `/${userId}`;
-  const response = await client.get(COIN_ROUTE + path);
+  const response = await client.get(ROUTE.COIN + path);
   return response.data;
 };
 // getCoin 사용 예제
@@ -125,7 +122,7 @@ interface ICoinDetail {
 
 export const getCoinDetail = async (userId: number): Promise<ICoinDetail[]> => {
   const path = `/${userId}/detail`;
-  const response = await client.get(COIN_ROUTE + path);
+  const response = await client.get(ROUTE.COIN + path);
 
   const result = response.data.map((it: ICoinDetail) => ({
     ...it,
@@ -144,8 +141,12 @@ export const getCoinDetailByAdId = async (
   adId: number
 ): Promise<ICoinDetail[]> => {
   const path = `/admin/detail`;
-  const response = await clientWithToken.get(COIN_ROUTE + path);
-  return response.data;
+  const response = await clientWithToken.get(ROUTE.COIN + path);
+  const result = response.data.map((it: ICoinDetail) => ({
+    ...it,
+    id: it.dtId,
+  }));
+  return result;
 };
 // getCoinDetailByAdId 사용 예제
 // const {
@@ -174,7 +175,7 @@ export const postManualCoin = async ({
   gainedDate,
 }: IGrantedCoin): Promise<{ dtId: number }> => {
   const path = `/point/manual`;
-  const response = await clientWithToken.post(COIN_ROUTE + path, {
+  const response = await clientWithToken.post(ROUTE.COIN + path, {
     stId,
     stName,
     title,
@@ -191,8 +192,6 @@ export const postManualCoin = async ({
 
 export interface ISearchOptions {
   order?: "asc" | "desc";
-  page: number;
-  pageSize: number;
   column?: string;
   search?: string;
 }
@@ -217,7 +216,7 @@ export const getUsersBySearch = async ({
   // (column == undefined || search == undefined): 모든 유저 검색
   if (!column || !search) path = `/?order=${order}`;
 
-  const response = await client.get(USER_ROUTE + path);
+  const response = await client.get(ROUTE.USER + path);
   const result = {
     data: response.data.map((it: IUser) => ({ ...it, id: it.userId })),
     length: response.data.length,
@@ -241,7 +240,7 @@ interface IUserDetail {
 
 export const getUserDetail = async (userId: number): Promise<IUserDetail> => {
   const path = `/detail/${userId}`;
-  const response = await client.get(USER_ROUTE + path);
+  const response = await client.get(ROUTE.USER + path);
   return response.data;
 };
 // getUserDetail 사용 예제
@@ -264,7 +263,7 @@ interface Policy {
 export const getPolicies = async (only?: "me"): Promise<Policy[]> => {
   let path = `/`;
   if (only) path = `/?only=${only}`;
-  const response = await clientWithToken.get(POLICY_ROUTE + path);
+  const response = await clientWithToken.get(ROUTE.POLICY + path);
   const result = response.data.map((it: Policy) => ({
     ...it,
     id: it.plId,
@@ -299,7 +298,7 @@ export const postPolicyRequest = async ({
 }: IPolicyRequest): Promise<{ rqId: number }> => {
   let path = `/request?plId=${plId}`;
   if (rqType === "CREATE" || !plId) path = `/request`;
-  const result = await clientWithToken.post(POLICY_ROUTE + path, {
+  const result = await clientWithToken.post(ROUTE.POLICY + path, {
     plId,
     pfId,
     rqName,
@@ -325,7 +324,7 @@ interface IStaticsByMonth {
 
 export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
   const path = `/month`;
-  const response = await client.get(STATICS_ROUTE + path);
+  const response = await client.get(ROUTE.STATICS + path);
   const result = response.data.map((it: IStaticsByMonth) => ({
     ...it,
     id: it.smId,
@@ -343,18 +342,29 @@ export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
 
 export const getDevToken = async () => {
   const path = `/token?key=ssa-dev-key-v1`;
-  const result = await client.get(DEV_ROUTE + path);
+  const result = await client.get(ROUTE.DEV + path);
   const accessToken = result.data;
-  document.cookie = `accessToken=${accessToken}`;
+  setAccessCookie(accessToken);
+  refreshClientToken();
 };
 
 export const getJWTClaims = async (
   accessToken: string
 ): Promise<{
   userId: number;
-  role: string;
+  role: USER_ROLE;
 }> => {
   const path = `/token/claims?token=${accessToken}`;
-  const response = await client.get(DEV_ROUTE + path);
+  const response = await client.get(ROUTE.DEV + path);
+  return response.data;
+};
+
+/* Auth */
+
+export const refreshAccessToken = async (
+  refreshToken: string
+): Promise<string> => {
+  const path = `/refresh?refreshToken=${refreshToken}`;
+  const response = await clientWithToken.get(ROUTE.AUTH + path);
   return response.data;
 };

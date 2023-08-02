@@ -8,11 +8,11 @@ import {
   Typography,
 } from "@mui/material";
 import { ExpandMore } from "@mui/icons-material";
-import { FAQS, PLATFORMS } from "../common/api";
+import { FAQS, PLATFORMS, getDevToken } from "../common/api";
 import Header from "../components/frames/Header";
 import Footer from "../components/frames/Footer";
 import SiteLink from "../components/SiteLink";
-import { Link } from "react-router-dom";
+import { PROD_HOST } from "../common/apiManager";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -39,7 +39,8 @@ function TabPanel(props: TabPanelProps) {
   );
 }
 
-export default function BasicTabs() {
+function Main() {
+  /* Panel control */
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -49,9 +50,9 @@ export default function BasicTabs() {
   return (
     <div className="flex flex-col items-center bg-surface">
       <div className="flex items-center justify-end w-screen max-w-full bg-primary h-8 p-1 px-8">
-        <Link to="/main/login" className="text-onPrimary text-label-m">
+        <a href={PROD_HOST} className="text-onPrimary text-label-m">
           KINGO ID LOGIN
-        </Link>
+        </a>
       </div>
       <Header />
       <div className="w-[1152px] py-8 min-h-screen">
@@ -114,3 +115,5 @@ export default function BasicTabs() {
     </div>
   );
 }
+
+export default Main;

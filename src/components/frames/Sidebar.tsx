@@ -1,9 +1,9 @@
 import {
   DashboardOutlined,
-  PersonOutlineOutlined,
   MonetizationOnOutlined,
-  ShowChartOutlined,
+  PersonOutlineOutlined,
   PolicyOutlined,
+  ShowChartOutlined,
 } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 
