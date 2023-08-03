@@ -100,6 +100,32 @@ export const formToPolicyRequest = ({
   return result;
 };
 
+
+export const setAccessCookie = (token: string) => {
+  setCookie(JWT_COOKIE.ACCESS_TOKEN, token, {
+    "max-age": 60 * 60,
+    path: "/main",
+    secure: true,
+    samesite: "strict",
+  });
+};
+
+export const setRefreshCookie = (token: string) => {
+  setCookie(JWT_COOKIE.REFRESH_TOKEN, token, {
+    "max-age": 60 * 60 * 24 * 14,
+    path: "/main",
+    secure: true,
+    samesite: "strict",
+  });
+};
+
+export const getAccessCookie = () => 
+  getCookie(JWT_COOKIE.ACCESS_TOKEN)
+
+export const getRefreshCookie = () =>
+  getCookie(JWT_COOKIE.REFRESH_TOKEN)
+
+
 export const getPlatformByPfId = (pfId: number) =>
   PLATFORMS.find((it) => it.pfId === pfId);
 
@@ -118,13 +144,10 @@ const handleAxiosError = async (error: AxiosError) => {
   } else {
     console.log("Error:", error.message);
   }
-  // 토큰 재발급
-  const refreshToken = getCookie(JWT_COOKIE.REFRESH_TOKEN);
-  if (!refreshToken) return Promise.reject(error);
-
-  const newAccessToken = await refreshAccessToken(refreshToken);
-  setAccessCookie(newAccessToken);
-  refreshClientToken();
+  // 오류 발생시 accessToken, refreshToken 확인
+  check().then((auth) =>{
+    if (!auth) window.location.href = "/main/login";
+  }).catch((reason) => Promise.reject(reason))
 
   return Promise.reject(error);
 };
@@ -142,7 +165,7 @@ axios.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
 export const clientWithToken = axios.create({
   baseURL: HOST,
   withCredentials: true,
-  headers: { Authorization: `bearer ${getCookie(JWT_COOKIE.ACCESS_TOKEN)}` },
+  headers: { Authorization: `bearer ${getAccessCookie()}` },
 });
 
 clientWithToken.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
@@ -150,7 +173,7 @@ clientWithToken.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
 export const refreshClientToken = () => {
   clientWithToken.defaults.headers.common[
     "Authorization"
-  ] = `bearer ${getCookie(JWT_COOKIE.ACCESS_TOKEN)}`;
+  ] = `bearer ${getAccessCookie()}`;
 };
 
 export const logout = () => {
@@ -160,39 +183,21 @@ export const logout = () => {
 };
 
 export const check = async () => {
-  const accessToken = getCookie(JWT_COOKIE.ACCESS_TOKEN);
-  if (!accessToken) return undefined;
+  const accessToken = getAccessCookie();
+  if (!accessToken) return null;
 
   let auth = await getJWTClaims(accessToken);
   if (auth) return auth;
 
-  const refreshToken = getCookie(JWT_COOKIE.REFRESH_TOKEN);
-  if (!refreshToken) return undefined;
+  const refreshToken = getRefreshCookie();
+  if (!refreshToken) return null;
 
   const newAccessToken = await refreshAccessToken(refreshToken);
-  if (!newAccessToken) return undefined;
+  if (!newAccessToken) return null;
 
   setAccessCookie(newAccessToken);
   refreshClientToken();
 
   auth = await getJWTClaims(accessToken);
   return auth;
-};
-
-export const setAccessCookie = (token: string) => {
-  setCookie(JWT_COOKIE.ACCESS_TOKEN, token, {
-    "max-age": 60 * 60,
-    path: "/main",
-    secure: true,
-    samesite: "strict",
-  });
-};
-
-export const setRefreshCookie = (token: string) => {
-  setCookie(JWT_COOKIE.REFRESH_TOKEN, token, {
-    "max-age": 60 * 60 * 24 * 14,
-    path: "/main",
-    secure: true,
-    samesite: "strict",
-  });
 };

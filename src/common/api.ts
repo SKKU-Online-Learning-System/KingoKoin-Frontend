@@ -82,7 +82,7 @@ export const FAQS = [
 
 /* Coin */
 
-interface ICoin {
+export interface ICoin {
   coinId: number;
   userId: number;
   pointTotal: number;

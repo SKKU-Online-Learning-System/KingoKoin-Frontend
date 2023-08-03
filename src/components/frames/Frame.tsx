@@ -6,9 +6,13 @@ import { USER_ROLE, check } from "../../common/apiManager";
 import Status from "../feedback/Status";
 import { useCallback } from "react";
 import { useQuery } from "react-query";
+import { getDevToken } from "../../common/api";
 
 const Frame = () => {
   /* Auth */
+  // TODO: 개발용 토큰 발급 코드 삭제
+  const matchLogin = useMatch("/main/login");
+  if (matchLogin) getDevToken();
 
   // 권한에 따라 리다이렉션
   const matchAdmin = useMatch("/main/admin/*");
@@ -44,9 +48,9 @@ const Frame = () => {
 
   return (
     <>
-      <Header login={login} />
+      <Header login={login || undefined} />
       <div className="flex bg-primary pt-16">
-        <Sidebar login={login} />
+        <Sidebar login={login || undefined} />
         <main className="flex items-center py-16 justify-center bg-surface rounded-tl-lg flex-grow">
           <div className="flex flex-col gap-6 w-[1152px] min-h-screen">
             <Status
