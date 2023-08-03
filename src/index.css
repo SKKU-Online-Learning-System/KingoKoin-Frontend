@@ -132,6 +132,8 @@ table {
   border-spacing: 0;
 }
 
+/* global style */
+
 a {
   color: inherit;
   text-decoration: inherit; /* no underline */
@@ -139,22 +141,22 @@ a {
 * {
   box-sizing: border-box;
 }
-/* type system */
+/* typography system */
 
 .text-logo {
-  @apply font-gugi text-2xl font-regular;
+  @apply font-gugi text-xl font-regular;
 }
 
 .text-display {
-  @apply font-noto-sans-kr text-3xl font-bold;
+  @apply font-noto-sans-kr text-2xl font-bold;
 }
 
 .text-title-m {
-  @apply font-noto-sans-kr text-2xl font-medium;
+  @apply font-noto-sans-kr text-xl font-medium;
 }
 
 .text-title-l {
-  @apply font-noto-sans-kr text-2xl font-light;
+  @apply font-noto-sans-kr text-xl font-light;
 }
 
 .text-label-m {
@@ -171,6 +173,14 @@ a {
 
 p {
   @apply font-noto-sans-kr text-sm font-thin;
+}
+
+.text-caption {
+  @apply font-noto-sans-kr text-xs;
+}
+
+caption {
+  @apply font-noto-sans-kr text-xs;
 }
 
 /* scrollbar */
