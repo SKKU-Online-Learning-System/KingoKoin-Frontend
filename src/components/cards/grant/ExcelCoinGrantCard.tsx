@@ -209,12 +209,13 @@ const ExcelCoinGrantCard = ({
                     defaultValue={policies[0].plId}
                     label="정책"
                     onChange={(e) => {
+                      const policy = findPolicyByPlId(e.target.value);
                       setForm({
                         ...form,
                         plId: e.target.value,
-                        pfName:
-                          findPolicyByPlId(e.target.value)?.pfName ||
-                          "제공처를 찾지 못했습니다.",
+                        pfName: policy!.pfName,
+                        point: policy!.point,
+                        title: policy!.plName,
                       });
                       if (e.target.value == PL_ID_MANUAL) setIsMenual(true);
                       else setIsMenual(false);
@@ -222,7 +223,7 @@ const ExcelCoinGrantCard = ({
                     size="small"
                   >
                     {policies.map((it) => (
-                      <MenuItem key={it.plName} value={it.plId}>
+                      <MenuItem key={it.plId} value={it.plId}>
                         {it.plName}
                       </MenuItem>
                     ))}
@@ -241,6 +242,10 @@ const ExcelCoinGrantCard = ({
                     placeholder="제목을 입력해주세요."
                     label="제목"
                     size="small"
+                    value={form.title}
+                    onChange={(e) => {
+                      setForm({ ...form, title: e.target.value });
+                    }}
                   />
                 </Collapse>
                 <div className="flex gap-2">

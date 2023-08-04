@@ -1,7 +1,12 @@
 import { Dayjs } from "dayjs";
 import { dayjsToStamp, deleteCookie, getCookie, setCookie } from "./utils";
 import { PLATFORMS, getJWTClaims, refreshAccessToken } from "./api";
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, {
+  AxiosError,
+  AxiosRequestConfig,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
+} from "axios";
 
 // TODO: PL_ID_MANUAL -> PL_CODE_MANUAL
 export const PL_ID_MANUAL = "2";
@@ -100,7 +105,6 @@ export const formToPolicyRequest = ({
   return result;
 };
 
-
 export const setAccessCookie = (token: string) => {
   setCookie(JWT_COOKIE.ACCESS_TOKEN, token, {
     "max-age": 60 * 60,
@@ -119,12 +123,9 @@ export const setRefreshCookie = (token: string) => {
   });
 };
 
-export const getAccessCookie = () => 
-  getCookie(JWT_COOKIE.ACCESS_TOKEN)
+export const getAccessCookie = () => getCookie(JWT_COOKIE.ACCESS_TOKEN);
 
-export const getRefreshCookie = () =>
-  getCookie(JWT_COOKIE.REFRESH_TOKEN)
-
+export const getRefreshCookie = () => getCookie(JWT_COOKIE.REFRESH_TOKEN);
 
 export const getPlatformByPfId = (pfId: number) =>
   PLATFORMS.find((it) => it.pfId === pfId);
@@ -132,11 +133,24 @@ export const getPlatformByPfId = (pfId: number) =>
 export const getPlatformByPfName = (pfName: string) =>
   PLATFORMS.find((it) => it.pfName === pfName);
 
-const handleAxiosSuccess = (response: AxiosResponse) => {
+const axiosRequestSuccess = (config: InternalAxiosRequestConfig) => {
+  console.log(config);
+  return config;
+};
+
+const axiosRequestError = (error: AxiosError) => {
+  if (error.request) {
+    console.log("Client Error:", error.request.data);
+  }
+  return Promise.reject(error);
+};
+
+const axiosResponesSuccess = (response: AxiosResponse) => {
+  console.log(response);
   return response;
 };
 
-const handleAxiosError = async (error: AxiosError) => {
+const axiosResponesError = async (error: AxiosError) => {
   if (error.response) {
     console.log("Server Error:", error.response.data);
   } else if (error.request) {
@@ -145,9 +159,11 @@ const handleAxiosError = async (error: AxiosError) => {
     console.log("Error:", error.message);
   }
   // 오류 발생시 accessToken, refreshToken 확인
-  check().then((auth) =>{
-    if (!auth) window.location.href = "/main/login";
-  }).catch((reason) => Promise.reject(reason))
+  check()
+    .then((auth) => {
+      if (!auth) window.location.href = "/main/login";
+    })
+    .catch((reason) => Promise.reject(reason));
 
   return Promise.reject(error);
 };
@@ -160,7 +176,8 @@ export const client = axios.create({
   baseURL: HOST,
 });
 
-axios.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
+axios.interceptors.request.use(axiosRequestSuccess, axiosRequestError);
+axios.interceptors.response.use(axiosResponesSuccess, axiosResponesError);
 
 export const clientWithToken = axios.create({
   baseURL: HOST,
@@ -168,7 +185,15 @@ export const clientWithToken = axios.create({
   headers: { Authorization: `bearer ${getAccessCookie()}` },
 });
 
-clientWithToken.interceptors.response.use(handleAxiosSuccess, handleAxiosError);
+clientWithToken.interceptors.request.use(
+  axiosRequestSuccess,
+  axiosRequestError
+);
+
+clientWithToken.interceptors.response.use(
+  axiosResponesSuccess,
+  axiosResponesError
+);
 
 export const refreshClientToken = () => {
   clientWithToken.defaults.headers.common[

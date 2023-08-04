@@ -41,6 +41,7 @@ function TabPanel(props: TabPanelProps) {
 }
 
 function Main() {
+  getDevToken();
   /* Panel control */
   const [value, setValue] = useState(0);
 

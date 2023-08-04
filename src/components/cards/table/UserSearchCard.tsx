@@ -35,7 +35,9 @@ const UserSearchCard = ({
     isLoading: usersIsLoading,
     error: usersError,
     data: users,
-  } = useQuery(["users"], () => getUsersBySearch(searchOptions));
+  } = useQuery(["users"], () => getUsersBySearch(searchOptions), {
+    refetchInterval: 1000,
+  });
 
   // serverside filter
   const onFilterChange = useCallback(

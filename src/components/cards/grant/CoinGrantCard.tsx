@@ -114,13 +114,13 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                 defaultValue={policies[0].plId}
                 label="정책"
                 onChange={(e) => {
+                  const policy = findPolicyByPlId(e.target.value);
                   setForm({
                     ...form,
                     plId: e.target.value,
-                    pfName:
-                      findPolicyByPlId(e.target.value)?.pfName ||
-                      "제공처를 찾지 못했습니다.",
-                    point: findPolicyByPlId(e.target.value)?.point || 0,
+                    pfName: policy!.pfName,
+                    point: policy!.point,
+                    title: policy!.plName,
                   });
                   if (e.target.value == PL_ID_MANUAL) setIsMenual(true);
                   else setIsMenual(false);
@@ -128,7 +128,7 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                 size="small"
               >
                 {policies.map((it) => (
-                  <MenuItem key={it.plName} value={it.plId}>
+                  <MenuItem key={it.plId} value={it.plId}>
                     {it.plName}
                   </MenuItem>
                 ))}
@@ -145,6 +145,10 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                   placeholder="제목을 입력해주세요."
                   label="제목"
                   size="small"
+                  value={form.title}
+                  onChange={(e) => {
+                    setForm({ ...form, title: e.target.value });
+                  }}
                 />
               </Collapse>
               <LocalizationProvider dateAdapter={AdapterDayjs}>

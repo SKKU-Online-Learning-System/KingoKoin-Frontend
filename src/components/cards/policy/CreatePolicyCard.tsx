@@ -12,7 +12,6 @@ import {
   FormControlLabel,
   FormLabel,
   Input,
-  InputLabel,
   MenuItem,
   Radio,
   RadioGroup,
