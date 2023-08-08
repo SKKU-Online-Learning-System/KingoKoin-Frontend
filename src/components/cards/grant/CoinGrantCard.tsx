@@ -13,15 +13,15 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import dayjs from "dayjs";
 import { useState } from "react";
 import { useQuery } from "react-query";
-import { getPolicies, postManualCoin } from "../../../common/api";
-import ConfirmDialog from "../../ConfirmDialog";
-import { validateStid } from "../../../common/utils";
-import Status from "../../feedback/Status";
+import { IPolicy, getPolicies, postManualCoin } from "../../../common/api";
 import {
   IGrantedCoinForm,
-  formToGrantedCoin,
   PL_ID_MANUAL,
+  formToGrantedCoin,
+  validateStid,
 } from "../../../common/apiManager";
+import ConfirmDialog from "../../ConfirmDialog";
+import Status from "../../feedback/Status";
 
 interface CoinGrantCardProps {
   adId: number;
@@ -42,7 +42,7 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
   });
 
   const [isManual, setIsMenual] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const [stIdIsValid, setStIdIsValid] = useState(true);
 
   const {
@@ -54,19 +54,16 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
   const render =
     !policiesIsLoading && !policiesError && policies && policies.length > 0;
 
-  const findPolicyByPlId = (plId: string) =>
-    policies?.find((it) => (it.plId === parseInt(plId) ? it : undefined));
-
   return (
     <>
       <ConfirmDialog
-        open={open}
+        open={showModal}
         handleConfirm={() => {
           postManualCoin(formToGrantedCoin(form));
-          setOpen(false);
+          setShowModal(false);
         }}
         handleCancel={() => {
-          setOpen(false);
+          setShowModal(false);
         }}
       >
         {`${form.stName} 학생에게 ${form.point}코인을 부여하시겠습니까?`}
@@ -114,13 +111,14 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                 defaultValue={policies[0].plId}
                 label="정책"
                 onChange={(e) => {
-                  const policy = findPolicyByPlId(e.target.value);
+                  //객체를 value로 사용하기 위한 캐스팅
+                  const policy = e.target.value as unknown as IPolicy;
                   setForm({
                     ...form,
-                    plId: e.target.value,
-                    pfName: policy!.pfName,
-                    point: policy!.point,
-                    title: policy!.plName,
+                    plId: policy.plId.toString(),
+                    pfName: policy.pfName,
+                    point: policy.point,
+                    title: policy.plName,
                   });
                   if (e.target.value == PL_ID_MANUAL) setIsMenual(true);
                   else setIsMenual(false);
@@ -128,7 +126,8 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                 size="small"
               >
                 {policies.map((it) => (
-                  <MenuItem key={it.plId} value={it.plId}>
+                  //@ts-ignore - 객체를 value로 사용하기 위한 타입 무시
+                  <MenuItem key={it.plId} value={it}>
                     {it.plName}
                   </MenuItem>
                 ))}
@@ -157,7 +156,7 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                   onChange={(value) => {
                     setForm({
                       ...form,
-                      gainedDate: value || dayjs(),
+                      gainedDate: value!,
                     });
                   }}
                   slotProps={{ textField: { size: "small" } }}
@@ -180,9 +179,10 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                 <Button
                   variant="contained"
                   onClick={() => {
+                    // 코인부여 버튼 클릭시 실행할 코드
                     const result = validateStid(form.stId);
                     setStIdIsValid(result);
-                    if (result) setOpen(true);
+                    if (result) setShowModal(true);
                   }}
                 >
                   코인부여

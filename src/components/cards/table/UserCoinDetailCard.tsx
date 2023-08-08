@@ -2,7 +2,7 @@ import { Card, CardContent, CardHeader } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useQuery } from "react-query";
 import { getCoinDetail } from "../../../common/api";
-import { dayjsToFormat, stampToDayjs } from "../../../common/utils";
+import { dayjsToFormat, stampToDayjs } from "../../../common/apiManager";
 import CustomPagination from "../../CustomPagination";
 import Status from "../../feedback/Status";
 

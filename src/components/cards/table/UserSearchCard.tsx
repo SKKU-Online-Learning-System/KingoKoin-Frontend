@@ -96,8 +96,7 @@ const UserSearchCard = ({
     },
   ];
 
-  const render =
-    !usersIsLoading && !usersError && users && users.data.length > 0;
+  const render = !usersIsLoading && !usersError && users && users.length > 0;
 
   return (
     <div className={className}>
@@ -127,13 +126,13 @@ const UserSearchCard = ({
           <Status
             isLoading={usersIsLoading}
             error={usersError}
-            isData={users && users.data.length > 0}
+            isData={users && users.length > 0}
             className="h-[318.4px]"
           />
           {render && (
             <DataGrid
               className="h-[318.4px]"
-              rows={users.data}
+              rows={users}
               columns={columns}
               initialState={{
                 pagination: {

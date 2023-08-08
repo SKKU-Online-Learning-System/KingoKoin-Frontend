@@ -13,14 +13,16 @@ interface UserChartProps {
 
 const UserChartCard = ({ userId, pageSize, className }: UserChartProps) => {
   // TODO: userId에 따라 통계를 검색하는 기능 추가
-  // TODO: dataGrid -> Chart
+  // TODO: dataGrid -> highChart
 
+  // 통계 데이터 api 호출
   const {
     isLoading: statisticIsLoading,
     error: statisticError,
     data: statistic,
   } = useQuery(["statistic"], getStaticsByMonth);
 
+  // 데이터 보여줄지 결정하는 상수
   const render =
     !statisticIsLoading && !statisticError && statistic && statistic.length > 0;
 
@@ -35,7 +37,7 @@ const UserChartCard = ({ userId, pageSize, className }: UserChartProps) => {
       <CardHeader
         title="누적코인보유량"
         titleTypographyProps={{ variant: "display" }}
-        subheader={`최근 ${statistic ? statistic.length : 0}개월`}
+        subheader={`최근 ${statistic ? statistic.length : 0}개월`} // 로딩중 보여줄 값 0
         subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
       />
       <CardContent>
@@ -43,7 +45,7 @@ const UserChartCard = ({ userId, pageSize, className }: UserChartProps) => {
           isLoading={statisticIsLoading}
           error={statisticError}
           isData={statistic && statistic.length > 0}
-          className="h-[162.4px]"
+          className="h-[162.4px]" // DataGrid와 동일한 높이
         />
         {render && (
           <DataGrid

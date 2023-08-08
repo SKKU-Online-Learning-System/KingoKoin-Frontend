@@ -1,17 +1,17 @@
-import { Dayjs } from "dayjs";
-import { dayjsToStamp, deleteCookie, getCookie, setCookie } from "./utils";
-import { PLATFORMS, getJWTClaims, refreshAccessToken } from "./api";
+import dayjs, { Dayjs } from "dayjs";
+import "dayjs/locale/ko";
+import { deleteCookie, getCookie, setCookie } from "./utils";
+import { getJWTClaims, refreshAccessToken } from "./api";
 import axios, {
   AxiosError,
-  AxiosRequestConfig,
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
 
-// TODO: PL_ID_MANUAL -> PL_CODE_MANUAL
+/** 직접 입력에 해당하는 plId */
 export const PL_ID_MANUAL = "2";
 
-export const PROD_HOST = "https://kingocoin.cs.skku.edu/";
+export const PROD_HOST = "https://kingocoin.cs.skku.edu";
 
 export enum POLICY_REQUEST_TYPE {
   CREATE = "CREATE",
@@ -19,7 +19,6 @@ export enum POLICY_REQUEST_TYPE {
   READ = "READ",
   DEACTIVATE = "DEACTIVATE",
   ACTIVATE = "ACTIVATE",
-  DELETE = "DELETE",
   EMPTY = "EMPTY",
 }
 
@@ -38,6 +37,25 @@ export enum JWT_COOKIE {
   REFRESH_TOKEN = "refreshToken",
 }
 
+/* Data */
+
+dayjs.locale("ko");
+export const stampToDayjs = (stamp: string) => dayjs(stamp);
+
+export const dayjsToFormat = (dayjs: Dayjs) => dayjs.format("YYYY.MM.DD (ddd)");
+
+export const dayjsToStamp = (dayjs: Dayjs) =>
+  dayjs.format("YYYY-MM-DDTHH:mm:ss");
+
+export const validateStid = (stId: string) => {
+  if (stId.length !== 10) return false;
+  const year = parseInt(stId.slice(0, 4));
+  if (year < 2000 || year > dayjs().year()) return false;
+  const dept = parseInt(stId.slice(4, 6));
+  if (dept !== 31 && dept !== 71 && dept !== 72 && dept !== 73) return false;
+  return true;
+};
+
 export interface IGrantedCoinForm {
   stId: string;
   stName: string;
@@ -49,6 +67,7 @@ export interface IGrantedCoinForm {
   gainedDate: Dayjs;
 }
 
+/* 입력폼을 postManualCoin api 변수 형식으로 변환 */
 export const formToGrantedCoin = ({
   stId,
   stName,
@@ -83,6 +102,7 @@ export interface IPolicyRequestForm {
   rqType: POLICY_REQUEST_TYPE;
 }
 
+/* 입력폼을 postPolicyRequest api 변수 형식으로 변환 */
 export const formToPolicyRequest = ({
   plId,
   pfId,
@@ -105,9 +125,11 @@ export const formToPolicyRequest = ({
   return result;
 };
 
+/* Auth */
+
 export const setAccessCookie = (token: string) => {
   setCookie(JWT_COOKIE.ACCESS_TOKEN, token, {
-    "max-age": 60 * 60,
+    "max-age": 60 * 60, // access token 만료 기한 (1시간)
     path: "/main",
     secure: true,
     samesite: "strict",
@@ -116,7 +138,7 @@ export const setAccessCookie = (token: string) => {
 
 export const setRefreshCookie = (token: string) => {
   setCookie(JWT_COOKIE.REFRESH_TOKEN, token, {
-    "max-age": 60 * 60 * 24 * 14,
+    "max-age": 60 * 60 * 24 * 14, // refresh token 만료 기한 (2주)
     path: "/main",
     secure: true,
     samesite: "strict",
@@ -127,11 +149,36 @@ export const getAccessCookie = () => getCookie(JWT_COOKIE.ACCESS_TOKEN);
 
 export const getRefreshCookie = () => getCookie(JWT_COOKIE.REFRESH_TOKEN);
 
-export const getPlatformByPfId = (pfId: number) =>
-  PLATFORMS.find((it) => it.pfId === pfId);
+/** 로그인 여부 확인 */
+export const check = async () => {
+  // accessToken 확인
+  const accessToken = getAccessCookie();
+  if (!accessToken) return null;
+  let auth = await getJWTClaims(accessToken);
+  if (auth) return auth;
 
-export const getPlatformByPfName = (pfName: string) =>
-  PLATFORMS.find((it) => it.pfName === pfName);
+  // refreshToken 확인
+  const refreshToken = getRefreshCookie();
+  if (!refreshToken) return null;
+  const newAccessToken = await refreshAccessToken(refreshToken);
+  if (!newAccessToken) return null;
+
+  setAccessCookie(newAccessToken);
+  refreshClientToken();
+
+  auth = await getJWTClaims(accessToken);
+  return auth;
+};
+
+export const logout = () => {
+  deleteCookie(JWT_COOKIE.ACCESS_TOKEN);
+  deleteCookie(JWT_COOKIE.REFRESH_TOKEN);
+  window.location.replace(PROD_HOST + "/logout");
+};
+
+/* axios settings */
+
+const HOST = "https://kingocoin.cs.skku.edu";
 
 const axiosRequestSuccess = (config: InternalAxiosRequestConfig) => {
   console.log(config);
@@ -158,7 +205,7 @@ const axiosResponesError = async (error: AxiosError) => {
   } else {
     console.log("Error:", error.message);
   }
-  // 오류 발생시 accessToken, refreshToken 확인
+
   check()
     .then((auth) => {
       if (!auth) window.location.href = "/main/login";
@@ -168,10 +215,7 @@ const axiosResponesError = async (error: AxiosError) => {
   return Promise.reject(error);
 };
 
-/* axios */
-
-const HOST = "https://kingocoin.cs.skku.edu";
-
+/** JWT 없이 요청할 때 사용하는 axios client */
 export const client = axios.create({
   baseURL: HOST,
 });
@@ -179,6 +223,7 @@ export const client = axios.create({
 axios.interceptors.request.use(axiosRequestSuccess, axiosRequestError);
 axios.interceptors.response.use(axiosResponesSuccess, axiosResponesError);
 
+/** JWT를 첨부하여 요청할 때 사용하는 axios client */
 export const clientWithToken = axios.create({
   baseURL: HOST,
   withCredentials: true,
@@ -199,30 +244,4 @@ export const refreshClientToken = () => {
   clientWithToken.defaults.headers.common[
     "Authorization"
   ] = `bearer ${getAccessCookie()}`;
-};
-
-export const logout = () => {
-  deleteCookie(JWT_COOKIE.ACCESS_TOKEN);
-  deleteCookie(JWT_COOKIE.REFRESH_TOKEN);
-  window.location.replace(PROD_HOST + "logout");
-};
-
-export const check = async () => {
-  const accessToken = getAccessCookie();
-  if (!accessToken) return null;
-
-  let auth = await getJWTClaims(accessToken);
-  if (auth) return auth;
-
-  const refreshToken = getRefreshCookie();
-  if (!refreshToken) return null;
-
-  const newAccessToken = await refreshAccessToken(refreshToken);
-  if (!newAccessToken) return null;
-
-  setAccessCookie(newAccessToken);
-  refreshClientToken();
-
-  auth = await getJWTClaims(accessToken);
-  return auth;
 };

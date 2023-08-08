@@ -1,6 +1,3 @@
-import dayjs, { Dayjs } from "dayjs";
-import "dayjs/locale/ko";
-
 export function getCookie(name: string) {
   let matches = document.cookie.match(
     new RegExp(
@@ -66,20 +63,3 @@ export function deleteAllCookies() {
   }
   console.log("all cookies deleted !");
 }
-
-dayjs.locale("ko");
-export const stampToDayjs = (stamp: string) => dayjs(stamp);
-
-export const dayjsToFormat = (dayjs: Dayjs) => dayjs.format("YYYY.MM.DD (ddd)");
-
-export const dayjsToStamp = (dayjs: Dayjs) =>
-  dayjs.format("YYYY-MM-DDTHH:mm:ss");
-
-export const validateStid = (stId: string) => {
-  if (stId.length !== 10) return false;
-  const year = parseInt(stId.slice(0, 4));
-  if (year < 2000 || year > dayjs().year()) return false;
-  const dept = parseInt(stId.slice(4, 6));
-  if (dept !== 31 && dept !== 71 && dept !== 72 && dept !== 73) return false;
-  return true;
-};

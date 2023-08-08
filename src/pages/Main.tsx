@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import banner from "../assets/banner.jpg";
-import { FAQS, PLATFORMS, getDevToken } from "../common/api";
+import { FAQS, PLATFORMS } from "../common/api";
 import { PROD_HOST } from "../common/apiManager";
 import SiteLink from "../components/SiteLink";
 import Footer from "../components/frames/Footer";
@@ -41,7 +41,6 @@ function TabPanel(props: TabPanelProps) {
 }
 
 function Main() {
-  getDevToken();
   /* Panel control */
   const [value, setValue] = useState(0);
 

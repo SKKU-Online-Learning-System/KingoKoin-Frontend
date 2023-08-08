@@ -24,13 +24,16 @@ import {
   POLICY_REQUEST_TYPE,
   POLICY_TYPE,
   formToPolicyRequest,
-  getPlatformByPfId,
 } from "../../../common/apiManager";
-import { PLATFORMS, postPolicyRequest } from "../../../common/api";
+import {
+  PLATFORMS,
+  getPlatformByPfId,
+  postPolicyRequest,
+} from "../../../common/api";
 
 interface CreatePolicyCardProps {
   className?: string;
-  reasonRow: number;
+  reasonRow: number; // textarea의 row 개수
 }
 
 const CreatePolicyCard = ({ className, reasonRow }: CreatePolicyCardProps) => {
@@ -46,18 +49,18 @@ const CreatePolicyCard = ({ className, reasonRow }: CreatePolicyCardProps) => {
     rqType: POLICY_REQUEST_TYPE.CREATE,
   });
 
-  const [open, setOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <>
       <ConfirmDialog
-        open={open}
+        open={showModal}
         handleConfirm={() => {
           postPolicyRequest(formToPolicyRequest(form));
-          setOpen(false);
+          setShowModal(false);
         }}
         handleCancel={() => {
-          setOpen(false);
+          setShowModal(false);
         }}
       >
         정말로 생성하시겠습니까?
@@ -174,7 +177,7 @@ const CreatePolicyCard = ({ className, reasonRow }: CreatePolicyCardProps) => {
             <Button
               variant="contained"
               onClick={() => {
-                setOpen(true);
+                setShowModal(true);
               }}
             >
               생성

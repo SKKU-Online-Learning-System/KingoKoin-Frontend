@@ -21,9 +21,8 @@ import {
   POLICY_REQUEST_TYPE,
   POLICY_TYPE,
   formToPolicyRequest,
-  getPlatformByPfName,
 } from "../../../common/apiManager";
-import { postPolicyRequest } from "../../../common/api";
+import { getPlatformByPfName, postPolicyRequest } from "../../../common/api";
 
 interface UpdatePolicyCardProps {
   plId: number;

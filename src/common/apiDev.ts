@@ -1,3 +1,6 @@
+// 개발이 필요한 api를 작성한 파일입니다.
+// 현재는 임시로 더미 데이터를 작성했습니다.
+
 interface IStaticsByMonthToTal {
   smId: number;
   year: number;

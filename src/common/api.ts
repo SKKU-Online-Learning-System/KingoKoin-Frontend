@@ -9,6 +9,7 @@ import {
   setAccessCookie,
 } from "./apiManager";
 
+/** api 라우트 정보 */
 enum ROUTE {
   COIN = "/api/coin",
   USER = "/api/user",
@@ -18,6 +19,7 @@ enum ROUTE {
   AUTH = "/api/auth",
 }
 
+/** 하드코딩된 플랫폼 정보 */
 export const PLATFORMS = [
   {
     pfId: 1,
@@ -47,6 +49,13 @@ export const PLATFORMS = [
   },
 ];
 
+export const getPlatformByPfId = (pfId: number) =>
+  PLATFORMS.find((it) => it.pfId === pfId);
+
+export const getPlatformByPfName = (pfName: string) =>
+  PLATFORMS.find((it) => it.pfName === pfName);
+
+/** 하드코딩된 FAQ 정보 */
 export const FAQS = [
   {
     faqId: 0,
@@ -80,7 +89,7 @@ export const FAQS = [
   },
 ];
 
-/* Coin */
+/* Coin api */
 
 export interface ICoin {
   coinId: number;
@@ -124,6 +133,7 @@ export const getCoinDetail = async (userId: number): Promise<ICoinDetail[]> => {
   const path = `/${userId}/detail`;
   const response = await client.get(ROUTE.COIN + path);
 
+  // MUI를 위한 id 추가
   const result = response.data.map((it: ICoinDetail) => ({
     ...it,
     id: it.dtId,
@@ -142,6 +152,8 @@ export const getCoinDetailByAdId = async (
 ): Promise<ICoinDetail[]> => {
   const path = `/admin/detail`;
   const response = await clientWithToken.get(ROUTE.COIN + path);
+
+  // MUI를 위한 id 추가
   const result = response.data.map((it: ICoinDetail) => ({
     ...it,
     id: it.dtId,
@@ -188,7 +200,7 @@ export const postManualCoin = async ({
   return response.data;
 };
 
-/* User */
+/* User api */
 
 export interface ISearchOptions {
   order?: "asc" | "desc";
@@ -207,20 +219,18 @@ interface IUser {
 }
 
 export const getUsersBySearch = async ({
-  order = "desc",
+  order = "desc", // 코인 보유량 정렬 기본값: 내림차순
   column,
   search,
-}: ISearchOptions): Promise<{ data: IUser[]; length: number }> => {
+}: ISearchOptions): Promise<IUser[]> => {
   let path = `/?order=${order}&column=${column}&search=${search}`;
 
   // (column == undefined || search == undefined): 모든 유저 검색
   if (!column || !search) path = `/?order=${order}`;
 
+  // MUI를 위한 id 추가
   const response = await client.get(ROUTE.USER + path);
-  const result = {
-    data: response.data.map((it: IUser) => ({ ...it, id: it.userId })),
-    length: response.data.length,
-  };
+  const result = response.data.map((it: IUser) => ({ ...it, id: it.userId }));
   return result;
 };
 // getUsersBySearch 사용 예제
@@ -250,7 +260,9 @@ export const getUserDetail = async (userId: number): Promise<IUserDetail> => {
 //   data: userDetail,
 // } = useQuery(["userDetail", userId], () => getUserDetail(userId));
 
-interface Policy {
+/* Policy api */
+
+export interface IPolicy {
   plId: number;
   plName: string;
   plCode: string;
@@ -260,11 +272,13 @@ interface Policy {
   available: boolean;
 }
 
-export const getPolicies = async (only?: "me"): Promise<Policy[]> => {
+export const getPolicies = async (only?: "me"): Promise<IPolicy[]> => {
   let path = `/`;
   if (only) path = `/?only=${only}`;
   const response = await clientWithToken.get(ROUTE.POLICY + path);
-  const result = response.data.map((it: Policy) => ({
+
+  // MUI를 위한 id 추가
+  const result = response.data.map((it: IPolicy) => ({
     ...it,
     id: it.plId,
   }));
@@ -311,7 +325,7 @@ export const postPolicyRequest = async ({
   return result.data;
 };
 
-/* Statics */
+/* Statics api */
 
 interface IStaticsByMonth {
   smId: number;
@@ -325,6 +339,8 @@ interface IStaticsByMonth {
 export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
   const path = `/month`;
   const response = await client.get(ROUTE.STATICS + path);
+
+  // MUI를 위한 id 추가
   const result = response.data.map((it: IStaticsByMonth) => ({
     ...it,
     id: it.smId,
@@ -338,8 +354,9 @@ export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
 //   data: statistic,
 // } = useQuery(["statistic"], getStaticsByMonth);
 
-/* Dev */
+/* Dev api */
 
+// TODO: 업로드시 삭제
 export const getDevToken = async () => {
   const path = `/token?key=ssa-dev-key-v1`;
   const result = await client.get(ROUTE.DEV + path);
@@ -359,7 +376,7 @@ export const getJWTClaims = async (accessToken: string): Promise<IAuth> => {
   return response.data;
 };
 
-/* Auth */
+/* Auth api */
 
 export const refreshAccessToken = async (
   refreshToken: string
