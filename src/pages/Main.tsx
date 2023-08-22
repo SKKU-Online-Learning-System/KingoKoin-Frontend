@@ -29,9 +29,9 @@ function TabPanel(props: TabPanelProps) {
     <div className="flex items-center justify-center w-full">
       <div hidden={value !== index} {...other} className="w-full">
         {value === index && (
-          <div className="flex flex-col gap-4 py-8 w-full">
+          <div className="flex flex-col w-full gap-4 py-8">
             <h1 className="text-title-m">{label}</h1>
-            <hr className="bg-primary w-8 h-1 ml-2"></hr>
+            <hr className="w-8 h-1 ml-2 bg-primary"></hr>
             <div className="text-label-l">{children}</div>
           </div>
         )}
@@ -50,7 +50,7 @@ function Main() {
 
   return (
     <div className="flex flex-col items-center bg-surface">
-      <div className="flex items-center justify-end w-screen max-w-full bg-primary h-8 p-1 px-8">
+      <div className="flex items-center justify-end w-screen h-8 max-w-full p-1 px-8 bg-primary">
         <a href={PROD_HOST} className="text-onPrimary text-label-m">
           KINGO ID LOGIN
         </a>
@@ -58,7 +58,7 @@ function Main() {
       <Header />
       <div className="relative flex justify-center mb-8">
         <img
-          src={banner}
+          src={process.env.PUBLIC_URL + "/main/banner.jpg"}
           className="w-full"
           alt="성균관대학교 삼성정보학술관 전경 사진"
         />
@@ -73,12 +73,12 @@ function Main() {
           variant="fullWidth"
           className="h-16 shadow-md"
         >
-          <Tab label="킹고코인이란?" className="h-16 text-title-l shadow-sm" />
+          <Tab label="킹고코인이란?" className="h-16 shadow-sm text-title-l" />
           <Tab
             label="자주 물어보는 질문"
-            className="h-16 text-title-l shadow-sm"
+            className="h-16 shadow-sm text-title-l"
           />
-          <Tab label="관련 사이트" className="h-16 text-title-l shadow-sm" />
+          <Tab label="관련 사이트" className="h-16 shadow-sm text-title-l" />
         </Tabs>
         <TabPanel value={value} index={0} label="킹고코인이란?">
           킹고코인은 성균관대에 학생들의 비교과 활동에 대한 인센티브로서
@@ -100,9 +100,9 @@ function Main() {
         </TabPanel>
         <TabPanel value={value} index={1} label="자주 물어보는 질문">
           {FAQS.map((it) => (
-            <Accordion key={it.faqId} className="shadow rounded-lg mb-4">
+            <Accordion key={it.faqId} className="mb-4 rounded-lg shadow">
               <AccordionSummary
-                className="flex flex-row-reverse gap-2 rounded-lg mx-2"
+                className="flex flex-row-reverse gap-2 mx-2 rounded-lg"
                 expandIcon={<ExpandMore className="w-6 h-6" />}
               >
                 <Typography variant="title-l">{it.question}</Typography>

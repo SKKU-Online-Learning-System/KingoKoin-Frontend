@@ -32,9 +32,13 @@ function Header({ login }: HeaderProps) {
   );
 
   return (
-    <div className="flex justify-between items-center w-screen max-w-full bg-background px-16 py-8">
+    <div className="flex items-center justify-between w-screen max-w-full px-16 py-8 bg-background">
       <div className="flex items-center gap-4">
-        <img src={SKKU_LOGO} alt="SKKU logo" className="h-8" />
+        <img
+          src={process.env.PUBLIC_URL + "/main/main_logo_eng.png"}
+          alt="SKKU logo"
+          className="h-8"
+        />
         <span className=" text-lightGray text-logo">|</span>
         <span className="text-logo" style={{ whiteSpace: "nowrap" }}>
           킹고코인

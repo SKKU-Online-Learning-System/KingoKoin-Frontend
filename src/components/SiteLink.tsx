@@ -5,7 +5,7 @@ import { Button } from "@mui/material";
 interface IPlatform {
   pfName: string;
   pfLink: string;
-  pfLogo: string;
+  pfLogo: string | null;
 }
 
 interface SiteLinkProps {

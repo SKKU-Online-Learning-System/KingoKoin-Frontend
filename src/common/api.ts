@@ -30,20 +30,20 @@ export const PLATFORMS = [
   {
     pfId: 2,
     pfName: "학과 행사 참석",
-    pfLogo: SKKU_EMBLEM,
+    pfLogo: process.env.PUBLIC_URL + "/main/skku_emblem_kor.png",
     pfLink:
       "https://sw.skku.edu/sw/notice.do?mode=list&srCategoryId1=1587&srSearchKey=&srSearchVal=",
   },
   {
     pfId: 3,
     pfName: "오픈소스플랫폼",
-    pfLogo: SOSD_LOGO,
+    pfLogo: process.env.PUBLIC_URL + "/main/sosd_logo.svg",
     pfLink: "https://sosd.skku.edu",
   },
   {
     pfId: 4,
     pfName: "킹고인과의 만남",
-    pfLogo: SKKU_EMBLEM,
+    pfLogo: process.env.PUBLIC_URL + "/main/skku_emblem_kor.png",
     pfLink:
       "https://sw.skku.edu/sw/notice.do?mode=list&srCategoryId1=1587&srSearchKey=&srSearchVal=",
   },
