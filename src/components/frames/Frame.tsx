@@ -11,11 +11,11 @@ import { getDevToken } from "../../common/api";
 const Frame = () => {
   /* Auth */
   // TODO: 개발용 토큰 발급 코드 삭제
-  const matchLogin = useMatch("/main/login");
+  const matchLogin = useMatch("/login");
   if (matchLogin) getDevToken();
 
   // 권한에 따라 리다이렉션
-  const matchAdmin = useMatch("/main/admin/*");
+  const matchAdmin = useMatch("/admin/*");
 
   const {
     isLoading: loginIsLoading,
@@ -29,18 +29,18 @@ const Frame = () => {
     (role: USER_ROLE) => {
       switch (role) {
         case USER_ROLE.USER:
-          navigate("/main/dashboard");
+          navigate("/dashboard");
           break;
         case USER_ROLE.ADMIN:
           break;
         default:
-          navigate("/main");
+          navigate("/");
       }
     },
     [navigate]
   );
 
-  if (!loginIsLoading && !login) navigate("/main");
+  if (!loginIsLoading && !login) navigate("/");
 
   if (!loginIsLoading && login && matchAdmin) checkAdmin(login.role);
 
@@ -49,15 +49,15 @@ const Frame = () => {
   return (
     <>
       <Header login={login || undefined} />
-      <div className="flex bg-primary pt-16">
+      <div className="flex pt-16 bg-primary">
         <Sidebar login={login || undefined} />
-        <main className="flex items-center py-16 justify-center bg-surface rounded-tl-lg flex-grow">
+        <main className="flex items-center justify-center flex-grow py-16 rounded-tl-lg bg-surface">
           <div className="flex flex-col gap-6 w-[1152px] min-h-screen">
             <Status
               isLoading={loginIsLoading}
               error={loginError}
               isData={login ? true : false}
-              className="w-screen max-w-full h-full"
+              className="w-screen h-full max-w-full"
             />
             {render && <Outlet />}
           </div>

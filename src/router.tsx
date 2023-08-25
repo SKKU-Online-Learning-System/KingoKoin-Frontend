@@ -11,12 +11,12 @@ import Login from "./pages/Login";
 
 const router = createBrowserRouter([
   {
-    path: "/main",
+    path: "/",
     element: <Main />,
     errorElement: <NotFound />,
   },
   {
-    path: "/main",
+    path: "/",
     element: <Frame />,
     children: [
       {
@@ -42,11 +42,6 @@ const router = createBrowserRouter([
         ],
       },
     ],
-    errorElement: <NotFound />,
-  },
-  {
-    path: "/main/*",
-    element: <NotFound />,
     errorElement: <NotFound />,
   },
 ]);
