@@ -13,7 +13,6 @@ export const PL_ID_MANUAL = "2";
 
 export const PROD_HOST = "https://kingocoin.cs.skku.edu";
 
-
 export enum POLICY_REQUEST_TYPE {
   CREATE = "CREATE",
   UPDATE = "UPDATE",
@@ -174,7 +173,7 @@ export const check = async () => {
 export const logout = () => {
   deleteCookie(JWT_COOKIE.ACCESS_TOKEN);
   deleteCookie(JWT_COOKIE.REFRESH_TOKEN);
-  window.location.replace(PROD_HOST + "/logout");
+  window.location.replace(PROD_HOST + "/");
 };
 
 /* axios settings */
