@@ -30,13 +30,13 @@ const Login = () => {
   const redirectionByRole = (role: USER_ROLE) => {
     switch (role) {
       case USER_ROLE.ADMIN:
-        navigate("/main/admin/users");
+        navigate("/admin/users");
         break;
       case USER_ROLE.USER:
-        navigate("/main/dashboard");
+        navigate("/dashboard");
         break;
       default:
-        navigate("/main");
+        navigate("/");
     }
   };
 

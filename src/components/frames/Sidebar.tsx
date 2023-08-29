@@ -19,29 +19,29 @@ const Sidebar = ({ login }: SidebarProps) => {
   const menuItem = isAdmin
     ? [
         {
-          path: "/main/admin/users",
+          path: "/admin/users",
           name: "사용자 조회",
           icon: <PersonOutlineOutlined />,
         },
         {
-          path: "/main/admin/coin",
+          path: "/admin/coin",
           name: "코인 부여",
           icon: <MonetizationOnOutlined />,
         },
         {
-          path: "/main/admin/policies",
+          path: "/admin/policies",
           name: "정책 관리",
           icon: <PolicyOutlined />,
         },
         {
-          path: "/main/admin/analysis",
+          path: "/admin/analysis",
           name: "코인 분석",
           icon: <ShowChartOutlined />,
         },
       ]
     : [
         {
-          path: "/main/dashboard",
+          path: "/dashboard",
           name: "대시보드",
           icon: <DashboardOutlined />,
         },

@@ -13,6 +13,7 @@ export const PL_ID_MANUAL = "2";
 
 export const PROD_HOST = "https://kingocoin.cs.skku.edu";
 
+
 export enum POLICY_REQUEST_TYPE {
   CREATE = "CREATE",
   UPDATE = "UPDATE",
@@ -130,7 +131,7 @@ export const formToPolicyRequest = ({
 export const setAccessCookie = (token: string) => {
   setCookie(JWT_COOKIE.ACCESS_TOKEN, token, {
     "max-age": 60 * 60, // access token 만료 기한 (1시간)
-    path: "/main",
+    path: "/",
     secure: true,
     samesite: "strict",
   });
@@ -139,7 +140,7 @@ export const setAccessCookie = (token: string) => {
 export const setRefreshCookie = (token: string) => {
   setCookie(JWT_COOKIE.REFRESH_TOKEN, token, {
     "max-age": 60 * 60 * 24 * 14, // refresh token 만료 기한 (2주)
-    path: "/main",
+    path: "/",
     secure: true,
     samesite: "strict",
   });
@@ -208,7 +209,7 @@ const axiosResponesError = async (error: AxiosError) => {
 
   check()
     .then((auth) => {
-      if (!auth) window.location.href = "/main/login";
+      if (!auth) window.location.href = "/login";
     })
     .catch((reason) => Promise.reject(reason));
 

@@ -15,6 +15,8 @@ import SiteLink from "../components/SiteLink";
 import Footer from "../components/frames/Footer";
 import Header from "../components/frames/Header";
 
+export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/login";
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -51,7 +53,7 @@ function Main() {
   return (
     <div className="flex flex-col items-center bg-surface">
       <div className="flex items-center justify-end w-screen h-8 max-w-full p-1 px-8 bg-primary">
-        <a href={PROD_HOST} className="text-onPrimary text-label-m">
+        <a href={PROD_LOGIN} className="text-onPrimary text-label-m">
           KINGO ID LOGIN
         </a>
       </div>
