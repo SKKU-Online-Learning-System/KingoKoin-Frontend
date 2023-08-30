@@ -11,8 +11,8 @@ import { getDevToken } from "../../common/api";
 const Frame = () => {
   /* Auth */
   // TODO: 개발용 토큰 발급 코드 삭제
-  const matchLogin = useMatch("/login");
-  if (matchLogin) getDevToken();
+  // const matchLogin = useMatch("/login");
+  // if (matchLogin) getDevToken();
 
   // 권한에 따라 리다이렉션
   const matchAdmin = useMatch("/admin/*");

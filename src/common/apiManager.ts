@@ -173,7 +173,7 @@ export const check = async () => {
 export const logout = () => {
   deleteCookie(JWT_COOKIE.ACCESS_TOKEN);
   deleteCookie(JWT_COOKIE.REFRESH_TOKEN);
-  window.location.replace(PROD_HOST + "/");
+  window.location.replace(PROD_HOST + "/api/login");
 };
 
 /* axios settings */

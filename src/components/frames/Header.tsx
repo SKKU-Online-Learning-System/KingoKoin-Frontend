@@ -45,7 +45,7 @@ function Header({ login }: HeaderProps) {
         </span>
       </div>
       <div className="flex items-center gap-4 text-label-l text-onSurface">
-        {!match && userDetail && (
+        {!match && userDetail && userDetail.stName && userDetail.stStatus && (
           <>
             <span>{userDetail.stName}</span>
             <span>|</span>
