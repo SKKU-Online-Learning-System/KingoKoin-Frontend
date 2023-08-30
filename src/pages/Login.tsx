@@ -66,7 +66,7 @@ const Login = () => {
           navigate("/dashboard");
           break;
         default:
-          navigate("/");
+          navigate("/loginroleerror");
       }
     };
     if (tokensSet && !loginIsLoading && login) {
