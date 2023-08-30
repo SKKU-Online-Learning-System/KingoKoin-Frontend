@@ -7,6 +7,7 @@ import {
   setRefreshCookie,
 } from "../common/apiManager";
 import { useQuery } from "react-query";
+import { useEffect } from "react";
 
 const Login = () => {
   /* Auth */
@@ -15,8 +16,20 @@ const Login = () => {
   const accessTokenParam = searchParams.get(JWT_COOKIE.ACCESS_TOKEN);
   const refreshTokenParam = searchParams.get(JWT_COOKIE.REFRESH_TOKEN);
 
-  if (accessTokenParam) setAccessCookie(accessTokenParam);
-  if (refreshTokenParam) setRefreshCookie(refreshTokenParam);
+  // if (accessTokenParam) setAccessCookie(accessTokenParam);
+  // if (refreshTokenParam) setRefreshCookie(refreshTokenParam);
+
+  useEffect(() => {
+    if (accessTokenParam) {
+      setAccessCookie(accessTokenParam);
+    }
+  }, [accessTokenParam, setAccessCookie]);
+
+  useEffect(() => {
+    if (refreshTokenParam) {
+      setRefreshCookie(refreshTokenParam);
+    }
+  }, [refreshTokenParam, setRefreshCookie]);
 
   // 권한에 따라 리다이렉션
   const {
@@ -27,20 +40,38 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const redirectionByRole = (role: USER_ROLE) => {
-    switch (role) {
-      case USER_ROLE.ADMIN:
-        navigate("/admin/users");
-        break;
-      case USER_ROLE.USER:
-        navigate("/dashboard");
-        break;
-      default:
-        navigate("/");
-    }
-  };
+  // const redirectionByRole = (role: USER_ROLE) => {
+  //   switch (role) {
+  //     case USER_ROLE.ADMIN:
+  //       navigate("/admin/users");
+  //       break;
+  //     case USER_ROLE.USER:
+  //       navigate("/dashboard");
+  //       break;
+  //     default:
+  //       navigate("/");
+  //   }
+  // };
 
-  if (!loginIsLoading && login) redirectionByRole(login.role);
+  // if (!loginIsLoading && login) redirectionByRole(login.role);
+
+  useEffect(() => {
+    const redirectionByRole = (role: USER_ROLE) => {
+      switch (role) {
+        case USER_ROLE.ADMIN:
+          navigate("/admin/users");
+          break;
+        case USER_ROLE.USER:
+          navigate("/dashboard");
+          break;
+        default:
+          navigate("/");
+      }
+    };
+    if (!loginIsLoading && login) {
+      redirectionByRole(login.role);
+    }
+  }, [loginIsLoading, login]);
 
   return <div>login</div>;
 };
