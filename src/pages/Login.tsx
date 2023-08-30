@@ -7,9 +7,10 @@ import {
   setRefreshCookie,
 } from "../common/apiManager";
 import { useQuery } from "react-query";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Login = () => {
+  const [tokensSet, setTokensSet] = useState(false);
   /* Auth */
   // 토큰을 전달받았을 경우 파싱
   const [searchParams] = useSearchParams();
@@ -23,13 +24,13 @@ const Login = () => {
     if (accessTokenParam) {
       setAccessCookie(accessTokenParam);
     }
-  }, [accessTokenParam, setAccessCookie]);
-
-  useEffect(() => {
     if (refreshTokenParam) {
       setRefreshCookie(refreshTokenParam);
     }
-  }, [refreshTokenParam, setRefreshCookie]);
+    if (accessTokenParam && refreshTokenParam) {
+      setTokensSet(true);
+    }
+  }, [accessTokenParam, refreshTokenParam, setAccessCookie, setRefreshCookie]);
 
   // 권한에 따라 리다이렉션
   const {
@@ -68,10 +69,10 @@ const Login = () => {
           navigate("/");
       }
     };
-    if (!loginIsLoading && login) {
+    if (tokensSet && !loginIsLoading && login) {
       redirectionByRole(login.role);
     }
-  }, [loginIsLoading, login]);
+  }, [tokensSet, loginIsLoading, login]);
 
   return <div>login</div>;
 };
