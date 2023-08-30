@@ -7,6 +7,7 @@ import Status from "../feedback/Status";
 import { useCallback } from "react";
 import { useQuery } from "react-query";
 import { getDevToken } from "../../common/api";
+import { useEffect } from "react";
 
 const Frame = () => {
   /* Auth */
@@ -40,9 +41,21 @@ const Frame = () => {
     [navigate]
   );
 
-  if (!loginIsLoading && !login) navigate("/");
+  // if (!loginIsLoading && !login) navigate("/");
 
-  if (!loginIsLoading && login && matchAdmin) checkAdmin(login.role);
+  // if (!loginIsLoading && login && matchAdmin) checkAdmin(login.role);
+
+  useEffect(() => {
+    if (!loginIsLoading && !login) {
+      navigate("/");
+    }
+  }, [loginIsLoading, login, navigate]);
+
+  useEffect(() => {
+    if (!loginIsLoading && login && matchAdmin) {
+      checkAdmin(login.role);
+    }
+  }, [loginIsLoading, login, matchAdmin, checkAdmin]);
 
   const render = !loginIsLoading && !loginError && login;
 
