@@ -8,8 +8,17 @@ import {
 } from "../common/apiManager";
 import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 const Logout = () => {
+  const [cookies, , removeCookie] = useCookies();
+  useEffect(() => {
+    removeCookie("loginUserID");
+    removeCookie("uid");
+    removeCookie("pToken");
+    removeCookie("language");
+  }, [removeCookie]);
+
   const navigate = useNavigate();
 
   useEffect(() => {

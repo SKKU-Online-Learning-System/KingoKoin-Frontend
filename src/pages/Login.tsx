@@ -1,4 +1,6 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams, useMatch } from "react-router-dom";
+import { getDevToken } from "./../common/api";
+
 import {
   JWT_COOKIE,
   USER_ROLE,
@@ -10,6 +12,17 @@ import { useQuery } from "react-query";
 import { useEffect, useState } from "react";
 
 const Login = () => {
+  const matchLogin = useMatch("/login");
+  if (matchLogin) {
+    getDevToken();
+    console.log("11");
+  }
+  console.log("22");
+
+  useEffect(() => {
+    navigate("/dashboard"); // Or any other route
+  }, []);
+
   const [tokensSet, setTokensSet] = useState(false);
   /* Auth */
   // 토큰을 전달받았을 경우 파싱

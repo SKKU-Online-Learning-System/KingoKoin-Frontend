@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound";
 import Policies from "./pages/Policies";
 import Users from "./pages/Users";
 import Login from "./pages/Login";
+import Logout from "./pages/Logout";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
+  },
+  {
+    path: "/logout",
+    element: <Logout />,
   },
   {
     path: "/",
