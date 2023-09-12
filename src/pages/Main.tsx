@@ -16,7 +16,7 @@ import Footer from "../components/frames/Footer";
 import Header from "../components/frames/Header";
 
 // export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/login";
-export const PROD_LOGIN = "http://kingocoin-dev.cs.skku.edu/api/login";
+export const PROD_LOGIN = "http://kingocoin-dev.cs.skku.edu:8080/api/login";
 
 interface TabPanelProps {
   children?: React.ReactNode;
