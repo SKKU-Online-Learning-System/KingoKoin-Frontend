@@ -15,7 +15,8 @@ import SiteLink from "../components/SiteLink";
 import Footer from "../components/frames/Footer";
 import Header from "../components/frames/Header";
 
-export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/login";
+// export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/login";
+export const PROD_LOGIN = "https://kingocoin-dev.cs.skku.edu/api/login";
 
 interface TabPanelProps {
   children?: React.ReactNode;

@@ -7,6 +7,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
+import { useCookies } from 'react-cookie';
 
 /** 직접 입력에 해당하는 plId */
 export const PL_ID_MANUAL = "2";
