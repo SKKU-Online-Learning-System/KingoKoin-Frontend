@@ -7,7 +7,7 @@ import axios, {
   AxiosResponse,
   InternalAxiosRequestConfig,
 } from "axios";
-import { useCookies } from 'react-cookie';
+import { useCookies } from "react-cookie";
 
 /** 직접 입력에 해당하는 plId */
 export const PL_ID_MANUAL = "2";
@@ -17,9 +17,11 @@ export const PROD_HOST = "https://kingocoin.cs.skku.edu";
 export enum POLICY_REQUEST_TYPE {
   CREATE = "CREATE",
   UPDATE = "UPDATE",
-  READ = "READ",
   DEACTIVATE = "DEACTIVATE",
   ACTIVATE = "ACTIVATE",
+  DELETE = "DELETE",
+
+  // READ = "READ",
   EMPTY = "EMPTY",
 }
 
@@ -29,7 +31,7 @@ export enum POLICY_TYPE {
 }
 
 export enum USER_ROLE {
-  USER = "ROLE_USER",
+  USER = "ROLE_STUDENT",
   ADMIN = "ROLE_ADMIN",
 }
 

@@ -10,7 +10,7 @@ import {
 } from "@mui/x-data-grid";
 import { useCallback, useState } from "react";
 import { useQuery } from "react-query";
-import { ISearchOptions, getUsersBySearch } from "../../../common/api";
+import { ISearchOptions, getStudentsBySearch } from "../../../common/api";
 import CustomPagination from "../../CustomPagination";
 import Status from "../../feedback/Status";
 
@@ -35,7 +35,7 @@ const UserSearchCard = ({
     isLoading: usersIsLoading,
     error: usersError,
     data: users,
-  } = useQuery(["users"], () => getUsersBySearch(searchOptions), {
+  } = useQuery(["users"], () => getStudentsBySearch(searchOptions), {
     refetchInterval: 1000,
   });
 
@@ -60,7 +60,7 @@ const UserSearchCard = ({
     (sortModel: GridSortModel) => {
       setSearchOptions({
         ...searchOptions,
-        order: sortModel[0].sort ?? undefined,
+        order: sortModel[0].sort ?? "desc",
       });
     },
     [searchOptions]
@@ -107,7 +107,7 @@ const UserSearchCard = ({
           subheader={`${users?.length || 0}건`}
           subheaderTypographyProps={{ variant: "label-l", className: "mt-2" }}
         />
-        <div className="absolute right-6 top-8 flex items-center gap-0 pt-4 pl-4">
+        <div className="absolute flex items-center gap-0 pt-4 pl-4 right-6 top-8">
           <Search className="w-6 h-6" />
           <TextField
             variant="standard"

@@ -1,7 +1,7 @@
 import { useMatch } from "react-router-dom";
 import SKKU_LOGO from "../../assets/main_logo_eng.png";
 import { Logout } from "@mui/icons-material";
-import { IAuth, IUserDetail, getUserDetail } from "../../common/api";
+import { IAuth, IStudentDetail, getStudentDetail } from "../../common/api";
 import { logout } from "../../common/apiManager";
 import { useQuery } from "react-query";
 
@@ -19,9 +19,10 @@ function Header({ login }: HeaderProps) {
     data: userDetail,
   } = useQuery(["userDetail", login?.userId], () =>
     login
-      ? getUserDetail(login.userId)
-      : new Promise<IUserDetail>((resolve, reject) =>
+      ? getStudentDetail(login.userId)
+      : new Promise<IStudentDetail>((resolve, reject) =>
           resolve({
+            userId: 0,
             stId: 0,
             stName: "",
             stDegree: "",

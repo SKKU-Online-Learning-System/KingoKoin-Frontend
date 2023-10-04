@@ -1,5 +1,5 @@
 import { useNavigate, useSearchParams, useMatch } from "react-router-dom";
-import { getDevToken } from "./../common/api";
+import { getStudentDevToken } from "./../common/api";
 
 import {
   JWT_COOKIE,
@@ -14,7 +14,17 @@ import { useEffect, useState } from "react";
 const Login = () => {
   const matchLogin = useMatch("/login");
   if (matchLogin) {
-    getDevToken();
+    // getStudentDevToken();
+    getStudentDevToken()
+      .then((token) => {
+        console.log("Token received:", token);
+        // Set token and navigate
+      })
+      .catch((error) => {
+        console.error("Error fetching token:", error);
+        // Handle error, maybe show a message to the user
+      });
+
     console.log("11");
   }
   console.log("22");

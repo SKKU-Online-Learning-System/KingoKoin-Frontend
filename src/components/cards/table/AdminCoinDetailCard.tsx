@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useQuery } from "react-query";
-import { getCoinDetailByAdId } from "../../../common/api";
+import { getCoinDetailByAdmin } from "../../../common/api";
 import { dayjsToFormat, stampToDayjs } from "../../../common/apiManager";
 import CustomPagination from "../../CustomPagination";
 import Status from "../../feedback/Status";
@@ -16,7 +16,7 @@ const AdminCoinDetailCard = ({ adId, pageSize }: AdminCoinDetailCardProps) => {
     isLoading: adCoinDetailIsLoading,
     error: adCoinDetailError,
     data: adCoinDetail,
-  } = useQuery(["adCoinDetail"], () => getCoinDetailByAdId(adId));
+  } = useQuery(["adCoinDetail"], () => getCoinDetailByAdmin(adId));
 
   const render =
     !adCoinDetailIsLoading &&

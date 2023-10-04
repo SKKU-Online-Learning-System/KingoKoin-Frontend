@@ -1,7 +1,7 @@
 import { Card, CardContent, CardHeader } from "@mui/material";
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import { useQuery } from "react-query";
-import { getCoinDetail } from "../../../common/api";
+import { getCoinDetailByStudent } from "../../../common/api";
 import { dayjsToFormat, stampToDayjs } from "../../../common/apiManager";
 import CustomPagination from "../../CustomPagination";
 import Status from "../../feedback/Status";
@@ -16,7 +16,9 @@ const UserCoinDetailCard = ({ userId, pageSize }: UserCoinDetailCardProps) => {
     isLoading: userCoinDetailIsLoading,
     error: userCoinDetailError,
     data: userCoinDetail,
-  } = useQuery(["userCoinDetail", userId], () => getCoinDetail(userId));
+  } = useQuery(["userCoinDetail", userId], () =>
+    getCoinDetailByStudent(userId)
+  );
 
   const render =
     !userCoinDetailIsLoading &&
