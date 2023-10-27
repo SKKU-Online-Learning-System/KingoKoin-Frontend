@@ -28,8 +28,6 @@ import {
 export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/login";
 export const DEV_LOGIN = "http://kingocoin-dev.cs.skku.edu:8080";
 
-const [redirectTo, setRedirectTo] = useState<string | null>(null);
-
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -54,6 +52,15 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
   const navigate = useNavigate();
 
   const [responseData, setResponseData] = useState<any>(null);
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (redirectTo) {
+      navigate(redirectTo);
+      // Reset the state if needed
+      setRedirectTo(null);
+    }
+  }, [redirectTo]);
 
   if (!isOpen) return null;
 
@@ -97,7 +104,7 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
           setRedirectTo("/dashboard");
           break;
         default:
-          setRedirectTo("/dashboard");
+          setRedirectTo("/404");
       }
       console.log("role: ", role);
     } else {
@@ -106,14 +113,6 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
 
     onClose();
   };
-
-  useEffect(() => {
-    if (redirectTo) {
-      navigate(redirectTo);
-      // Reset the state if needed
-      setRedirectTo(null);
-    }
-  }, [redirectTo]);
 
   return (
     <div
