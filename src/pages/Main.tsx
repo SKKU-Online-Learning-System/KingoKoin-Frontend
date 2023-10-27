@@ -8,7 +8,7 @@ import {
   Tabs,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import banner from "../assets/banner.jpg";
 import { FAQS, PLATFORMS } from "../common/api";
 import { PROD_HOST } from "../common/apiManager";
@@ -27,6 +27,8 @@ import {
 
 export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/login";
 export const DEV_LOGIN = "http://kingocoin-dev.cs.skku.edu:8080";
+
+const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -89,20 +91,29 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
 
       switch (role) {
         case 1:
-          navigate("/admin/users");
+          setRedirectTo("/admin/users");
           break;
         case 0:
-          navigate("/dashboard");
+          setRedirectTo("/dashboard");
           break;
         default:
-          navigate("/dashboard");
+          setRedirectTo("/dashboard");
       }
+      console.log("role: ", role);
     } else {
       console.error("Error logging in:", data);
     }
 
     onClose();
   };
+
+  useEffect(() => {
+    if (redirectTo) {
+      navigate(redirectTo);
+      // Reset the state if needed
+      setRedirectTo(null);
+    }
+  }, [redirectTo]);
 
   return (
     <div
