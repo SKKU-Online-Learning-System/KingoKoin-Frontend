@@ -52,15 +52,15 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
   const navigate = useNavigate();
 
   const [responseData, setResponseData] = useState<any>(null);
-  const [redirectTo, setRedirectTo] = useState<string | null>(null);
+  // const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (redirectTo) {
-      navigate(redirectTo);
-      // Reset the state if needed
-      setRedirectTo(null);
-    }
-  }, [redirectTo]);
+  // useEffect(() => {
+  //   if (redirectTo) {
+  //     navigate(redirectTo);
+  //     // Reset the state if needed
+  //     setRedirectTo(null);
+  //   }
+  // }, [redirectTo]);
 
   if (!isOpen) return null;
 
@@ -98,13 +98,16 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
 
       switch (role) {
         case 1:
-          setRedirectTo("/admin/users");
+          navigate("/admin/users");
+          // setRedirectTo("/admin/users");
           break;
         case 0:
-          setRedirectTo("/dashboard");
+          navigate("/dashboard");
+          // setRedirectTo("/dashboard");
           break;
         default:
-          setRedirectTo("/404");
+          navigate("/");
+        // setRedirectTo("/404");
       }
       console.log("role: ", role);
     } else {
