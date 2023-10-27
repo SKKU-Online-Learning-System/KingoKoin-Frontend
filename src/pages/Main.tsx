@@ -95,7 +95,7 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
           navigate("/dashboard");
           break;
         default:
-          navigate("/");
+          navigate("/dashboard");
       }
     } else {
       console.error("Error logging in:", data);
