@@ -1,4 +1,5 @@
 import { ExpandMore } from "@mui/icons-material";
+// import { getStudentDevToken } from "./../common/api";
 import {
   Accordion,
   AccordionDetails,
@@ -14,9 +15,18 @@ import { PROD_HOST } from "../common/apiManager";
 import SiteLink from "../components/SiteLink";
 import Footer from "../components/frames/Footer";
 import Header from "../components/frames/Header";
+import { useNavigate, useSearchParams, useMatch } from "react-router-dom";
 
-// export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/login";
-export const PROD_LOGIN = "http://kingocoin-dev.cs.skku.edu:8080/api/login";
+import {
+  JWT_COOKIE,
+  USER_ROLE,
+  check,
+  setAccessCookie,
+  setRefreshCookie,
+} from "../common/apiManager";
+
+export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/login";
+export const DEV_LOGIN = "http://kingocoin-dev.cs.skku.edu:8080";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -24,6 +34,126 @@ interface TabPanelProps {
   value: number;
   label: string;
 }
+
+interface DevLoginModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export const DevLoginModal: React.FC<DevLoginModalProps> = ({
+  isOpen,
+  onClose,
+}) => {
+  const [name, setName] = useState("");
+  const [glsId, setGlsId] = useState("");
+  const [stId, setStId] = useState<number>();
+  const [role, setRole] = useState<number>();
+  const [tokensSet, setTokensSet] = useState(false);
+  const navigate = useNavigate();
+
+  const [responseData, setResponseData] = useState<any>(null);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const response = await fetch(DEV_LOGIN + `/api/dev/login/${role}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, glsId, stId }),
+    });
+
+    const data = await response.json();
+    setResponseData(data);
+
+    if (response.ok) {
+      console.log("ok");
+      console.log(data);
+      // setAccessToken(data.accessToken);
+      // setRefreshToken(data.refreshToken);
+      // window.location.href = DEV_LOGIN;
+
+      if (data.accessToken) {
+        console.log(data.accessToken);
+        setAccessCookie(data.accessToken);
+      }
+      if (data.refreshToken) {
+        console.log(data.refreshToken);
+        setRefreshCookie(data.refreshToken);
+      }
+      if (data.accessToken && data.refreshToken) {
+        setTokensSet(true);
+        console.log(true);
+      }
+
+      switch (role) {
+        case 1:
+          navigate("/admin/users");
+          break;
+        case 0:
+          navigate("/dashboard");
+          break;
+        default:
+          navigate("/");
+      }
+    } else {
+      console.error("Error logging in:", data);
+    }
+
+    onClose();
+  };
+
+  return (
+    <div
+      className="modal-container"
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+      }}
+    >
+      <div
+        className="modal-content"
+        style={{
+          background: "white",
+          padding: "20px",
+          maxWidth: "400px",
+          margin: "50px auto",
+        }}
+      >
+        <form onSubmit={handleSubmit}>
+          <input
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Name"
+          />
+          <input
+            value={glsId}
+            onChange={(e) => setGlsId(e.target.value)}
+            placeholder="GLS ID"
+          />
+          <input
+            value={stId}
+            onChange={(e) => setStId(parseInt(e.target.value, 10))}
+            placeholder="ST ID"
+          />
+          <input
+            value={role}
+            onChange={(e) => setRole(parseInt(e.target.value, 10))}
+            placeholder="role"
+          />
+
+          <button type="submit">Send</button>
+        </form>
+        <button onClick={onClose}>Close</button>
+      </div>
+    </div>
+  );
+};
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, label, ...other } = props;
@@ -46,6 +176,29 @@ function TabPanel(props: TabPanelProps) {
 function Main() {
   /* Panel control */
   const [value, setValue] = useState(0);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+  const handleLogin = async (
+    name: string,
+    glsId: string,
+    stId: number,
+    role: number
+  ) => {
+    const response = await fetch(DEV_LOGIN + `/api/dev/login/${role}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, glsId, stId }),
+    });
+
+    // If the response is okay, redirect to the DEV_LOGIN link
+    if (response.ok) {
+      window.location.href = ""; // Redirect to the DEV_LOGIN link
+    } else {
+      // Handle the error. Maybe show an error message to the user?
+    }
+
+    setIsLoginModalOpen(false); // Close the modal after login or error
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -54,9 +207,19 @@ function Main() {
   return (
     <div className="flex flex-col items-center bg-surface">
       <div className="flex items-center justify-end w-screen h-8 max-w-full p-1 px-8 bg-primary">
-        <a href={PROD_LOGIN} className="text-onPrimary text-label-m">
+        {/* <a href={PROD_LOGIN} className="text-onPrimary text-label-m">
           KINGO ID LOGIN
-        </a>
+        </a> */}
+        <div
+          onClick={() => {
+            console.log("Login clicked!");
+            setIsLoginModalOpen(true);
+            console.log(isLoginModalOpen);
+          }}
+          className="cursor-pointer text-onPrimary text-label-m"
+        >
+          KINGO ID LOGIN (DEV)
+        </div>
       </div>
       <Header />
       <div className="relative flex justify-center mb-8">
@@ -128,6 +291,10 @@ function Main() {
           </div>
         </TabPanel>
       </div>
+      <DevLoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setIsLoginModalOpen(false)}
+      />
       <Footer />
     </div>
   );

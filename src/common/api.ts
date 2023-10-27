@@ -229,15 +229,15 @@ export const getPolicies = async (only?: "me"): Promise<IPolicy[]> => {
 // 3. Dev 개발용 API
 
 // GET /api/dev/token/student 학생용 JWT 토큰 발급받기
-export const getStudentDevToken = async () => {
-  // const path = `/token/student?key=ssa-dev-key-v1`;
-  const path = `/token?key=ssa-dev-key-v1`;
-  const result = await client.get(ROUTE.DEV + path);
-  console.log("result:", result);
-  const accessToken = result.data;
-  setAccessCookie(accessToken);
-  refreshClientToken();
-};
+// export const getStudentDevToken = async () => {
+//   // const path = `/token/student?key=ssa-dev-key-v1`;
+//   const path = `/token?key=ssa-dev-key-v1`;
+//   const result = await client.get(ROUTE.DEV + path);
+//   console.log("result:", result);
+//   const accessToken = result.data;
+//   setAccessCookie(accessToken);
+//   refreshClientToken();
+// };
 
 // GET /api/dev/tokent/admin
 export const getAdminDevToken = async () => {

@@ -14,7 +14,9 @@ const Dashboard = () => {
     isLoading: loginIsLoading,
     error: loginError,
     data: login,
-  } = useQuery("login", check);
+  } = useQuery("login", check, {
+    enabled: false,
+  });
 
   const {
     isLoading: userCoinIsLoading,
@@ -48,12 +50,12 @@ const Dashboard = () => {
         isLoading={isLoading}
         error={error}
         isData={isData}
-        className="w-screen max-w-full h-screen"
+        className="w-screen h-screen max-w-full"
       />
       {render && (
         <>
-          <section className="flex gap-6 w-full">
-            <div className="flex flex-col gap-6 w-full">
+          <section className="flex w-full gap-6">
+            <div className="flex flex-col w-full gap-6">
               <div className="flex gap-6">
                 <CounterCard
                   label={"보유한 코인"}
@@ -86,13 +88,13 @@ const Dashboard = () => {
                 className="w-[564px]"
               />
             </div>
-            <Card className="bg-transparent shadow-none w-full">
+            <Card className="w-full bg-transparent shadow-none">
               <CardHeader
                 title="연관 사이트로 이동"
                 titleTypographyProps={{ variant: "display" }}
               />
               <CardContent>
-                <div className="flex flex-wrap gap-3 w-full">
+                <div className="flex flex-wrap w-full gap-3">
                   {PLATFORMS.map((it) => (
                     <SiteLink
                       platform={it}
