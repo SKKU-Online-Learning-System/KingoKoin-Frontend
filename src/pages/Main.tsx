@@ -16,6 +16,8 @@ import SiteLink from "../components/SiteLink";
 import Footer from "../components/frames/Footer";
 import Header from "../components/frames/Header";
 import { useNavigate, useSearchParams, useMatch } from "react-router-dom";
+import  redirectionByRole  from "../pages/Login"
+
 
 import {
   JWT_COOKIE,
@@ -81,7 +83,7 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
       console.log(data);
       // setAccessToken(data.accessToken);
       // setRefreshToken(data.refreshToken);
-      window.location.href = DEV_LOGIN;
+      // window.location.href = DEV_LOGIN;
 
       if (data.accessToken) {
         console.log(data.accessToken);
@@ -110,7 +112,9 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
           setRedirectTo("/404");
       }
       console.log("role: ", role);
-    } else {
+    } 
+    
+    else {
       console.error("Error logging in:", data);
     }
 

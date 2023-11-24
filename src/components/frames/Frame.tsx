@@ -43,9 +43,9 @@ const Frame = () => {
     [navigate]
   );
 
-  // if (!loginIsLoading && !login) navigate("/");
+   if (!loginIsLoading && !login) navigate("/");
 
-  // if (!loginIsLoading && login && matchAdmin) checkAdmin(login.role);
+   if (!loginIsLoading && login && matchAdmin) checkAdmin(login.role);
 
   useEffect(() => {
     if (!loginIsLoading && !login) {
