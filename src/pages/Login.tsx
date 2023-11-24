@@ -64,20 +64,20 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  // const redirectionByRole = (role: USER_ROLE) => {
-  //   switch (role) {
-  //     case USER_ROLE.ADMIN:
-  //       navigate("/admin/users");
-  //       break;
-  //     case USER_ROLE.USER:
-  //       navigate("/dashboard");
-  //       break;
-  //     default:
-  //       navigate("/");
-  //   }
-  // };
+  const redirectionByRole = (role: USER_ROLE) => {
+     switch (role) {
+       case USER_ROLE.ADMIN:
+         navigate("/admin/users");
+         break;
+       case USER_ROLE.USER:
+         navigate("/dashboard");
+         break;
+       default:
+         navigate("/");
+     }
+  };
 
-  // if (!loginIsLoading && login) redirectionByRole(login.role);
+  if (!loginIsLoading && login) redirectionByRole(login.role);
 
   useEffect(() => {
     const redirectionByRole = (role: USER_ROLE) => {

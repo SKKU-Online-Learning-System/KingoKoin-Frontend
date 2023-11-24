@@ -52,22 +52,22 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
   const navigate = useNavigate();
 
   const [responseData, setResponseData] = useState<any>(null);
-  // const [redirectTo, setRedirectTo] = useState<string | null>(null);
+  const [redirectTo, setRedirectTo] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   if (redirectTo) {
-  //     navigate(redirectTo);
+  useEffect(() => {
+    if (redirectTo) {
+    navigate(redirectTo);
   //     // Reset the state if needed
-  //     setRedirectTo(null);
-  //   }
-  // }, [redirectTo]);
+    setRedirectTo(null);
+    }
+  }, [redirectTo]);
 
   if (!isOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await fetch(DEV_LOGIN + `/api/dev/login/${role}`, {
+    const response = await fetch(`http://kingocoin-dev.cs.skku.edu:8080/api/dev/login/1`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, glsId, stId }),
@@ -81,7 +81,7 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
       console.log(data);
       // setAccessToken(data.accessToken);
       // setRefreshToken(data.refreshToken);
-      // window.location.href = DEV_LOGIN;
+      window.location.href = DEV_LOGIN;
 
       if (data.accessToken) {
         console.log(data.accessToken);
@@ -99,15 +99,15 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
       switch (role) {
         case 1:
           navigate("/admin/users");
-          // setRedirectTo("/admin/users");
+          setRedirectTo("/admin/users");
           break;
         case 0:
           navigate("/dashboard");
-          // setRedirectTo("/dashboard");
+          setRedirectTo("/dashboard");
           break;
         default:
           navigate("/");
-        // setRedirectTo("/404");
+          setRedirectTo("/404");
       }
       console.log("role: ", role);
     } else {
@@ -199,14 +199,16 @@ function Main() {
   ) => {
     const response = await fetch(DEV_LOGIN + `/api/dev/login/${role}`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { Accept: "application/json",},
       body: JSON.stringify({ name, glsId, stId }),
     });
 
     // If the response is okay, redirect to the DEV_LOGIN link
     if (response.ok) {
-      window.location.href = ""; // Redirect to the DEV_LOGIN link
+      console.log("success")
+      //window.location.href = ""; // Redirect to the DEV_LOGIN link
     } else {
+      console.log("fail")
       // Handle the error. Maybe show an error message to the user?
     }
 
@@ -225,9 +227,10 @@ function Main() {
         </a> */}
         <div
           onClick={() => {
-            console.log("Login clicked!");
+            console.log("Login clicked");
             setIsLoginModalOpen(true);
             console.log(isLoginModalOpen);
+            console.log("DEV_LOGIN");
           }}
           className="cursor-pointer text-onPrimary text-label-m"
         >
