@@ -56,10 +56,10 @@ const UpdatePolicyCard = ({
   useEffect(() => {
     if (policy)
       setForm({
-        plId: policy.plId.toString(),
-        pfId: getPlatformByPfName(policy.pfName)?.pfId!,
-        pfName: policy.pfName,
-        rqName: policy.plName,
+        plId: policy.pl_id.toString(),
+        pfId: getPlatformByPfName(policy.pf_name)?.pfId!,
+        pfName: policy.pf_name,
+        rqName: policy.pl_name,
         rqPlus: policy.plus,
         rqPoint: policy.point,
         rqAvailable: policy.available,

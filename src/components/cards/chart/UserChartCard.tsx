@@ -20,7 +20,7 @@ const UserChartCard = ({ userId, pageSize, className }: UserChartProps) => {
     isLoading: statisticIsLoading,
     error: statisticError,
     data: statistic,
-  } = useQuery(["statistic"], getStaticsByMonth);
+  } = useQuery(["statistic", userId], () => getStaticsByMonth(userId));
 
   // 데이터 보여줄지 결정하는 상수
   const render =

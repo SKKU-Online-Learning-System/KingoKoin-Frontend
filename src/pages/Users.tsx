@@ -17,6 +17,7 @@ const Users = () => {
     setTimeout(() => {
       setOpen(true);
     }, 100);
+    console.log("selected user id: ", selectedUserId);
   };
 
   return (
@@ -48,6 +49,7 @@ const Users = () => {
         <section className="flex gap-6">
           {selectedUserId && (
             <UserCoinDetailCard userId={selectedUserId} pageSize={4} />
+            
           )}
         </section>
       </Grow>

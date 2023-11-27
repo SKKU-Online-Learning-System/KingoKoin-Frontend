@@ -6,6 +6,7 @@ import { dayjsToFormat, stampToDayjs } from "../../../common/apiManager";
 import CustomPagination from "../../CustomPagination";
 import Status from "../../feedback/Status";
 
+
 interface UserCoinDetailCardProps {
   userId: number;
   pageSize: number;
@@ -19,6 +20,7 @@ const UserCoinDetailCard = ({ userId, pageSize }: UserCoinDetailCardProps) => {
   } = useQuery(["userCoinDetail", userId], () =>
     getCoinDetailByStudent(userId)
   );
+
 
   const render =
     !userCoinDetailIsLoading &&

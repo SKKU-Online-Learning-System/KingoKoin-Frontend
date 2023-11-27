@@ -8,6 +8,18 @@ import {
   refreshClientToken,
   setAccessCookie,
 } from "./apiManager";
+import { DataGrid } from '@mui/x-data-grid'
+import {studentsData} from "../common/studentsData";
+import { getcoinDetail_66 } from "./getCoinDetail/getCoinDetail_66";
+import { getcoinDetail_51 } from "./getCoinDetail/getCoinDetail_51";
+import { getcoinDetail_117 } from "./getCoinDetail/getCoinDetail_117";
+import { getcoinDetail_260 } from "./getCoinDetail/getCoinDetail_260";
+import { staticByMonth_51 } from "./staticsByMonth/staticByMonth_51";
+import { staticByMonth_66 } from "./staticsByMonth/staticByMonth_66";
+import { staticByMonth_117 } from "./staticsByMonth/staticByMonth_117";
+import { staticByMonth_260 } from "./staticsByMonth/staticByMonth_260";
+import { getPolicy } from "./getPolicy";
+
 
 /** api 라우트 정보 */
 enum ROUTE {
@@ -147,6 +159,7 @@ export interface IStudentListItem {
   pointPlus: number;
 }
 
+
 export const getStudentsBySearch = async ({
   order = "desc", // 기본값 desc
   column,
@@ -157,13 +170,24 @@ export const getStudentsBySearch = async ({
     path += `&column=${column}&search=${search}`;
   }
 
-  const response = await clientWithToken.get(ROUTE.STUDENT + path);
-  const result = response.data.map((it: IStudentListItem) => ({
+  // const response = await clientWithToken.get(ROUTE.STUDENT + path);
+  
+
+  const result = studentsData.map((it: IStudentListItem) => ({
     ...it,
-    id: it.userId,
-  }));
+    id: it.userId
+  }))
+  // const result = response.data.map((it: IStudentListItem) => ({
+  //   ...it,
+  //   id: it.userId,
+  // }));
   return result; // MUI를 위한 id 추가
+
+  
 };
+
+
+
 
 // 2. Policy 정책(Policy) API
 
@@ -204,24 +228,24 @@ export const postPolicyRequest = async ({
 
 // GET /api/policy 정책 조회 (getPoliciesByAdId)
 export interface IPolicy {
-  plId: number;
-  plName: string;
-  plCode: string;
-  pfName: string;
+  pl_id: number;
+  pl_code: string;
+  pl_name: string;
+  pf_name: string;
   plus: boolean;
   point: number;
   available: boolean;
 }
 
 export const getPolicies = async (only?: "me"): Promise<IPolicy[]> => {
-  let path = `/`;
-  if (only) path = `/?only=${only}`;
-  const response = await clientWithToken.get(ROUTE.POLICY + path);
+  //let path = `/`;
+  //if (only) path = `/?only=${only}`;
+  //const response = await clientWithToken.get(ROUTE.POLICY + path);
 
   // MUI를 위한 id 추가
-  const result = response.data.map((it: IPolicy) => ({
+  const result = getPolicy.map((it: IPolicy) => ({
     ...it,
-    id: it.plId,
+    id: it.pl_id,
   }));
   return result;
 };
@@ -357,7 +381,6 @@ interface ICoinDetailByStudent {
   dtId: number;
   coinId: number;
   pointTotal: number;
-  plId: number;
   title: string;
   plus: boolean;
   point: number;
@@ -369,16 +392,41 @@ interface ICoinDetailByStudent {
 export const getCoinDetailByStudent = async (
   userId: number
 ): Promise<ICoinDetailByStudent[]> => {
-  const path = `/${userId}/detail`;
-  const response = await clientWithToken.get(ROUTE.COIN + path);
+  //const path = `/${userId}/detail`;
+  //const response = await clientWithToken.get(ROUTE.COIN + path);
+  let result: ICoinDetailByStudent[];
 
-  // MUI를 위한 id 추가
-  const result = response.data.map((it: ICoinDetailByStudent) => ({
-    ...it,
-    id: it.dtId,
-  }));
+  if (userId == 2018312181){
+    result = getcoinDetail_51.map((it: ICoinDetailByStudent) => ({
+      ...it,
+      id: it.dtId
+    }));
+  }
+  else if (userId == 2018314837) {
+    result = getcoinDetail_66.map((it: ICoinDetailByStudent) => ({
+      ...it,
+      id: it.dtId
+    }));
+  }
+  else if (userId == 2022312657) {
+    result = getcoinDetail_117.map((it: ICoinDetailByStudent) => ({
+      ...it,
+      id: it.dtId
+    }));
+  }
+  else if (userId == 2021314861) {
+    result = getcoinDetail_260.map((it: ICoinDetailByStudent) => ({
+      ...it,
+      id: it.dtId
+    }));
+  }
+  else {
+    result = [];
+  }
+
   return result;
-};
+
+}
 
 // GET /api/coin/admin/detail 관리자의 최근 부여 내역 조회 (getCoinDetailByAdmin)
 interface ICoinDetailByAdmin {
@@ -394,7 +442,7 @@ interface ICoinDetailByAdmin {
   modifiedDate: string;
 }
 
-export const getCoinDetailByAdmin = async (
+/* export const getCoinDetailByAdmin = async (
   userId: number
 ): Promise<ICoinDetailByAdmin[]> => {
   const path = `/${userId}/detail`;
@@ -407,6 +455,37 @@ export const getCoinDetailByAdmin = async (
   }));
   return result;
 };
+*/
+
+export const getCoinDetailByAdmin = async (
+  userId: number
+): Promise<ICoinDetailByAdmin[]> => {
+  const path = `/${userId}/detail`;
+  const response = await clientWithToken.get(ROUTE.COIN + path);
+
+  // MUI를 위한 id 추가
+  const result = response.data.map((it: ICoinDetailByAdmin) => ({
+    ...it,
+    id: it.dtId,
+  }));
+  return result;
+}
+
+/*
+export const getCoinDetailByAdmin = async (
+  userId: number
+): Promise<ICoinDetailByAdmin[]> => {
+  const path = `/${userId}/detail`;
+  const response = await clientWithToken.get(ROUTE.COIN + path);
+
+  // MUI를 위한 id 추가
+  const result = response.data.map((it: ICoinDetailByAdmin) => ({
+    ...it,
+    id: it.dtId,
+  }));
+  return result;
+}
+*/
 
 /*
 
@@ -654,6 +733,7 @@ export const getCoinDetailByAdmin = async (
 /* Statics api */
 
 interface IStaticsByMonth {
+  times: number;
   smId: number;
   year: number;
   month: number;
@@ -662,15 +742,43 @@ interface IStaticsByMonth {
   modifiedDate: string;
 }
 
-export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
-  const path = `/month`;
-  const response = await client.get(ROUTE.STATICS + path);
+export const getStaticsByMonth = async (
+  stID: number
+): Promise<IStaticsByMonth[]> => {
+  //const path = `/month`;
+  //const response = await client.get(ROUTE.STATICS + path);
+  let result: IStaticsByMonth[];
 
   // MUI를 위한 id 추가
-  const result = response.data.map((it: IStaticsByMonth) => ({
-    ...it,
-    id: it.smId,
-  }));
+  if (stID == 2018312181){
+    result = staticByMonth_51.map((it: IStaticsByMonth) => ({
+      ...it,
+      id: it.times
+      
+    }));
+    
+  }
+  else if (stID == 2018314837) {
+    result = staticByMonth_66.map((it: IStaticsByMonth) => ({
+      ...it,
+      id: it.times
+    }));
+  }
+  else if (stID == 2022312657) {
+    result = staticByMonth_117.map((it: IStaticsByMonth) => ({
+      ...it,
+      id: it.times
+    }));
+  }
+  else if (stID == 2021314861) {
+    result = staticByMonth_260.map((it: IStaticsByMonth) => ({
+      ...it,
+      id: it.times
+    }));
+  }
+  else {
+    result = [];
+  }
   return result;
 };
 // getStaticsByMonth 사용 예제

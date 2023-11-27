@@ -89,7 +89,9 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
                   error={!stIdIsValid}
                   value={form.stId}
                   onChange={(e) => {
-                    setForm({ ...form, stId: e.target.value });
+                    const newStId = e.target.value;
+                    setStIdIsValid(true);
+                    setForm({ ...form, stId: newStId });
                   }}
                   size="small"
                   helperText={
@@ -108,17 +110,17 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
               </div>
               <TextField
                 select
-                defaultValue={policies[0].plId}
+                defaultValue={policies[0].pl_id}
                 label="정책"
                 onChange={(e) => {
                   //객체를 value로 사용하기 위한 캐스팅
                   const policy = e.target.value as unknown as IPolicy;
                   setForm({
                     ...form,
-                    plId: policy.plId.toString(),
-                    pfName: policy.pfName,
+                    plId: policy.pl_id.toString(),
+                    pfName: policy.pf_name,
                     point: policy.point,
-                    title: policy.plName,
+                    title: policy.pl_name,
                   });
                   if (e.target.value == PL_ID_MANUAL) setIsMenual(true);
                   else setIsMenual(false);
@@ -127,8 +129,8 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
               >
                 {policies.map((it) => (
                   //@ts-ignore - 객체를 value로 사용하기 위한 타입 무시
-                  <MenuItem key={it.plId} value={it}>
-                    {it.plName}
+                  <MenuItem key={it.pl_id} value={it.pl_}>
+                    {it.pl_name}
                   </MenuItem>
                 ))}
               </TextField>

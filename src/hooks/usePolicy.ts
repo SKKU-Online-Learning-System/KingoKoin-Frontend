@@ -8,7 +8,7 @@ const usePolicy = (plId: number) => {
     data: policies,
   } = useQuery(["policies"], () => getPolicies());
 
-  const policy = policies?.find((it) => it.plId === plId);
+  const policy = policies?.find((it) => it.pl_id === plId);
 
   return {
     isLoading: policiesIsLoading,

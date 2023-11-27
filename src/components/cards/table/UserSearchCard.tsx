@@ -82,7 +82,7 @@ const UserSearchCard = ({
       filterOperators: stringOperators,
     },
     {
-      field: "dept",
+      field: "stDept",
       headerName: "학과",
       flex: 2,
       sortable: false,

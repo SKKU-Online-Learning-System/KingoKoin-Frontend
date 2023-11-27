@@ -181,7 +181,7 @@ export const logout = () => {
 
 /* axios settings */
 
-const HOST = "https://kingocoin.cs.skku.edu";
+const HOST = 'https://kingocoin.cs.skku.edu';
 
 const axiosRequestSuccess = (config: InternalAxiosRequestConfig) => {
   console.log(config);

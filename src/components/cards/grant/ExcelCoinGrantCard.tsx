@@ -204,17 +204,17 @@ const ExcelCoinGrantCard = ({
                   <TextField
                     className="flex-[3]"
                     select
-                    defaultValue={policies[0].plId}
+                    defaultValue={policies[0].pl_id}
                     label="정책"
                     onChange={(e) => {
                       //객체를 value로 사용하기 위한 캐스팅
                       const policy = e.target.value as unknown as IPolicy;
                       setForm({
                         ...form,
-                        plId: policy.plId.toString(),
-                        pfName: policy.pfName,
+                        plId: policy.pl_id.toString(),
+                        pfName: policy.pf_name,
                         point: policy.point,
-                        title: policy.plName,
+                        title: policy.pl_name,
                       });
                       if (e.target.value == PL_ID_MANUAL) setIsMenual(true);
                       else setIsMenual(false);
@@ -224,7 +224,7 @@ const ExcelCoinGrantCard = ({
                     {policies.map((it) => (
                       //@ts-ignore - 객체를 value로 사용하기 위한 타입 무시
                       <MenuItem key={it.plId} value={it}>
-                        {it.plName}
+                        {it.pl_name}
                       </MenuItem>
                     ))}
                   </TextField>
