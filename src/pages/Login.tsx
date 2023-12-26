@@ -31,6 +31,7 @@ const Login = () => {
 
   useEffect(() => {
     navigate("/dashboard"); // Or any other route
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [tokensSet, setTokensSet] = useState(false);

@@ -216,7 +216,7 @@ const ExcelCoinGrantCard = ({
                         point: policy.point,
                         title: policy.pl_name,
                       });
-                      if (e.target.value == PL_ID_MANUAL) setIsMenual(true);
+                      if (e.target.value === PL_ID_MANUAL) setIsMenual(true);
                       else setIsMenual(false);
                     }}
                     size="small"

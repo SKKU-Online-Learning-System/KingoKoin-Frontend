@@ -279,9 +279,20 @@ export interface IAuth {
 }
 
 export const getJWTClaims = async (accessToken: string): Promise<IAuth> => {
-  const path = `/token/claims?token=${accessToken}`;
-  const response = await client.get(ROUTE.DEV + path);
-  return response.data;
+  const path = `/token/claims?token=${accessToken}`; 
+  console.log("path: ", path);
+  try{
+    console.log(ROUTE.DEV + path);
+    const response = await client.get(ROUTE.DEV + path );
+    console.log("response: ", response);
+    return response.data;
+  }
+  catch(error) {
+    console.error("error: ", error);
+    throw error;
+  }
+
+  
 };
 
 // apiManger.ts에서 사용하는 부분. swagger에는 없다.

@@ -69,7 +69,7 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const response = await fetch(`http://kingocoin-dev.cs.skku.edu:8080/api/dev/login/1`, {
+    const response = await fetch(`http://kingocoin-dev.cs.skku.edu:8080/api/dev/login/${role}`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, glsId, stId }),
@@ -93,10 +93,7 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
         console.log(data.refreshToken);
         setRefreshCookie(data.refreshToken);
       }
-      if (data.accessToken && data.refreshToken) {
-        setTokensSet(true);
-        console.log(true);
-      }
+      
 
       switch (role) {
         case 1:

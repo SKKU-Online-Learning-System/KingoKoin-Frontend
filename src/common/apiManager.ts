@@ -157,7 +157,9 @@ export const check = async () => {
   // accessToken 확인
   const accessToken = getAccessCookie();
   if (!accessToken) return null;
+  console.log(100);
   let auth = await getJWTClaims(accessToken);
+
   if (auth) return auth;
 
   // refreshToken 확인
@@ -170,6 +172,7 @@ export const check = async () => {
   refreshClientToken();
 
   auth = await getJWTClaims(accessToken);
+  console.log("auth: ", auth);
   return auth;
 };
 
@@ -181,7 +184,7 @@ export const logout = () => {
 
 /* axios settings */
 
-const HOST = 'https://kingocoin.cs.skku.edu';
+const HOST = 'https://kingocoin.cs.skku.edu/';
 
 const axiosRequestSuccess = (config: InternalAxiosRequestConfig) => {
   console.log(config);
@@ -220,6 +223,7 @@ const axiosResponesError = async (error: AxiosError) => {
 
 /** JWT 없이 요청할 때 사용하는 axios client */
 export const client = axios.create({
+  withCredentials: true,
   baseURL: HOST,
 });
 
