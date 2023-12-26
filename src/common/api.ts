@@ -7,7 +7,13 @@ import {
   clientWithToken,
   refreshClientToken,
   setAccessCookie,
+  getAccessCookie,
 } from "./apiManager";
+
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
+
+
 
 /** api 라우트 정보 */
 enum ROUTE {
@@ -109,6 +115,7 @@ export const postStudents = async (
   student: IStudent
 ): Promise<number> => {
   const path = `/${userId}`;
+  
   const response = await clientWithToken.post(ROUTE.STUDENT + path, student);
   return response.data;
 };
@@ -126,10 +133,36 @@ export interface IStudentDetail {
 export const getStudentDetail = async (
   userId: number
 ): Promise<IStudentDetail> => {
+  const path = `http://kingocoin-dev.cs.skku.edu:8080/api/student/${userId}/detail`;
+  
+  try {
+    const response = await axios.get(path, {
+      headers: {
+        // 필요한 경우 인증 헤더 추가
+        'Authorization': `Bearer ${getAccessCookie()}`
+      }
+    });
+
+    console.log(response.status);
+    return response.data;
+  } catch (error) {
+    // 오류 처리
+    console.error('Error fetching student details:', error);
+    throw error;
+  }
+};
+
+/* 
+export const getStudentDetail = async (
+  userId: number
+): Promise<IStudentDetail> => {
   const path = `/${userId}/detail`;
+  console.log(path);
   const response = await clientWithToken.get(ROUTE.STUDENT + path);
+  console.log(response.status);
   return response.data;
 };
+*/
 
 // GET /api/stduent 학생 리스트 조회 (getStudentsBySearch)
 export interface ISearchOptions {
@@ -239,7 +272,7 @@ export const getPolicies = async (only?: "me"): Promise<IPolicy[]> => {
 //   refreshClientToken();
 // };
 
-// GET /api/dev/tokent/admin
+// GET /api/dev/token/admin
 export const getAdminDevToken = async () => {
   const path = `/token/admin?key=ssa-dev-key-v1`;
   const result = await client.get(ROUTE.DEV + path);
@@ -255,10 +288,41 @@ export interface IAuth {
 }
 
 export const getJWTClaims = async (accessToken: string): Promise<IAuth> => {
-  const path = `/token/claims?token=${accessToken}`;
-  const response = await client.get(ROUTE.DEV + path);
-  return response.data;
+  try {
+    const decoded = jwtDecode<{ userId: number, role: USER_ROLE }>(accessToken);
+    return {
+      userId: decoded.userId,
+      role: decoded.role
+    };
+  }
+  catch (error) {
+    console.error("JWT Decoding error:", error);
+    throw error;
+  }
 };
+
+/*
+export interface IAuth {
+  userId: number;
+  role: USER_ROLE;
+}
+
+export const getJWTClaims = (token: string): IAuth | null => {
+  try {
+    const decoded = jwtDecode<{ userId: number, role: USER_ROLE }>(token);
+    return {
+      userId: decoded.userId,
+      role: decoded.role
+    };
+  } catch (error) {
+    console.error("JWT Decoding error:", error);
+    return null;
+  }
+}
+
+*/
+
+
 
 // apiManger.ts에서 사용하는 부분. swagger에는 없다.
 export const refreshAccessToken = async (

@@ -156,6 +156,7 @@ export const getRefreshCookie = () => getCookie(JWT_COOKIE.REFRESH_TOKEN);
 export const check = async () => {
   // accessToken 확인
   const accessToken = getAccessCookie();
+  console.log("accessToken: ", accessToken);
   if (!accessToken) return null;
   let auth = await getJWTClaims(accessToken);
   if (auth) return auth;
@@ -181,7 +182,7 @@ export const logout = () => {
 
 /* axios settings */
 
-const HOST = "https://kingocoin.cs.skku.edu";
+const HOST = "http://kingocoin-dev.cs.skku.edu:8080/";
 
 const axiosRequestSuccess = (config: InternalAxiosRequestConfig) => {
   console.log(config);
@@ -226,17 +227,19 @@ export const client = axios.create({
 axios.interceptors.request.use(axiosRequestSuccess, axiosRequestError);
 axios.interceptors.response.use(axiosResponesSuccess, axiosResponesError);
 
-/** JWT를 첨부하여 요청할 때 사용하는 axios client */
+/** JWT를 첨부하여 요청할 때 사용하는 axios client */ 
 export const clientWithToken = axios.create({
   baseURL: HOST,
-  withCredentials: true,
-  headers: { Authorization: `bearer ${getAccessCookie()}` },
+  withCredentials: true
 });
 
-clientWithToken.interceptors.request.use(
-  axiosRequestSuccess,
-  axiosRequestError
-);
+clientWithToken.interceptors.request.use(config => {
+  const token = getAccessCookie(); 
+  config.headers.Authorization = token ? `Bearer ${token}` : ''; 
+  return config;
+}, error => {
+  return Promise.reject(error);
+});
 
 clientWithToken.interceptors.response.use(
   axiosResponesSuccess,
