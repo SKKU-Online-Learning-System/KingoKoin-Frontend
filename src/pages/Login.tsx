@@ -46,6 +46,7 @@ const Login = () => {
   useEffect(() => {
     if (accessTokenParam) {
       setAccessCookie(accessTokenParam);
+      console.log("access: ", accessTokenParam);
     }
     if (refreshTokenParam) {
       setRefreshCookie(refreshTokenParam);

@@ -11,7 +11,7 @@ import {
 import { useState, useEffect } from "react";
 import banner from "../assets/banner.jpg";
 import { FAQS, PLATFORMS } from "../common/api";
-import { PROD_HOST } from "../common/apiManager";
+import { PROD_HOST, getAccessCookie } from "../common/apiManager";
 import SiteLink from "../components/SiteLink";
 import Footer from "../components/frames/Footer";
 import Header from "../components/frames/Header";
@@ -88,6 +88,7 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
       if (data.accessToken) {
         console.log(data.accessToken);
         setAccessCookie(data.accessToken);
+        console.log("get cookie: ",getAccessCookie());
       }
       if (data.refreshToken) {
         console.log(data.refreshToken);

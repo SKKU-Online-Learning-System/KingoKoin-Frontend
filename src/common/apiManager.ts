@@ -134,7 +134,7 @@ export const setAccessCookie = (token: string) => {
   setCookie(JWT_COOKIE.ACCESS_TOKEN, token, {
     "max-age": 60 * 60, // access token 만료 기한 (1시간)
     path: "/",
-    secure: true,
+    // secure: true,
     samesite: "strict",
   });
 };
