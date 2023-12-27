@@ -73,6 +73,8 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
       body: JSON.stringify({ name, glsId, stId }),
     });
 
+    console.log("hi");
+
     const data = await response.json();
     setResponseData(data);
 
@@ -81,7 +83,7 @@ export const DevLoginModal: React.FC<DevLoginModalProps> = ({
       console.log(data);
       // setAccessToken(data.accessToken);
       // setRefreshToken(data.refreshToken);
-      window.location.href = DEV_LOGIN;
+      //window.location.href = DEV_LOGIN;
 
       if (data.accessToken) {
         console.log(data.accessToken);
@@ -203,6 +205,9 @@ function Main() {
       body: JSON.stringify({ name, glsId, stId }),
     });
 
+    console.log("h");
+
+  
     // If the response is okay, redirect to the DEV_LOGIN link
     if (response.ok) {
       console.log("success")
