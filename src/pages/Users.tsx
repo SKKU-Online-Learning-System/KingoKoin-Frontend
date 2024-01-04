@@ -13,7 +13,7 @@ const Users = () => {
 
   const handleRowClick = (params: GridRowParams) => {
     setOpen(false);
-    setSelectedUserId(params.row.stId as number);
+    setSelectedUserId(params.row.userId as number);
     setTimeout(() => {
       setOpen(true);
     }, 100);

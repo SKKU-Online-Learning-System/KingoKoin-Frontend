@@ -36,7 +36,7 @@ const UserSearchCard = ({
     error: usersError,
     data: users,
   } = useQuery(["users"], () => getStudentsBySearch(searchOptions), {
-    refetchInterval: 1000,
+    refetchInterval: 3600000,
   });
 
   // serverside filter

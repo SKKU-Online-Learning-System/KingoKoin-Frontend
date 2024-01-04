@@ -26,6 +26,7 @@ enum ROUTE {
   AUTH = "/api/auth",
 }
 
+
 /** 하드코딩된 플랫폼 정보 */
 export const PLATFORMS = [
   {
@@ -138,15 +139,11 @@ export const getStudentDetail = async (
   try {
     const response = await axios.get(path, {
       headers: {
-        // 필요한 경우 인증 헤더 추가
         'Authorization': `Bearer ${getAccessCookie()}`
       }
     });
-
-    console.log(response.status);
     return response.data;
   } catch (error) {
-    // 오류 처리
     console.error('Error fetching student details:', error);
     throw error;
   }
@@ -248,16 +245,24 @@ export interface IPolicy {
 
 export const getPolicies = async (only?: "me"): Promise<IPolicy[]> => {
   let path = `/`;
-  if (only) path = `/?only=${only}`;
-  const response = await clientWithToken.get(ROUTE.POLICY + path);
+  if (only) {
+    path = `/?only=${only}`;
+  }
 
-  // MUI를 위한 id 추가
-  const result = response.data.map((it: IPolicy) => ({
-    ...it,
-    id: it.plId,
-  }));
-  return result;
-};
+  try {
+    const response = await clientWithToken.get(ROUTE.POLICY + path);
+
+    const result = response.data.map((it: IPolicy) => ({
+      ...it,
+      id: it.plId,
+    }));
+
+    return result;
+  } catch (error) {
+    console.error("Error fetching poliRMSEPcies: ", error);
+    return []; // 에러 발생 시 빈 배열 반환
+  }
+}
 
 // 3. Dev 개발용 API
 
@@ -355,16 +360,23 @@ export const postManualCoin = async ({
   plus,
   gainedDate,
 }: IManualGrantedCoin): Promise<{ dtId: number }> => {
+  
   const path = `/point/manual`;
   const response = await clientWithToken.post(ROUTE.COIN + path, {
     stId,
     stName,
+    stDept: "소프트웨어학과",
     title,
     point,
     plId,
     plus,
     gainedDate,
+    provider: "",
   });
+
+  console.log(path);
+  console.log(ROUTE.COIN + path);
+  console.log("in postMaual ", response);
 
   return response.data;
 };
@@ -436,6 +448,9 @@ export const getCoinDetailByStudent = async (
   const path = `/${userId}/detail`;
   const response = await clientWithToken.get(ROUTE.COIN + path);
 
+  console.log("유저 아이디: ", userId);
+
+  console.log("코인내역: ", response.data);
   // MUI를 위한 id 추가
   const result = response.data.map((it: ICoinDetailByStudent) => ({
     ...it,
@@ -726,17 +741,29 @@ interface IStaticsByMonth {
   modifiedDate: string;
 }
 
-export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
-  const path = `/month`;
-  const response = await client.get(ROUTE.STATICS + path);
 
-  // MUI를 위한 id 추가
-  const result = response.data.map((it: IStaticsByMonth) => ({
-    ...it,
-    id: it.smId,
-  }));
-  return result;
+
+export const getStaticsByMonth = async (): Promise<IStaticsByMonth[]> => {
+  // API 엔드포인트 URL 구성
+  const url = `http://kingocoin-dev.cs.skku.edu:8080/api/statics/month`; // HOST와 경로를 적절히 조정하세요
+
+  try {
+    const response = await axios.get(url);
+    console.log("월별: ", response);
+
+    // MUI를 위한 id 추가
+    const result = response.data.map((it: IStaticsByMonth) => ({
+      ...it,
+      id: it.smId,
+    }));
+    return result;
+  } catch (error) {
+    console.error("Error fetching monthly statistics:", error);
+    throw error;
+  }
 };
+
+
 // getStaticsByMonth 사용 예제
 // const {
 //   isLoading: statisticIsLoading,

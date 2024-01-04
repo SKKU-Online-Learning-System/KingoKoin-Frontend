@@ -25,7 +25,7 @@ import {
   setRefreshCookie,
 } from "../common/apiManager";
 
-export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/login";
+export const PROD_LOGIN = "https://kingocoin.cs.skku.edu/api/";
 export const DEV_LOGIN = "http://kingocoin-dev.cs.skku.edu:8080";
 
 interface TabPanelProps {

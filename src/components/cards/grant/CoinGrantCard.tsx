@@ -40,7 +40,7 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
     adId: adId,
     gainedDate: dayjs(),
   });
-
+  
   const [isManual, setIsMenual] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [stIdIsValid, setStIdIsValid] = useState(true);
@@ -50,6 +50,7 @@ const CoinGrantCard = ({ adId }: CoinGrantCardProps) => {
     error: policiesError,
     data: policies,
   } = useQuery(["policies"], () => getPolicies());
+
 
   const render =
     !policiesIsLoading && !policiesError && policies && policies.length > 0;

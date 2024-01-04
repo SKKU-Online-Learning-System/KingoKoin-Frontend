@@ -22,6 +22,7 @@ const UserChartCard = ({ userId, pageSize, className }: UserChartProps) => {
     data: statistic,
   } = useQuery(["statistic"], getStaticsByMonth);
 
+  console.log("누적?", statistic);
   // 데이터 보여줄지 결정하는 상수
   const render =
     !statisticIsLoading && !statisticError && statistic && statistic.length > 0;

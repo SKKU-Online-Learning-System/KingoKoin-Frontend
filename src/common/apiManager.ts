@@ -83,6 +83,8 @@ export const formToGrantedCoin = ({
   const result = {
     stId: parseInt(stId),
     stName,
+    stDept: "소프트웨어학과",
+    provider: "관리자",
     plId: parseInt(plId),
     title,
     plus: point >= 0,
@@ -156,7 +158,6 @@ export const getRefreshCookie = () => getCookie(JWT_COOKIE.REFRESH_TOKEN);
 export const check = async () => {
   // accessToken 확인
   const accessToken = getAccessCookie();
-  console.log("accessToken: ", accessToken);
   if (!accessToken) return null;
   let auth = await getJWTClaims(accessToken);
   if (auth) return auth;
@@ -182,33 +183,23 @@ export const logout = () => {
 
 /* axios settings */
 
-const HOST = "http://kingocoin-dev.cs.skku.edu:8080/";
+const HOST = "http://kingocoin-dev.cs.skku.edu:8080";
 
 const axiosRequestSuccess = (config: InternalAxiosRequestConfig) => {
-  console.log(config);
   return config;
 };
 
 const axiosRequestError = (error: AxiosError) => {
   if (error.request) {
-    console.log("Client Error:", error.request.data);
   }
   return Promise.reject(error);
 };
 
 const axiosResponesSuccess = (response: AxiosResponse) => {
-  console.log(response);
   return response;
 };
 
 const axiosResponesError = async (error: AxiosError) => {
-  if (error.response) {
-    console.log("Server Error:", error.response.data);
-  } else if (error.request) {
-    console.log("No response received:", error.request);
-  } else {
-    console.log("Error:", error.message);
-  }
 
   check()
     .then((auth) => {
@@ -242,8 +233,12 @@ clientWithToken.interceptors.request.use(config => {
 });
 
 clientWithToken.interceptors.response.use(
-  axiosResponesSuccess,
-  axiosResponesError
+  response => {
+    return axiosResponesSuccess(response);
+  },
+  error => {
+    return Promise.reject(axiosResponesError(error));
+  }
 );
 
 export const refreshClientToken = () => {
